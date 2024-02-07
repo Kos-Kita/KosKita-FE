@@ -9,7 +9,7 @@ import message from "@/assets/message.png";
 const App = () => {
   return (
     <Layout>
-      <div className="min-h-screen ">
+      <div className="min-h-screen">
         <section
           className="w-full h-[767px] bg-no-repeat bg-cover bg-center relative bg-red-500"
           style={{
