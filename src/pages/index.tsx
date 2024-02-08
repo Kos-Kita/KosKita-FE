@@ -5,13 +5,11 @@ import carbonClean from "@/assets/carbon_clean.png";
 import tag from "@/assets/tag.png";
 import signal from "@/assets/signal.png";
 import message from "@/assets/message.png";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import { useNavigate } from "react-router-dom";
 
 const App = () => {
+  const navigate = useNavigate();
   return (
     <Layout>
       <div className="min-h-screen">
@@ -23,9 +21,7 @@ const App = () => {
         >
           <div className="bg-white/85 shadow rounded-tr-3xl rounded-tl-3xl rounded-br-3xl rounded absolute top-48 left-20 p-8 space-y-10 max-w-lg w-full ">
             <h1 className="text-4xl font-semibold">Anda Cari Kost?</h1>
-            <p className="text-lg font-medium text-[#181A18]">
-              Cari disini aja dah
-            </p>
+            <p className="text-lg font-medium text-[#181A18]">Cari disini aja dah</p>
             <label
               htmlFor="search"
               className="bg-white/95 p-1 rounded-2xl flex items-center gap-x-3 overflow-hidden"
@@ -37,9 +33,7 @@ const App = () => {
                 placeholder="Select a address"
                 className="w-full h-full outline-none bg-transparent border-none"
               />
-              <button className="py-4 px-8 bg-[#4CA02E]  text-white rounded-xl">
-                Search
-              </button>
+              <button className="py-4 px-8 bg-[#4CA02E]  text-white rounded-xl">Search</button>
             </label>
           </div>
         </section>
@@ -84,8 +78,9 @@ const App = () => {
                 <>
                   <CarouselItem className="basis-1/4" key={index}>
                     <div
-                      className="flex flex-col items-center gap-y-1 rounded-3xl overflow-hidden bg-[#F2F0F2]"
+                      className="flex flex-col items-center gap-y-1 rounded-3xl overflow-hidden bg-[#F2F0F2] cursor-pointer "
                       key={index}
+                      onClick={() => navigate(`/kos/${index + 1}`)}
                     >
                       <img
                         src={`https://source.unsplash.com/300x30${index}?rented-house`}
@@ -94,9 +89,7 @@ const App = () => {
                       />
                       <div className="flex flex-col items-center w-full p-4 gap-y-3">
                         <div className="flex items-center justify-between w-full">
-                          <h3 className="font-semibold text-xl ">
-                            Kostan {index + 1}
-                          </h3>
+                          <h3 className="font-semibold text-xl ">Kostan {index + 1}</h3>
                           <span className="text-xs">Tipe Kost : Putri</span>
                         </div>
                         <div className="flex items-center w-full gap-x-3 text-sm">
@@ -116,9 +109,7 @@ const App = () => {
                         </div>
                         <div className="flex items-center w-full">
                           <div className="flex flex-col gap-y-2 ">
-                            <span className="text-xs">
-                              Wc Gratis, Makan Gratis, Minum Bayar
-                            </span>
+                            <span className="text-xs">Wc Gratis, Makan Gratis, Minum Bayar</span>
 
                             <span className="text-sm font-medium text-[#4CA02E]">
                               Rp. 140.000/perbulan
@@ -137,32 +128,20 @@ const App = () => {
         <section className="flex flex-col gap-y-3 items-center justify-center py-20">
           <div className="container flex flex-col gap-y-12 items-center justify-center">
             <div className="gap-y-5 flex flex-col items-center">
-              <h1 className="text-4xl font-medium text-[#181A18]">
-                Alasan Kenapa KosKita !!!
-              </h1>
+              <h1 className="text-4xl font-medium text-[#181A18]">Alasan Kenapa KosKita !!!</h1>
               <p className="text-sm text-center max-w-4xl leading-relaxed tracking-wide">
-                Koskita adalah platform inovatif yang dirancang khusus untuk
-                memudahkan pencarian dan penyewaan kos bagi semua kalangan.
-                Dengan antarmuka yang ramah pengguna dan fitur canggih, Koskita
-                membantu Anda menemukan tempat tinggal yang sempurna sesuai
+                Koskita adalah platform inovatif yang dirancang khusus untuk memudahkan pencarian
+                dan penyewaan kos bagi semua kalangan. Dengan antarmuka yang ramah pengguna dan
+                fitur canggih, Koskita membantu Anda menemukan tempat tinggal yang sempurna sesuai
                 dengan kebutuhan dan preferensi Anda.
               </p>
             </div>
             <div className="grid grid-cols-4 gap-5">
               {Array.from({ length: 4 }, (_, index) => (
-                <div
-                  className="bg-[#E2F1E8] rounded-xl flex flex-col gap-y-4 p-10"
-                  key={index}
-                >
+                <div className="bg-[#E2F1E8] rounded-xl flex flex-col gap-y-4 p-10" key={index}>
                   <img
                     src={
-                      index === 0
-                        ? carbonClean
-                        : index === 1
-                        ? tag
-                        : index === 2
-                        ? signal
-                        : message
+                      index === 0 ? carbonClean : index === 1 ? tag : index === 2 ? signal : message
                     }
                     alt="carbohidrat"
                     className="size-14 object-contain"

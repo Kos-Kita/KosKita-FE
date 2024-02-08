@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/Breadcrumb";
 import Layout from "@/components/Layout";
 import Stepper from "@/components/Stepper";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import DataKos from "./steps/DataKos";
 import FotoKos from "./steps/FotoKos";

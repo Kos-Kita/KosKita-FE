@@ -1,7 +1,7 @@
 import useDebounce from "@/utils/hooks/useDebounce";
 import axios from "axios";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Marker, Popup, Rectangle, useMap, useMapEvents } from "react-leaflet";
+import { Marker, Popup } from "react-leaflet";
 import { MapContainer } from "react-leaflet/MapContainer";
 import { TileLayer } from "react-leaflet/TileLayer";
 
