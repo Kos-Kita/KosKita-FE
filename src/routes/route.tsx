@@ -7,6 +7,7 @@ import ProfileRenter from "@/pages/Profile/ProfileRenter";
 import ProfileOwner from "@/pages/Profile/ProfileOwner";
 
 import AddKos from "@/pages/kos/AddKos";
+import DetailKos from "@/pages/kos/DetailKos";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/profilerenter" element={<ProfileRenter />} />
         <Route path="/profileowner" element={<ProfileOwner />} />
         <Route path="/buat-kos" element={<AddKos />} />
+        <Route path="/kos/:id" element={<DetailKos />} />
         <Route path="*" element={<>Not found</>} />
       </Routes>
     </BrowserRouter>
