@@ -6,7 +6,14 @@ const Navbar = () => {
   return (
     <div className="p-3 shadow">
       <div className="container flex items-center justify-between ">
-        <img src={brandLogo} alt="Brand-logo" width={100} height={58} />
+        <img
+          src={brandLogo}
+          alt="Brand-logo"
+          width={100}
+          height={58}
+          className="cursor-pointer"
+          onClick={() => navigate("/")}
+        />
         <ul className="flex items-center gap-x-10">
           <li className={`cursor-pointer ${location.pathname === "/" && "font-medium"}`}>
             Beranda
