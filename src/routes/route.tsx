@@ -5,6 +5,7 @@ import Register from "@/pages/auth/Register";
 import SearchMenu from "@/pages/Products/SearchMenu";
 import ProfileRenter from "@/pages/Profile/ProfileRenter";
 import ProfileOwner from "@/pages/Profile/ProfileOwner";
+import BookingPage from "@/pages/Payment/BookingPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/searchmenu" element={<SearchMenu />} />
         <Route path="/profilerenter" element={<ProfileRenter />} />
         <Route path="/profileowner" element={<ProfileOwner />} />
+        <Route path="/bookingpage" element={<BookingPage />} />
         <Route path="*" element={<>Not found</>} />
       </Routes>
     </BrowserRouter>
