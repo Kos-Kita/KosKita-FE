@@ -7,6 +7,8 @@ import ProfileRenter from "@/pages/Profile/ProfileRenter";
 import ProfileOwner from "@/pages/Profile/ProfileOwner";
 import BookingPage from "@/pages/Payment/BookingPage";
 
+import AddKos from "@/pages/kos/AddKos";
+
 function App() {
   return (
     <BrowserRouter>
@@ -18,6 +20,7 @@ function App() {
         <Route path="/profilerenter" element={<ProfileRenter />} />
         <Route path="/profileowner" element={<ProfileOwner />} />
         <Route path="/bookingpage" element={<BookingPage />} />
+        <Route path="/buat-kos" element={<AddKos />} />
         <Route path="*" element={<>Not found</>} />
       </Routes>
     </BrowserRouter>
