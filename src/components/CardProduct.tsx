@@ -14,14 +14,12 @@ const CardProduct = (props: any) => {
                 <div className="text-sm leading-4 gap-5 whitespace-nowrap text-neutral-900">K.Mandi Dalam · Wifi · AC · Kasur</div>
                 {!hidden && <div className="text-sm leading-4 gap-5 whitespace-nowrap text-neutral-900">tipe kost: campur</div>}
               </div>
-              {!hidden && (
-                <div>
-                  <div className="flex gap-3 justify-between mt-3.5 text-base whitespace-nowrap">
-                    <div className="grow justify-center px-5 py-1 text-white bg-lime-600 rounded-[30px]">AVAILABLE</div>
-                    <div className="grow my-auto text-neutral-900">from Rp. 1.500.000 /bulan</div>
-                  </div>
+              <div>
+                <div className="flex gap-3 justify-between mt-3.5 text-base whitespace-nowrap">
+                  {!hidden && <div className="grow justify-center px-5 py-1 text-white bg-lime-600 rounded-[30px]">AVAILABLE</div>}
+                  <div className="grow my-auto text-neutral-900">from Rp. 1.500.000 /bulan</div>
                 </div>
-              )}
+              </div>
 
               <div className="mt-6  text-base whitespace-nowrap text-neutral-900 max-md:ml-2.5 flex justify-star items-center">
                 <img width="20" height="20" src="https://img.icons8.com/ios/50/marker--v1.png" alt="marker--v1" /> <span>** Lokasi kos kosannya**</span>
