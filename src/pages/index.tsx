@@ -7,9 +7,13 @@ import signal from "@/assets/signal.png";
 import message from "@/assets/message.png";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/utils/context/auth";
 
 const App = () => {
   const navigate = useNavigate();
+  const { user, token } = useAuth();
+  console.log(user);
+  console.log(token);
   return (
     <Layout>
       <div className="min-h-screen">
