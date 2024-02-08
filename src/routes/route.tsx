@@ -5,6 +5,7 @@ import Register from "@/pages/auth/Register";
 import SearchMenu from "@/pages/Products/SearchMenu";
 import ProfileRenter from "@/pages/Profile/ProfileRenter";
 import ProfileOwner from "@/pages/Profile/ProfileOwner";
+import BookingPage from "@/pages/Payment/BookingPage";
 
 import AddKos from "@/pages/kos/AddKos";
 
@@ -18,6 +19,7 @@ function App() {
         <Route path="/searchmenu" element={<SearchMenu />} />
         <Route path="/profilerenter" element={<ProfileRenter />} />
         <Route path="/profileowner" element={<ProfileOwner />} />
+        <Route path="/bookingpage" element={<BookingPage />} />
         <Route path="/buat-kos" element={<AddKos />} />
         <Route path="*" element={<>Not found</>} />
       </Routes>
