@@ -245,6 +245,9 @@ const ProfileRenter = () => {
                       <div className="self-center ">Username</div>
                       <div className="input-container">
                         <input
+                          id="user_name"
+                          onChange={handlePerubahan}
+                          value={formData.user_name}
                           required
                           type="text"
                           placeholder="Masukan Username"
@@ -256,6 +259,9 @@ const ProfileRenter = () => {
                       <div className="self-center  text-black">Email</div>
                       <div className="input-container">
                         <input
+                          id="email"
+                          onChange={handlePerubahan}
+                          value={formData.email}
                           required
                           type="text"
                           placeholder="Masukan Email"
@@ -278,8 +284,11 @@ const ProfileRenter = () => {
                         >
                           Edit Akun
                         </button>
-                        <button className="grow justify-center md:px-3 md:py-4 px-3 py-2 bg-red-600 rounded shadow-sm">
-                          Delete Akun
+                        <button
+                          onClick={deleteProfile}
+                          className="grow justify-center md:px-3 md:py-4 px-3 py-2 bg-red-600 rounded shadow-sm"
+                        >
+                          Hapus Akun
                         </button>
                       </div>
                     </div>
