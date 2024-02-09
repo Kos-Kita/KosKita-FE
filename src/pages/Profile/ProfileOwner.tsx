@@ -1,6 +1,8 @@
 import Layout from "@/components/Layout";
+import { useNavigate } from "react-router-dom";
 
 const ProfileOwner = () => {
+  const navigate = useNavigate();
   return (
     <>
       <Layout>
@@ -70,7 +72,10 @@ const ProfileOwner = () => {
                           Cashless, dengan beragam metode pembayaran
                         </div>
                       </div>
-                      <div className="justify-center items-center self-end px-16 py-6 mt-7 mr-6 max-w-full text-center text-white whitespace-nowrap bg-lime-600 rounded-sm shadow-sm leading-[171%] w-[476px] max-md:px-5 max-md:mr-2.5">
+                      <div
+                        onClick={() => navigate("/buat-kos")}
+                        className="justify-center items-center self-end px-16 py-6 mt-7 mr-6 max-w-full text-center text-white whitespace-nowrap bg-lime-600 rounded-sm shadow-sm leading-[171%] w-[476px] max-md:px-5 max-md:mr-2.5"
+                      >
                         Mulai Buat Kos
                       </div>
                     </div>
