@@ -1,7 +1,7 @@
 import React from "react";
 
 export interface NumberFormatterProps {
-  value: number;
+  value: number | any;
 }
 
 const NumberFormatter: React.FC<NumberFormatterProps> = ({ value }) => {
