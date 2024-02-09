@@ -2,7 +2,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import Layout from "@/components/Layout";
 import Stepper from "@/components/Stepper";
 import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import DataKos from "./steps/DataKos";
 import FotoKos from "./steps/FotoKos";
 import AlamatKos from "./steps/AlamatKos";
@@ -10,13 +10,20 @@ import HargaKos from "./steps/HargaKos";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IKosType, kosSchema } from "@/utils/apis/kos/types";
+import { toast } from "@/components/ui/use-toast";
+import { createKos } from "@/utils/apis/kos/api";
 
 const AddKos = () => {
   const steps = ["Data Kos", "Foto Kos", "Alamat Kos", "Harga Kos"];
   const [searchParam, setSearchParam] = useSearchParams();
   const stepTab = searchParam.get("step");
-
-  const { register, handleSubmit } = useForm<IKosType>({
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<IKosType>({
     resolver: zodResolver(kosSchema),
   });
 
@@ -27,11 +34,24 @@ const AddKos = () => {
     }
   }, [stepTab]);
 
-  const handleCreateKos = () => {
-    alert("Kos berhasil dibuat");
+  const handleCreateKos = async (body: IKosType) => {
+    try {
+      const result = await createKos(body);
+      toast({
+        description: result?.message,
+      });
+      navigate("/");
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        description: (error as Error).message,
+      });
+    }
   };
 
   const handleNextStep = () => {
+    if (Number(stepTab) === 4) return;
+
     searchParam.set("step", `${Number(stepTab) + 1}`);
     setSearchParam(searchParam);
   };
@@ -48,22 +68,29 @@ const AddKos = () => {
             <Stepper steps={steps} />
           </div>
           {stepTab === "1" ? (
-            <DataKos register={register} />
+            <DataKos register={register} errors={errors!} />
           ) : stepTab === "2" ? (
-            <FotoKos />
+            <FotoKos register={register} errors={errors!} />
           ) : stepTab === "3" ? (
-            <AlamatKos />
-          ) : (
-            <HargaKos />
-          )}
+            <AlamatKos register={register} setValue={setValue} errors={errors!} />
+          ) : stepTab === "4" ? (
+            <HargaKos register={register} errors={errors!} />
+          ) : null}
           <div className="w-full flex items-center justify-end px-24 ">
-            <button
-              // type={Number(stepTab) > 4 ? "submit" : "button"}
-              className="bg-[#4CA02E] text-white py-2 px-3 text-sm rounded-md "
-              onClick={() => handleNextStep()}
-            >
-              Continue
-            </button>
+            {Number(stepTab) < 4 && (
+              <button
+                className="bg-[#4CA02E] text-white py-2 px-3 text-sm rounded-md "
+                onClick={() => handleNextStep()}
+                type={"button"}
+              >
+                Continue
+              </button>
+            )}
+            {Number(stepTab) === 4 && (
+              <button className="bg-[#4CA02E] text-white py-2 px-3 text-sm rounded-md ">
+                Submit
+              </button>
+            )}
           </div>
         </form>
       </div>
