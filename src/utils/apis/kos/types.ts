@@ -5,9 +5,11 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 export const kosSchema = z.object({
   kos_name: z.string().min(1, { message: "Enter your kos name" }),
   description: z.string().min(1, { message: "Enter your description" }),
-  category: z.string().email("Enter a valid email").min(1, { message: "Enter category kos" }),
-  price: z.number().min(1, "Price required"),
-  rooms: z.number().min(1, "Rooms required"),
+  latitude: z.string().min(1, { message: "Enter your latitude" }),
+  longitude: z.string().min(1, { message: "Enter your longitude" }),
+  category: z.string().min(1, { message: "Enter category kos" }),
+  price: z.string().min(1, "Price is required"),
+  rooms: z.string().min(1, "Rooms is required"),
   address: z.string().min(1, { message: "Enter your address" }),
   kos_facilities: z.string().min(1, { message: "Enter your kos fasilitas" }),
   kos_rules: z.string().min(1, { message: "Enter your kos fasilitas" }),
@@ -50,3 +52,16 @@ export const kosSchema = z.object({
 });
 
 export type IKosType = z.infer<typeof kosSchema>;
+
+export interface IKosRecomend {
+  id: string;
+  kos_name: string;
+  rating: number;
+  category: string;
+  price: number;
+  address: string;
+  kos_facilities: string;
+  photo_kos: {
+    main_kos_photo: string;
+  }[];
+}
