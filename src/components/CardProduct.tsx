@@ -1,6 +1,6 @@
 import { FC, ReactEventHandler } from "react";
 import NumberFormatter from "./NumberFormatter";
-import { Edit, MoreHorizontal, MoreHorizontalIcon, Trash2 } from "lucide-react";
+import { Edit, MoreHorizontal, Trash2 } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import AlertDelete from "./AlertDelete";
 import { Separator } from "@radix-ui/react-dropdown-menu";
@@ -8,19 +8,19 @@ import { toast } from "./ui/use-toast";
 import { deleteKos } from "@/utils/apis/kos/api";
 export interface searchKos {
   hidden: boolean;
-  kos_name: string;
-  rating: string;
-  price: number;
-  rooms?: string;
-  category?: string;
-  address: string;
-  kos_facilities: string;
-  photo_kos?: string | any;
-  direct?: ReactEventHandler;
-  id?: any;
+  kos_name: string | undefined;
+  rating: string | undefined;
+  price: number | undefined;
+  rooms?: string | undefined;
+  category?: string | undefined;
+  address?: string | undefined;
+  kos_facilities?: string | undefined;
+  photo_kos: string | any | undefined;
+  direct?: ReactEventHandler | undefined;
+  id?: any | undefined;
 }
 
-const getSentencesAfterNCommas = (text: string, n: number) => {
+const getSentencesAfterNCommas = (text: string | any, n: number) => {
   const sentences = text.split(". "); // Pisahkan kalimat
   const resultSentences = sentences.map((sentence: any) => {
     const commaIndex = [];
