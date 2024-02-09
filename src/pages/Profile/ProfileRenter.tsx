@@ -12,6 +12,12 @@ interface profile {
   gender: string;
 }
 
+interface changePassword {
+  old_password: string;
+  new_password: string;
+  konfirmasi_password: string;
+}
+
 const ProfileRenter = () => {
   const [status, setStatus] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
@@ -26,6 +32,12 @@ const ProfileRenter = () => {
     gender: "Pilih Jenis Kelamin",
     email: "",
     photo_profile: "",
+  });
+
+  const [formPassword, setFormPassword] = useState<changePassword>({
+    old_password: "",
+    new_password: "",
+    konfirmasi_password: "",
   });
 
   uploadedImageUrl ? uploadedImageUrl : "";
@@ -107,6 +119,37 @@ const ProfileRenter = () => {
     }
   };
 
+  const changePassword = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (formPassword.new_password === formPassword.konfirmasi_password) {
+      try {
+        const response = await axios.put(
+          `${baseurl}/change-password`,
+          { new_password: formPassword.new_password, old_password: formPassword.old_password },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response) {
+          toast({
+            description: "Berhasil merubah Password",
+          });
+        }
+      } catch (error: any) {
+        toast({
+          description: error.message,
+        });
+        console.log(error);
+      }
+    } else {
+      toast({
+        description: "Password baru dan Konfirmasi Password harus sama",
+      });
+    }
+  };
+
   const handleStatus = () => {
     setStatus(!status);
   };
@@ -118,6 +161,27 @@ const ProfileRenter = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  const cekKost = async () => {
+    try {
+      const response = await axios.get(`${baseurl}/users/kos`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data.data === null) {
+        setStatus(true);
+      } else {
+        setStatus(false);
+      }
+    } catch (error: any) {
+      toast({
+        description: error.message,
+      });
+    }
+  };
+
+  cekKost();
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files?.[0];
@@ -358,22 +422,12 @@ const ProfileRenter = () => {
                       </div>
                     </div>
                   ) : (
-                    <CardProduct
-                      hidden={true}
-                      kos_name={undefined}
-                      rating={undefined}
-                      price={undefined}
-                      category={undefined}
-                      kos_facilities="remo"
-                      photo_kos={"remo"}
-                    />
-                  )}
-
+                    <CardProduct hidden={true} kos_name={"Makan agung"} rating={"5"} price={500000} category={"banyak"} kos_facilities="remo" photo_kos={"remo"} />)}
                   {showPopup && (
                     <div>
                       <div className="fixed inset-0 bg-black opacity-50 z-50"></div>
                       <div className="fixed inset-0 flex items-center justify-center z-50 font-Poppins">
-                        <form>
+                        <form onSubmit={changePassword}>
                           <div className="flex flex-col px-16 py-8 text-sm text-black bg-white rounded-2xl shadow-2xl max-w-[772px] max-md:px-5">
                             <div className="text-5xl font-bold max-md:max-w-full">
                               Ganti Password
@@ -383,17 +437,19 @@ const ProfileRenter = () => {
                             </div>
                             <input
                               required
-                              type={showPassword ? "password" : "text"}
+                              type={!showPassword ? "password" : "text"}
                               className="justify-center p-3 mt-1.5 whitespace-nowrap bg-white rounded-md border border-solid shadow-sm border-slate-600 border-opacity-40 max-md:max-w-full"
                               placeholder="*******"
+                              onChange={(e: any) => setFormPassword((prev) => ({ ...prev, old_password: e.target.value }))}
                             />
 
                             <div className="mt-8 text-xs max-md:max-w-full">Password Baru</div>
                             <input
                               required
-                              type={showPassword ? "password" : "text"}
+                              type={!showPassword ? "password" : "text"}
                               className="justify-center p-3 mt-1.5 whitespace-nowrap bg-white rounded-md border border-solid shadow-sm border-slate-600 border-opacity-40 max-md:max-w-full"
                               placeholder="*******"
+                              onChange={(e: any) => setFormPassword((prev) => ({ ...prev, new_password: e.target.value }))}
                             />
 
                             <div className="mt-8 text-xs max-md:max-w-full">
@@ -401,12 +457,23 @@ const ProfileRenter = () => {
                             </div>
                             <input
                               required
-                              type={showPassword ? "password" : "text"}
+                              type={!showPassword ? "password" : "text"}
                               className="justify-center p-3 mt-1.5 whitespace-nowrap bg-white rounded-md border border-solid shadow-sm border-slate-600 border-opacity-40 max-md:max-w-full"
                               placeholder="*******"
+                              onChange={(e: any) => setFormPassword((prev) => ({ ...prev, konfirmasi_password: e.target.value }))}
                             />
 
                             <span onClick={togglePasswordVisibility} className="mt-5">
+<<<<<<< HEAD
+                              {!showPassword ? (
+                                <div className="flex gap-3 items-center">
+                                  <img width="30" height="30" className="rounded-full border-2 p-1 border-slate-500" src="https://img.icons8.com/ios/50/closed-eye.png" alt="closed-eye" /> Tampilkan Password
+                                </div>
+                              ) : (
+                                <div className="flex gap-3 items-center">
+                                  <img width="30" height="30" className="rounded-full border-2 p-1 border-slate-500" src="https://img.icons8.com/tapes/40/experimental-visible-tapes.png" alt="experimental-visible-tapes" /> Sembunyikan
+                                  Password
+=======
                               {showPassword ? (
                                 <div className="flex gap-3  items-center">
                                   <img
@@ -426,10 +493,20 @@ const ProfileRenter = () => {
                                     alt="experimental-visible-tapes"
                                   />{" "}
                                   Sembunyikan Password
+>>>>>>> main
                                 </div>
                               )}
                             </span>
 
+<<<<<<< HEAD
+                            <div className="flex justify-center gap-6">
+                              <div className="flex gap-2 self-start px-6 py-3 mt-12 font-bold text-white whitespace-nowrap hover:bg-blue-400 bg-blue-600 rounded-md max-md:px-5 max-md:mt-10">
+                                <button type="submit">Kirim</button>
+                              </div>
+                              <div className="flex gap-2 self-start px-6 py-3 mt-12 font-bold hover:bg-opacity-80 text-black border-[0.5px] border-black whitespace-nowrap bg-white rounded-md max-md:px-5 max-md:mt-10">
+                                <button onClick={() => setShowPopup(!showPopup)}>Tutup</button>
+                              </div>
+=======
                             <div className="flex gap-2 self-start px-6 py-3 mt-12 font-bold text-white whitespace-nowrap bg-blue-600 rounded-md max-md:px-5 max-md:mt-10">
                               <button type="submit">Kirim</button>
                               <img
@@ -437,6 +514,7 @@ const ProfileRenter = () => {
                                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/980f3594605ffd027f9c5a8ef0433b000d24e7cc0655eb3e461f034ad4f7722d?"
                                 className="w-4 aspect-square"
                               />
+>>>>>>> main
                             </div>
                           </div>
                         </form>
