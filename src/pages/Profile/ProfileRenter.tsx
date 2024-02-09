@@ -1,3 +1,4 @@
+import AlertDelete from "@/components/AlertDelete";
 import CardProduct from "@/components/CardProduct";
 import Layout from "@/components/Layout";
 import { toast } from "@/components/ui/use-toast";
@@ -318,9 +319,9 @@ const ProfileRenter = () => {
                         <button type="submit" className="grow justify-center px-3 py-2 md:px-4 md:py-3 bg-lime-600 rounded shadow-sm">
                           Edit Akun
                         </button>
-                        <button onClick={deleteProfile} className="grow justify-center md:px-3 md:py-4 px-3 py-2 bg-red-600 rounded shadow-sm">
-                          Hapus Akun
-                        </button>
+                        <AlertDelete onAction={() => deleteProfile}>
+                          <button className="grow justify-center md:px-3 md:py-4 px-3 py-2 bg-red-600 rounded shadow-sm">Hapus Akun</button>
+                        </AlertDelete>
                       </div>
                     </div>
                   </form>
@@ -366,7 +367,7 @@ const ProfileRenter = () => {
                   ) : (
                     <CardProduct hidden={true} kos_name={"Makan agung"} rating={"5"} price={500000} category={"banyak"} kos_facilities="remo" photo_kos={"remo"} />
                   )}
-   {showPopup && (
+                  {showPopup && (
                     <div>
                       <div className="fixed inset-0 bg-black opacity-50 z-50"></div>
                       <div className="fixed inset-0 flex items-center justify-center z-50 font-Poppins">
@@ -412,10 +413,7 @@ const ProfileRenter = () => {
                                 </div>
                               )}
                             </span>
-                                </div>
-                              )}
-                            </span>
-                             <div className="flex justify-center gap-6">
+                            <div className="flex justify-center gap-6">
                               <div className="flex gap-2 self-start px-6 py-3 mt-12 font-bold text-white whitespace-nowrap hover:bg-blue-400 bg-blue-600 rounded-md max-md:px-5 max-md:mt-10">
                                 <button type="submit">Kirim</button>
                               </div>
