@@ -3,19 +3,19 @@ import NumberFormatter from "./NumberFormatter";
 
 export interface searchKos {
   hidden: boolean;
-  kos_name: string;
-  rating: string;
-  price: number;
-  rooms: string;
-  category: string;
-  address: string;
-  kos_facilities: string;
-  photo_kos?: string | any;
-  direct: ReactEventHandler;
-  id?: any;
+  kos_name: string | undefined;
+  rating: string | undefined;
+  price: number | undefined;
+  rooms?: string | undefined;
+  category: string | undefined;
+  address?: string | undefined;
+  kos_facilities?: string | undefined;
+  photo_kos: string | any | undefined;
+  direct?: ReactEventHandler | undefined;
+  id?: any | undefined;
 }
 
-const getSentencesAfterNCommas = (text: string, n: number) => {
+const getSentencesAfterNCommas = (text: string | any, n: number) => {
   const sentences = text.split(". "); // Pisahkan kalimat
   const resultSentences = sentences.map((sentence: any) => {
     const commaIndex = [];
@@ -33,8 +33,6 @@ const getSentencesAfterNCommas = (text: string, n: number) => {
 
   return resultSentences;
 };
-
-// Contoh penggunaan
 
 const CardProduct: FC<searchKos> = (props: searchKos) => {
   const { hidden, kos_name, rating, category, price, rooms, address, kos_facilities, photo_kos, direct } = props;

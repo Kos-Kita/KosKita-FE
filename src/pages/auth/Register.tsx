@@ -80,8 +80,8 @@ const Register = () => {
               <option value="jenis-kelamin" className="ml-10">
                 Gender
               </option>
-              <option value="putra">Laki-laki</option>
-              <option value="putri">Perempuan</option>
+              <option value="laki-laki">Laki-laki</option>
+              <option value="perempuan">Perempuan</option>
             </select>
             {errors.gender && <p className="text-red-500 text-sm">Harap pilih jenis kelamin</p>}
           </div>
