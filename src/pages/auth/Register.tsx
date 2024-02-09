@@ -3,52 +3,44 @@ import axios from "axios";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { registerSchema } from "@/utils/apis/auth/types";
 
 const Register = () => {
   const [searchParams, _setSearchParams] = useSearchParams();
   const tabParam = searchParams.get("tab");
   const [showPassword, setPassword] = useState(true);
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const baseurl = import.meta.env.VITE_BASE_URL;
 
-  interface typeUser {
-    name: string;
-    user_name: string;
-    email: string;
-    password: string;
-    role: string;
-    gender: string;
-  }
-
-  const [user, setUser] = useState<typeUser>({
-    name: "",
-    user_name: "",
-    email: "",
-    password: "",
-    role: "",
-    gender: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: zodResolver(registerSchema),
   });
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  const onSubmit = async (data: any) => {
     try {
-      const response = await axios.post("https://l3n.my.id/users", {
-        name: user.name,
-        user_name: user.user_name,
-        email: user.email,
-        password: user.password,
-        gender: user.gender,
+      const response = await axios.post(`${baseurl}/users`, {
+        name: data.name,
+        user_name: data.user_name,
+        email: data.email,
+        password: data.password,
+        gender: data.gender,
         role: tabParam,
       });
+
       if (response) {
-        alert("Berhasil");
-        setUser({
-          name: "",
-          user_name: "",
-          email: "",
-          password: "",
-          role: "",
-          gender: "",
+        toast({
+          description: "Anda Berhasil Registrasi",
         });
+        reset();
       }
     } catch (error: any) {
       alert(error.response.data.message);
@@ -63,38 +55,40 @@ const Register = () => {
           Buat Akun
           <span className={`${tabParam === "renter" ? "text-[#4CA02E]" : "text-[#B6A563]"}`}>{tabParam === "renter" ? " Renter" : " Owner"}</span> Anda
         </h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="p-3 space-y-5">
-            <input type="text" onChange={(e) => setUser((prev) => ({ ...prev, name: e.target.value }))} className="px-4 py-2 rounded-md bg-slate-100 w-full" required placeholder="Nama" value={user.name} />
-            <input type="text" onChange={(e) => setUser((prev) => ({ ...prev, user_name: e.target.value }))} className="px-4 py-2 rounded-md bg-slate-100 w-full" required placeholder="Username" value={user.user_name} />
-            <input type="email" onChange={(e) => setUser((prev) => ({ ...prev, email: e.target.value }))} className="px-4 py-2 rounded-md bg-slate-100 w-full" required placeholder="Email" value={user.email} />
-            <div className="flex  bg-slate-100 w-full gap-2">
-              <input
-                type={showPassword ? "password" : "text"}
-                onChange={(e) => setUser((prev) => ({ ...prev, password: e.target.value }))}
-                className=" bg-slate-100 px-4 py-2 rounded-md w-full"
-                required
-                placeholder="Password"
-                value={user.password}
-              />
+            <input type="text" {...register("name")} className={`px-4 py-2 rounded-md bg-slate-100 w-full ${errors.name ? "border-red-500" : ""}`} placeholder="Nama" />
+            {errors.name && <p className="text-red-500 text-sm">Nama harus memiliki setidaknya 3 karakter</p>}
+
+            <input type="text" {...register("user_name")} className={`px-4 py-2 rounded-md bg-slate-100 w-full ${errors.user_name ? "border-red-500" : ""}`} placeholder="Username" />
+            {errors.user_name && <p className="text-red-500 text-sm">Username harus memiliki setidaknya 3 karakter</p>}
+
+            <input type="email" {...register("email")} className={`px-4 py-2 rounded-md bg-slate-100 w-full ${errors.email ? "border-red-500" : ""}`} placeholder="Email" />
+            {errors.email && <p className="text-red-500 text-sm">Email tidak valid</p>}
+
+            <div className="flex bg-slate-100 w-full gap-2">
+              <input type={showPassword ? "password" : "text"} {...register("password")} className={`bg-slate-100 px-4 py-2 rounded-md w-full ${errors.password ? "border-red-500" : ""}`} placeholder="Password" />
               {showPassword ? (
                 <img width="36px" onClick={() => setPassword(!showPassword)} height="16px" src="https://img.icons8.com/fluency-systems-regular/48/visible--v1.png" alt="visible--v1" className="p-2" />
               ) : (
                 <img width="36px" onClick={() => setPassword(!showPassword)} height="16px" src="https://img.icons8.com/fluency-systems-filled/48/closed-eye.png" alt="closed-eye" className="p-2" />
               )}
             </div>
-            <select onChange={(e) => setUser((prev) => ({ ...prev, gender: e.target.value }))} value={user.gender} className="p-3 w-full rounded-md bg-white border-[0.5px] border-slate-400">
+            {errors.password && <p className="text-red-500 text-sm">Password harus memiliki setidaknya 6 karakter</p>}
+
+            <select {...register("gender")} className={`p-3 w-full rounded-md bg-white border-[0.5px] border-slate-400 ${errors.gender ? "border-red-500" : ""}`}>
               <option value="jenis-kelamin" className="ml-10">
                 Gender
               </option>
               <option value="putra">Laki-laki</option>
               <option value="putri">Perempuan</option>
             </select>
+            {errors.gender && <p className="text-red-500 text-sm">Harap pilih jenis kelamin</p>}
           </div>
 
-          <div className="flex justify-start items-start  text-base leading-5 text-neutral-900 max-md:flex-wrap max-md:max-w-full">
+          <div className="flex justify-start items-start text-base leading-5 text-neutral-900 max-md:flex-wrap max-md:max-w-full">
             <div className="flex-auto gap-5 my-5 text-sm text-center items-start justify-start">
-              <input type="checkbox" id="checkbox-register" required />
+              <input type="checkbox" id="checkbox-register" {...register("terms")} />
               <label htmlFor="checkbox-register"> Saya menyetujui Syarat dan Ketentuan, Kebijakan Privasi, dan menerima pembaruan melalui email.</label>
             </div>
           </div>
