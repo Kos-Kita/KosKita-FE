@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { IKosType, kosSchema } from "@/utils/apis/kos/types";
 import { toast } from "@/components/ui/use-toast";
 import { createKos } from "@/utils/apis/kos/api";
+import { Loader2 } from "lucide-react";
 
 const AddKos = () => {
   const steps = ["Data Kos", "Foto Kos", "Alamat Kos", "Harga Kos"];
@@ -22,7 +23,7 @@ const AddKos = () => {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<IKosType>({
     resolver: zodResolver(kosSchema),
   });
@@ -35,18 +36,19 @@ const AddKos = () => {
   }, [stepTab]);
 
   const handleCreateKos = async (body: IKosType) => {
-    try {
-      const result = await createKos(body);
-      toast({
-        description: result?.message,
-      });
-      navigate("/");
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        description: (error as Error).message,
-      });
-    }
+    console.log(body);
+    // try {
+    //   const result = await createKos(body);
+    //   toast({
+    //     description: result?.message,
+    //   });
+    //   navigate("/");
+    // } catch (error) {
+    //   toast({
+    //     variant: "destructive",
+    //     description: (error as Error).message,
+    //   });
+    // }
   };
 
   const handleNextStep = () => {
@@ -87,8 +89,15 @@ const AddKos = () => {
               </button>
             )}
             {Number(stepTab) === 4 && (
-              <button className="bg-[#4CA02E] text-white py-2 px-3 text-sm rounded-md ">
-                Submit
+              <button className="bg-[#4CA02E] text-white py-2 px-3 text-sm rounded-md flex items-center justify-center">
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                  </>
+                ) : (
+                  "Submit"
+                )}
               </button>
             )}
           </div>

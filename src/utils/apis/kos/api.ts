@@ -46,3 +46,19 @@ export const createKos = async (body: IKosType) => {
     throw new Error(error.response.data.message);
   }
 };
+export const editKos = async (id: number) => {
+  try {
+    const response = await axiosWithConfig.put(`/kos/${id}`);
+    return response.data as Response;
+  } catch (error: any) {
+    throw new Error(error.response.data.message);
+  }
+};
+export const deleteKos = async (id: number) => {
+  try {
+    const response = await axiosWithConfig.delete(`/kos/${id}`);
+    return response.data as Response;
+  } catch (error: any) {
+    throw new Error(error.response.data.message);
+  }
+};
