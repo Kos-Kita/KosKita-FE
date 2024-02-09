@@ -24,3 +24,15 @@ export const userSchema = z.object({
   role: z.string().optional(),
 });
 export type IUserType = z.infer<typeof userSchema>;
+
+export interface IMyKosType {
+  id: number;
+  kos_name: string;
+  rating: number;
+  price: number;
+  address: string;
+  kos_facilities: string;
+  photo_kos: {
+    main_kos_photo: string;
+  };
+}

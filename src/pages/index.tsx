@@ -30,6 +30,11 @@ const App = () => {
       });
     }
   };
+
+  const handleSearch = (e: any) => {
+    navigate("/searchmenu", { state: { data: e.target[0].value } });
+  };
+
   return (
     <Layout>
       <div className="min-h-screen overflow-hidden">
@@ -39,7 +44,10 @@ const App = () => {
             backgroundImage: `url(${imageBackround})`,
           }}
         >
-          <div className="bg-white/85 shadow rounded-tr-3xl rounded-tl-3xl rounded-br-3xl rounded absolute top-48 left-20 p-8 space-y-10 max-w-lg w-full ">
+          <form
+            onSubmit={handleSearch}
+            className="bg-white/85 shadow rounded-tr-3xl rounded-tl-3xl rounded-br-3xl rounded absolute top-48 left-20 p-8 space-y-10 max-w-lg w-full "
+          >
             <h1 className="text-4xl font-semibold">Anda Cari Kost?</h1>
             <p className="text-lg font-medium text-[#181A18]">Cari disini aja dah</p>
             <label
@@ -55,7 +63,7 @@ const App = () => {
               />
               <button className="py-4 px-8 bg-[#4CA02E]  text-white rounded-xl">Search</button>
             </label>
-          </div>
+          </form>
         </section>
 
         <section className="flex flex-col gap-y-3 items-center justify-center py-20">
@@ -97,7 +105,13 @@ const App = () => {
               {kosRecomend?.map((data) => (
                 <>
                   <CarouselItem
-                    className={`${kosRecomend.length > 1 ? "basis-1/4" : ""}`}
+                    className={`${
+                      kosRecomend.length > 1 && kosRecomend.length < 5
+                        ? "basis-1/4"
+                        : kosRecomend.length > 5
+                        ? "basis-1/6"
+                        : ""
+                    }`}
                     key={data.id}
                   >
                     <div
@@ -131,7 +145,7 @@ const App = () => {
                             </span>
 
                             <span className="text-sm font-medium text-[#4CA02E]">
-                              {formattedAmount(data.price)}/perbulan
+                              {formattedAmount(data.price)}/bulan
                             </span>
                           </div>
                         </div>
