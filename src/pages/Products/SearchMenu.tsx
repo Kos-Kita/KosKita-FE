@@ -1,25 +1,102 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import CardProduct, { searchKos } from "@/components/CardProduct";
 import Layout from "@/components/Layout";
-import { useState } from "react";
 
 const SearchMenu = () => {
-  const [showCheckboxes, setShowCheckboxes] = useState(false);
+  const [showCheckboxes, setShowCheckboxes] = useState(true);
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [checkboxValues, setCheckboxValues] = useState({
+    putra: false,
+    putri: false,
+    hargaDibawah: false,
+    hargaDiatas: false,
+    campur: false,
+  });
+  const baseurl = import.meta.env.VITE_BASE_URL;
+  const token = localStorage.getItem("token");
+  const [showPagination, setShowPagination] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  const handleCheckboxChange = (checkboxName: string) => {
+    setCheckboxValues((prevValues: any) => ({
+      ...prevValues,
+      [checkboxName]: !prevValues[checkboxName],
+    }));
+  };
 
   const handleMoreFilterClick = () => {
     setShowCheckboxes(!showCheckboxes);
   };
+
+  const getSearch = async () => {
+    try {
+      const response = await axios.get(`${baseurl}/kos/search`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      let searchData = searchQuery ? response.data.data.filter((item: any) => item.kos_name.toLowerCase().includes(searchQuery.toLowerCase()) || item.address.toLowerCase().includes(searchQuery.toLowerCase())) : response.data.data;
+
+      if (searchData.length > 0) {
+        if (checkboxValues.putra) {
+          searchData = searchData.filter((item: any) => item.category.toLowerCase() === "putra");
+        }
+        if (checkboxValues.putri) {
+          searchData = searchData.filter((item: any) => item.category.toLowerCase() === "putri");
+        }
+        if (checkboxValues.campur) {
+          searchData = searchData.filter((item: any) => item.category.toLowerCase() === "campur");
+        }
+        if (checkboxValues.hargaDibawah) {
+          searchData = searchData.filter((item: any) => item.price < 1000000);
+        }
+        if (checkboxValues.hargaDiatas) {
+          searchData = searchData.filter((item: any) => item.price >= 1000000);
+        }
+      }
+
+      setSearchResults(searchData);
+      setShowCheckboxes(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    getSearch();
+  };
+
+  useEffect(() => {
+    setShowPagination(true);
+    getSearch();
+  }, []);
+
+  const totalPages = Math.ceil(searchResults.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = searchResults.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <Layout>
       <div className="flex flex-col justify-center items-center border-t-2 border-b-slate-50 bg-white">
         <div className="flex flex-col items-center self-stretch px-16 pt-5 pb-10 mt-2.5 w-full text-lg font-bold leading-6 bg-white max-md:px-5 max-md:max-w-full">
           <div className="flex flex-col items-start w-full max-w-[1064px] max-md:max-w-full">
-            <div className="flex gap-5 justify-between self-stretch py-1.5 pr-1.5 pl-10 w-full whitespace-nowrap bg-white border-4 border-solid border-[color:var(--Green,#4CA02E)] rounded-[40px] max-md:flex-wrap max-md:pl-5 max-md:max-w-full">
-              <div className="flex gap-3 my-auto text-neutral-900">
-                <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/9b47326f4402e3d3079778f9715c62d6008fc9e571445de53fc761fb2497a593?" className="my-auto w-5 aspect-square" />
-                <input type="text" placeholder="Cari Kota" className="grow border-none focus:outline-none w-[60vw]" />
+            <form onSubmit={handleSearchSubmit}>
+              <div className="flex gap-5 justify-between self-stretch py-1.5 pr-1.5 pl-10 w-full whitespace-nowrap bg-white border-4 border-solid border-[color:var(--Green,#4CA02E)] rounded-[40px] max-md:flex-wrap max-md:pl-5 max-md:max-w-full">
+                <div className="flex gap-3 my-auto text-neutral-900">
+                  <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/9b47326f4402e3d3079778f9715c62d6008fc9e571445de53fc761fb2497a593?" className="my-auto w-5 aspect-square" />
+                  <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Cari Kota" className="grow border-none focus:outline-none w-[55vw]" />
+                </div>
+                <button type="submit" className="cursor-pointer justify-center px-10 py-3 text-white bg-lime-600 rounded-[40px] max-md:px-5">
+                  Search
+                </button>
               </div>
-              <button className="cursor-pointer justify-center px-10 py-3 text-white bg-lime-600 rounded-[40px] max-md:px-5">Search</button>
-            </div>
+            </form>
 
             <button onClick={handleMoreFilterClick} className="flex gap-5 justify-center items-center p-3 w-1/6 my-4 border-[0.5px] text-white rounded-full bg-lime-600">
               <span>More Filters</span>
@@ -29,66 +106,87 @@ const SearchMenu = () => {
             {showCheckboxes && (
               <div className="checkbox-container flex flex-col ml-3 shadow-md p-3 rounded-md">
                 <label className="font-medium">
-                  <input type="checkbox" value="putra" /> Putra
+                  <input type="checkbox" checked={checkboxValues.putra} onChange={() => handleCheckboxChange("putra")} /> Putra
                 </label>
                 <label className="font-medium">
-                  <input type="checkbox" value="putri" /> Putri
+                  <input type="checkbox" checked={checkboxValues.putri} onChange={() => handleCheckboxChange("putri")} /> Putri
                 </label>
                 <label className="font-medium">
-                  <input type="checkbox" value="1.000.000" /> Harga Range 1.000.000 - 2.000.000
+                  <input type="checkbox" checked={checkboxValues.hargaDibawah} onChange={() => handleCheckboxChange("hargaDibawah")} /> Harga dibawah 1.000.000
                 </label>
                 <label className="font-medium">
-                  <input type="checkbox" value="campur" /> Campur
+                  <input type="checkbox" checked={checkboxValues.hargaDiatas} onChange={() => handleCheckboxChange("hargaDiatas")} /> Harga diatas 1.000.000
+                </label>
+                <label className="font-medium">
+                  <input type="checkbox" checked={checkboxValues.campur} onChange={() => handleCheckboxChange("campur")} /> Campur
                 </label>
               </div>
             )}
             <div className="mt-7 ml-3 text-base leading-5 whitespace-nowrap text-neutral-900 max-md:ml-2.5">
-              <span className="text-lg font-bold leading-6">1 results</span> untuk kosan di area Jakarta Barat
+              <span className="text-lg font-bold leading-6">{searchResults.length} </span> Hasil untuk data yang dicari
             </div>
           </div>
         </div>
-        <div className="flex flex-col items-center px-16 pb-12 mt-3 w-full max-w-[1300px] max-md:px-5 max-md:max-w-full">
+        <div className="flex flex-col items-center px-4 pb-12 mt-3 w-full max-w-[1300px] max-md:px-5 max-md:max-w-full">
           <div className="flex flex-col mb-10 w-full max-w-[995px] max-md:max-w-full">
-            <div className="pr-20 mt-11 bg-zinc-100 rounded-[60px_60px_60px_12px] max-md:pr-5 max-md:mt-10 max-md:max-w-full">
-              <div className="flex gap-5 max-md:flex-col max-md:gap-0 max-md:">
-                <div className="flex flex-col w-[44%] max-md:ml-0 max-md:w-full">
-                  <img loading="lazy" srcSet="https://www.pajak.com/storage/2022/08/indekos-758x490.png" className="grow self-stretch w-full " />
-                </div>
-                <div className="flex flex-col ml-5 w-[56%] max-md:ml-0 max-md:w-full">
-                  <div className="flex flex-col grow px-8 py-11 max-md:px-5">
-                    <h2 className="font-bold text-xl">Kostan Rame Agung</h2>
-                    <div className="flex items-center w-full gap-8 mt-8">
-                      <div className="text-sm leading-4 gap-5 whitespace-nowrap text-neutral-900">K.Mandi Dalam · Wifi · AC · Kasur</div>
-                      <div className="text-sm leading-4 gap-5 whitespace-nowrap text-neutral-900">tipe kost: campur</div>
-                    </div>
-                    <div className="flex gap-3 justify-between mt-3.5 text-base whitespace-nowrap">
-                      <div className="grow justify-center px-5 py-1 text-white bg-lime-600 rounded-[30px]">AVAILABLE</div>
-                      <div className="grow my-auto text-neutral-900">from Rp. 1.500.000 /bulan</div>
-                    </div>
-                    <div className="mt-6  text-base whitespace-nowrap text-neutral-900 max-md:ml-2.5 flex justify-star items-center">
-                      <img width="20" height="20" src="https://img.icons8.com/ios/50/marker--v1.png" alt="marker--v1" /> <span>** Lokasi kos kosannya**</span>
-                    </div>
-                    <div className="flex gap-5 justify-between mt-8 text-xs font-bold leading-5">
-                      <div className="flex gap-2 justify-between whitespace-nowrap text-stone-950">
-                        <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/3064243ec75f1730094f8347466f60fab0cc73015f1520a7cd67831cd2fbc934?" className="w-5 aspect-square" />
-                        <div className="my-auto">5.0</div>
-                      </div>
-                      <div className="flex-auto text-black">Tersisa : 2 kamar</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {searchResults.length > 0 && showPagination ? (
+              currentItems.map((item: searchKos, key: any) => (
+                <CardProduct
+                  hidden={false}
+                  key={key}
+                  kos_name={item.kos_name}
+                  rating={item.rating}
+                  price={item.price}
+                  rooms={item.rooms}
+                  category={item.category}
+                  address={item.address}
+                  kos_facilities={item.kos_facilities}
+                  photo_kos={item.photo_kos.main_kos_photo}
+                />
+              ))
+            ) : (
+              <div className="flex flex-col justify-center items-center mb-10 w-full max-w-[995px] max-md:max-w-full text-2xl">Tidak ada data, cari nama lain</div>
+            )}
+            {searchResults.length !== 0 && (
+              <div id="pagination" className="flex justify-center my-16 gap-8">
+                <button
+                  id="prevPageBtn"
+                  className={
+                    currentPage === 1
+                      ? `bg-white text-xs md:text-base text-black rounded-full px-3 py-2 md:p-3 border-2 border-slate-400`
+                      : ` bg-lime-600 text-xs md:text-base text-white rounded-full px-3 py-2 md:p-3 border-2 border-slate-400`
+                  }
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  Sebelumnya
+                </button>
 
-            <div className="flex gap-1.5 self-center mt-11 text-sm font-semibold whitespace-nowrap text-zinc-800 max-md:mt-10">
-              <div className="justify-center px-1 py-2 bg-white rounded-lg aspect-[1.16] text-stone-300">Prev</div>
-              <div className="justify-center items-center px-3 h-8 text-white bg-lime-600 rounded-lg aspect-square">1</div>
-              <div className="justify-center items-center px-3 h-8 bg-white rounded-lg border border-solid aspect-square border-zinc-100">2</div>
-              <div className="justify-center items-center px-3 h-8 bg-white rounded-lg border border-solid aspect-square border-zinc-100">3</div>
-              <div className="justify-center items-center px-2.5 h-8 bg-white rounded-lg aspect-square">...</div>
-              <div className="justify-center items-center px-2 h-8 bg-white rounded-lg border border-solid aspect-square border-zinc-100">10</div>
-              <div className="justify-center px-1 py-2 bg-white rounded-lg aspect-[1.19]">Next</div>
-            </div>
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <button
+                    className={`${currentPage === index + 1 ? "bg-lime-600 text-white" : "border-2 border-slate-200 text-black"} px-4 py-1 gap-[-10px] rounded-md `}
+                    key={`pageBtn_${index}`}
+                    onClick={() => setCurrentPage(index + 1)}
+                    disabled={currentPage === index + 1}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+
+                <button
+                  id="nextPageBtn"
+                  className={
+                    currentPage === totalPages
+                      ? `bg-white text-xs md:text-base text-black rounded-full px-3 py-2 md:p-3 border-2 border-slate-400`
+                      : ` bg-lime-600 text-xs md:text-base text-white rounded-full px-3 py-2 md:p-3 border-2 border-slate-400`
+                  }
+                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                >
+                  Selanjutnya
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
