@@ -46,10 +46,6 @@ const AlamatKos = ({ register, setValue, errors }: AlamatKosProps) => {
       const locationInfoByName = response.data;
       if (locationInfoByName.length !== 0) {
         setSuggestData(locationInfoByName);
-        // setPosition({
-        //   lat: locationInfoByName[0].lat,
-        //   lng: locationInfoByName[0].lon,
-        // });
       }
       console.log("Location Info By Name:", locationInfoByName);
     } catch (error) {

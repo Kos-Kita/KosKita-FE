@@ -8,7 +8,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu";
-import { UserRound } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "./ui/use-toast";
 const Navbar = () => {
@@ -61,12 +60,14 @@ const Navbar = () => {
                 >
                   Profile
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="p-2 hover:bg-slate-100 cursor-pointer"
-                  onClick={() => navigate("/buat-kos")}
-                >
-                  Buat Kos
-                </DropdownMenuItem>
+                {user.role === "owner" ? (
+                  <DropdownMenuItem
+                    className="p-2 hover:bg-slate-100 cursor-pointer"
+                    onClick={() => navigate("/buat-kos")}
+                  >
+                    Buat Kos
+                  </DropdownMenuItem>
+                ) : null}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="p-2 hover:bg-slate-100 cursor-pointer"
