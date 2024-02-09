@@ -1,33 +1,43 @@
+import { IKosType } from "@/utils/apis/kos/types";
 import useDebounce from "@/utils/hooks/useDebounce";
 import axios from "axios";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { Marker, Popup } from "react-leaflet";
 import { MapContainer } from "react-leaflet/MapContainer";
 import { TileLayer } from "react-leaflet/TileLayer";
-
-const AlamatKos = () => {
+interface AlamatKosProps {
+  register: UseFormRegister<IKosType>;
+  setValue: UseFormSetValue<IKosType>;
+  errors: FieldErrors<IKosType>;
+}
+const AlamatKos = ({ register, setValue, errors }: AlamatKosProps) => {
   const [position, setPosition] = useState({
     lat: -6.2,
     lng: 106.816666,
   });
+  const [suggestOpen, setSuggestOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const valueDebounce = useDebounce(searchValue, 500);
+  const [suggestData, setSuggestData] = useState([]);
   const [dataLoc, setDataLoc] = useState<any>();
   const markerRef = useRef<any>(null);
   const tileRef = useRef<any>(null);
-  const [searchValue, setSearchValue] = useState("");
-  const valueDebounce = useDebounce(searchValue, 500);
   const mapRef = useRef<any>(null);
-  const [suggestData, setSuggestData] = useState([]);
-  const [suggestOpen, setSuggestOpen] = useState(false);
+
   useEffect(() => {
     getLocationInfo();
     mapRef.current?.panTo(markerRef.current?.getLatLng());
+    setValue("address", dataLoc?.display_name);
+    setValue("latitude", `${position.lat}`);
+    setValue("longitude", `${position.lng}`);
   }, [position]);
 
   useEffect(() => {
     handleSearch();
     setSuggestOpen(true);
   }, [valueDebounce]);
-  console.log(dataLoc);
+
   const handleSearch = async () => {
     try {
       const response = await axios.get(
@@ -105,10 +115,15 @@ const AlamatKos = () => {
               type="text"
               className="border px-4 py-2 rounded-lg w-full"
               placeholder="Alamat"
-              defaultValue={dataLoc?.display_name}
               onClick={() => setSuggestOpen(!suggestOpen)}
-              onChange={(e) => setSearchValue(e.target.value)}
+              // onChange={(e) => setSearchValue(e.target.value)}
+              {...register("address", {
+                onChange: (e) => {
+                  setSearchValue(e.target.value);
+                },
+              })}
             />
+            {errors.address && <p className="text-red-500 text-sm">{errors.address.message}</p>}
             <div
               className="absolute  top-full left-0 w-full bg-white shadow-md z-10 border max-h-56 overflow-y-scroll "
               hidden={searchValue === "" || suggestOpen === false}
@@ -135,24 +150,6 @@ const AlamatKos = () => {
                 )}
               </ul>
             </div>
-          </div>
-          <div className="flex flex-col gap-y-3">
-            <label htmlFor="kabupaten/kota">kabupaten / kota</label>
-            <input
-              type="text"
-              className="border px-4 py-2 rounded-lg w-full"
-              placeholder="kabupaten/kota"
-              value={dataLoc?.address?.county ?? dataLoc?.address?.city}
-            />
-          </div>
-          <div className="flex flex-col gap-y-3">
-            <label htmlFor="kecamatan">Kecamatan</label>
-            <input
-              type="text"
-              className="border px-4 py-2 rounded-lg w-full"
-              placeholder="kecamatan"
-              value={dataLoc?.address?.village ?? dataLoc?.address?.suburb}
-            />
           </div>
         </div>
       </div>

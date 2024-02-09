@@ -7,16 +7,32 @@ import signal from "@/assets/signal.png";
 import message from "@/assets/message.png";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/utils/context/auth";
+import { getKosRecomend } from "@/utils/apis/kos/api";
+import { useEffect, useState } from "react";
+import { IKosRecomend } from "@/utils/apis/kos/types";
+import { formattedAmount } from "@/utils/formattedAmount";
+import { toast } from "@/components/ui/use-toast";
 
 const App = () => {
   const navigate = useNavigate();
-  const { user, token } = useAuth();
-  console.log(user);
-  console.log(token);
+  const [kosRecomend, setkosRecomend] = useState<IKosRecomend[]>();
+  useEffect(() => {
+    getRecommend();
+  }, []);
+
+  const getRecommend = async () => {
+    try {
+      const result = await getKosRecomend();
+      setkosRecomend(result.data);
+    } catch (error) {
+      toast({
+        description: (error as Error).message,
+      });
+    }
+  };
   return (
     <Layout>
-      <div className="min-h-screen">
+      <div className="min-h-screen overflow-hidden">
         <section
           className="w-full h-[767px] bg-no-repeat bg-cover bg-center relative bg-black/10 bg-blend-soft-light"
           style={{
@@ -78,45 +94,44 @@ const App = () => {
             }}
           >
             <CarouselContent className="gap-x-10">
-              {Array.from({ length: 8 }, (_, index) => (
+              {kosRecomend?.map((data) => (
                 <>
-                  <CarouselItem className="basis-1/4" key={index}>
+                  <CarouselItem
+                    className={`${kosRecomend.length > 1 ? "basis-1/4" : ""}`}
+                    key={data.id}
+                  >
                     <div
                       className="flex flex-col items-center gap-y-1 rounded-3xl overflow-hidden bg-[#F2F0F2] cursor-pointer "
-                      key={index}
-                      onClick={() => navigate(`/kos/${index + 1}`)}
+                      onClick={() => navigate(`/kos/${data.id}`)}
                     >
                       <img
-                        src={`https://source.unsplash.com/300x30${index}?rented-house`}
+                        src={`https://source.unsplash.com/300x30${data.id}?rented-house`}
                         alt="interior"
                         className="w-full h-[300px] object-cover"
                       />
-                      <div className="flex flex-col items-center w-full p-4 gap-y-3">
-                        <div className="flex items-center justify-between w-full">
-                          <h3 className="font-semibold text-xl ">Kostan {index + 1}</h3>
-                          <span className="text-xs">Tipe Kost : Putri</span>
+                      <div className="flex flex-col items-center w-full px-4 py-2 gap-y-3">
+                        <div className="flex items-center justify-start gap-x-2  w-full font-semibold">
+                          <span className="text-sm  py-1 px-4 bg-white/50 shadow rounded-lg ">
+                            Putri
+                          </span>
+                          <div className="flex items-center  rounded-xl gap-x-2">
+                            <Star color="white" fill={"green"} size={16} />
+                            <span className="text-sm">{data.rating}.0</span>
+                          </div>
                         </div>
-                        <div className="flex items-center w-full gap-x-3 text-sm">
-                          <div className="flex item-center gap-x-1">
-                            <MapPin size={16} />
-                            <span>Jakarta</span>
-                          </div>
-                          <div className="flex items-center gap-x-2">
-                            <Star
-                              color="yellow"
-                              fill={"yellow"}
-                              className="stroke-slate-100 drop-shadow-sm"
-                              size={20}
-                            />
-                            <span>{index + 1}.0</span>
-                          </div>
+                        <h3 className="font-semibold -mt-2 text-xl w-full">{data.kos_name}</h3>
+                        <div className="flex items-start w-full gap-x-2 text-sm">
+                          <MapPin size={16} className="w-8" />
+                          <span className="leading-tight ">{data.address}</span>
                         </div>
                         <div className="flex items-center w-full">
                           <div className="flex flex-col gap-y-2 ">
-                            <span className="text-xs">Wc Gratis, Makan Gratis, Minum Bayar</span>
+                            <span className="text-sm text-slate-800 ">
+                              {data.kos_facilities.replace(/ /g, "-").toLocaleLowerCase()}
+                            </span>
 
                             <span className="text-sm font-medium text-[#4CA02E]">
-                              Rp. 140.000/perbulan
+                              {formattedAmount(data.price)}/perbulan
                             </span>
                           </div>
                         </div>

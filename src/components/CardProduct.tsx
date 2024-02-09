@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, ReactEventHandler } from "react";
 import NumberFormatter from "./NumberFormatter";
 
 export interface searchKos {
@@ -11,21 +11,46 @@ export interface searchKos {
   address: string;
   kos_facilities: string;
   photo_kos?: string | any;
+  direct: ReactEventHandler;
+  id?: any;
 }
 
+const getSentencesAfterNCommas = (text: string, n: number) => {
+  const sentences = text.split(". "); // Pisahkan kalimat
+  const resultSentences = sentences.map((sentence: any) => {
+    const commaIndex = [];
+    for (let i = 0; i < sentence.length; i++) {
+      if (sentence[i] === ",") {
+        commaIndex.push(i);
+      }
+      if (commaIndex.length === n) {
+        break;
+      }
+    }
+    const result = commaIndex.length >= n ? sentence.slice(commaIndex[n - 1] + 1) : sentence;
+    return result.trim();
+  });
+
+  return resultSentences;
+};
+
+// Contoh penggunaan
+
 const CardProduct: FC<searchKos> = (props: searchKos) => {
-  const { hidden, kos_name, rating, category, price, rooms, address, kos_facilities, photo_kos } = props;
+  const { hidden, kos_name, rating, category, price, rooms, address, kos_facilities, photo_kos, direct } = props;
   return (
     <>
-      <div className="pr-20 mt-11 overflow-hidden bg-zinc-100 rounded-[60px_60px_60px_12px] max-md:pr-5 max-md:mt-10 max-md:max-w-full">
+      <div className=" md:pr-20 mt-11 overflow-hidden bg-zinc-100 rounded-[60px_60px_60px_12px] max-md:mt-10 max-md:max-w-full">
         <div className="flex gap-3 max-md:flex-col max-md:gap-0 max-md:">
-          <div className="flex flex-col w-[44%] max-md:ml-0 max-md:w-full">
-            <img loading="lazy" srcSet={photo_kos} className="grow self-stretch w-full h-[8rem] " />
+          <div className="flex flex-col w-[44%] max-md:ml-0 max-md:w-full overflow-hidden">
+            <img loading="lazy" srcSet={photo_kos} className="w-full md:h-[20rem] h-[12rem]  border-2 border-slate-100 " />
           </div>
           <div className="flex flex-col ml-5 w-[56%] max-md:ml-0 max-md:w-full">
-            <div className="flex flex-col grow  py-11 max-md:px-5">
-              <h2 className="font-bold text-xl">{kos_name}</h2>
-              <div className="flex items-center w-full gap-5 mt-8 flex-wrap">
+            <div className="flex flex-col grow py-5 md:py-11 max-md:px-5">
+              <h2 onClick={direct} className="cursor-pointer font-bold text-xl hover:text-2xl">
+                {kos_name}
+              </h2>
+              <div className="flex items-center w-full gap-5 mt-4 md:mt-8 flex-wrap">
                 <div className="text-sm leading-4 gap-5 whitespace-nowrap text-neutral-900">{kos_facilities}</div>
                 {!hidden && <div className="text-sm leading-4 gap-5 whitespace-nowrap text-neutral-900">tipe kost: {category}</div>}
               </div>
@@ -39,7 +64,7 @@ const CardProduct: FC<searchKos> = (props: searchKos) => {
               </div>
 
               <div className="mt-6  text-base whitespace-nowrap text-neutral-900 max-md:ml-2.5 flex gap-3 justify-start items-center">
-                <img width="20" height="20" src="https://img.icons8.com/ios/50/marker--v1.png" alt="marker--v1" /> <span className="text-xs w-full ">{address}</span>
+                <img width="20" height="20" src="https://img.icons8.com/ios/50/marker--v1.png" alt="marker--v1" /> <span className="text-xs w-full ">{getSentencesAfterNCommas(address, 4)}</span>
               </div>
               <div className="flex gap-5 justify-between mt-8 text-xs font-bold leading-5">
                 <div className="flex gap-2 justify-between whitespace-nowrap text-stone-950">

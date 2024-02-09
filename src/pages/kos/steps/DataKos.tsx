@@ -1,11 +1,12 @@
 import { IKosType } from "@/utils/apis/kos/types";
-import { UseFormRegister } from "react-hook-form";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
 
 interface DataKosProps {
   register: UseFormRegister<IKosType>;
+  errors: FieldErrors<IKosType>;
 }
 
-const DataKos = ({ register }: DataKosProps) => {
+const DataKos = ({ register, errors }: DataKosProps) => {
   return (
     <div className="max-w-6xl  mx-auto flex flex-col gap-y-[40px] p-3">
       <div className="flex item-center gap-x-3">
@@ -18,6 +19,7 @@ const DataKos = ({ register }: DataKosProps) => {
           id="namakos"
           className="border px-4 py-2 rounded-lg w-full"
         />
+        {errors.kos_name && <p className="text-red-500 text-sm">{errors.kos_name.message}</p>}
       </div>
       <div className="flex item-center gap-x-3">
         <label htmlFor="deskripsi" className="w-52 whitespace-nowrap">
@@ -29,6 +31,7 @@ const DataKos = ({ register }: DataKosProps) => {
           rows={5}
           className="border px-4 py-2 rounded-lg w-full"
         ></textarea>
+        {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
       </div>
       <div className="flex item-center gap-x-3">
         <label htmlFor="kategori" className="w-52 whitespace-nowrap">
@@ -42,8 +45,11 @@ const DataKos = ({ register }: DataKosProps) => {
           <option value="" hidden selected>
             Kategori
           </option>
-          <option value="category1">category 1</option>
+          <option value="putra">Putra</option>
+          <option value="putri">Putri</option>
+          <option value="campur">Campur</option>
         </select>
+        {errors.category && <p className="text-red-500 text-sm">{errors.category.message}</p>}
       </div>
       <div className="flex item-center gap-x-3">
         <label htmlFor="peraturan" className="w-52 whitespace-nowrap">
@@ -58,8 +64,9 @@ const DataKos = ({ register }: DataKosProps) => {
             Kebijakan
           </option>
 
-          <option value="category1">category 1</option>
+          <option value="bebas">Bebas</option>
         </select>
+        {errors.kos_rules && <p className="text-red-500 text-sm">{errors.kos_rules.message}</p>}
       </div>
       <div className="flex item-center gap-x-3">
         <label htmlFor="fasilitas" className="w-52 whitespace-nowrap">
@@ -74,8 +81,11 @@ const DataKos = ({ register }: DataKosProps) => {
             Fasilitas
           </option>
 
-          <option value="category1">category 1</option>
+          <option value="banyak">banyak</option>
         </select>
+        {errors.kos_facilities && (
+          <p className="text-red-500 text-sm">{errors.kos_facilities.message}</p>
+        )}
       </div>
     </div>
   );

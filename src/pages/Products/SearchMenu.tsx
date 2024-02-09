@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import CardProduct, { searchKos } from "@/components/CardProduct";
 import Layout from "@/components/Layout";
+import { useNavigate } from "react-router-dom";
 
 const SearchMenu = () => {
   const [showCheckboxes, setShowCheckboxes] = useState(true);
@@ -19,6 +20,7 @@ const SearchMenu = () => {
   const [showPagination, setShowPagination] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  const navigate = useNavigate();
 
   const handleCheckboxChange = (checkboxName: string) => {
     setCheckboxValues((prevValues: any) => ({
@@ -90,7 +92,7 @@ const SearchMenu = () => {
               <div className="flex gap-5 justify-between self-stretch py-1.5 pr-1.5 pl-10 w-full whitespace-nowrap bg-white border-4 border-solid border-[color:var(--Green,#4CA02E)] rounded-[40px] max-md:flex-wrap max-md:pl-5 max-md:max-w-full">
                 <div className="flex gap-3 my-auto text-neutral-900">
                   <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/9b47326f4402e3d3079778f9715c62d6008fc9e571445de53fc761fb2497a593?" className="my-auto w-5 aspect-square" />
-                  <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Cari Kota" className="grow border-none focus:outline-none w-[55vw]" />
+                  <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Cari Kota" className="grow border-none focus:outline-none w-[40vw] md:w-[55vw]" />
                 </div>
                 <button type="submit" className="cursor-pointer justify-center px-10 py-3 text-white bg-lime-600 rounded-[40px] max-md:px-5">
                   Search
@@ -98,7 +100,7 @@ const SearchMenu = () => {
               </div>
             </form>
 
-            <button onClick={handleMoreFilterClick} className="flex gap-5 justify-center items-center p-3 w-1/6 my-4 border-[0.5px] text-white rounded-full bg-lime-600">
+            <button onClick={handleMoreFilterClick} className="flex gap-5 md:text-base text-sm justify-center items-center p-3 w-[40%] md:w-1/6 my-4 border-[0.5px] text-white rounded-full bg-lime-600">
               <span>More Filters</span>
               <img width="20" height="20" src="https://img.icons8.com/badges/48/sort-down.png" alt="sort-down" />
             </button>
@@ -133,6 +135,7 @@ const SearchMenu = () => {
               currentItems.map((item: searchKos, key: any) => (
                 <CardProduct
                   hidden={false}
+                  direct={() => navigate(`/kos/${item.id}`)}
                   key={key}
                   kos_name={item.kos_name}
                   rating={item.rating}
