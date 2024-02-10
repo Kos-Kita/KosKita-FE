@@ -11,8 +11,8 @@ export const kosSchema = z.object({
   price: z.string().min(1, "Price is required"),
   rooms: z.string().min(1, "Rooms is required"),
   address: z.string().min(1, { message: "Enter your address" }),
-  kos_facilities: z.string().min(1, { message: "Enter your kos fasilitas" }),
-  kos_rules: z.string().min(1, { message: "Enter your kos fasilitas" }),
+  kos_facilities: z.string().array().min(3, { message: "must contain 3 or more fasilitas" }),
+  kos_rules: z.string().array().min(5, { message: "must contain 5 or more rules" }),
 
   main_kos_photo: z
     .any()
@@ -60,7 +60,10 @@ export interface IKosRecomend {
   category: string;
   price: number;
   address: string;
-  kos_facilities: string;
+  kos_facilities: {
+    id: number;
+    facility: string;
+  }[];
   photo_kos: {
     main_kos_photo: string;
   }[];

@@ -13,13 +13,14 @@ export const getKosRecomend = async () => {
 
 export const createKos = async (body: IKosType) => {
   try {
+    const notFormData = new Map();
     const formData = new FormData();
     let key: keyof typeof body;
     for (key in body) {
       if (body[key][0] instanceof File) {
         formData.append(key, body[key][0]);
       } else {
-        formData.append(key, body[key]);
+        notFormData.set(key, body[key]);
       }
     }
     // formData.append("kos_name", body.kos_name);
@@ -37,11 +38,12 @@ export const createKos = async (body: IKosType) => {
     // formData.append("back_kos_photo", body.back_kos_photo[0]);
     // formData.append("front_room_photo", body.front_room_photo[0]);
     // formData.append("inside_room_photo", body.inside_room_photo[0]);
-    const response = await axiosWithConfig.post("/kos", formData);
-    if (response.status === 200) {
-      return response.data as Response;
-    }
+    // const response = await axiosWithConfig.post("/kos", formData);
+    // if (response.status === 200) {
+    //   return response.data as Response;
+    // }
     console.log(...formData);
+    console.log(`bukan form data : ${notFormData}`);
   } catch (error: any) {
     throw new Error(error.response.data.message);
   }

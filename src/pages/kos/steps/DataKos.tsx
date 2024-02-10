@@ -7,6 +7,34 @@ interface DataKosProps {
 }
 
 const DataKos = ({ register, errors }: DataKosProps) => {
+  const categoryKos = ["putra", "putri", "campur"];
+  const peraturanKos = [
+    "24 JAM",
+    "TIDAK BOLEH MEROKOK",
+    "TIDAK BOLEH PETS",
+    "TIDAK BOLEH PESTA/EVENTS",
+    "TIDAK BOLEH PASUTRI",
+    "HANYA BISA MAKS. 1 ORANG/ KAMAR",
+    "TIDAK BOLEH BAWA ANAK",
+    "ADA JAM MALAM UNTUK TAMU",
+    "KHUSUS MAHASISWA",
+    "KHUSUS KARYAWAN",
+    "TAMU BEBAS BERKUNJUNG",
+    "TAMU BOLEH MENGINAP",
+    "TAMU DILARANG MENGINAP",
+    "DENDA KERUSAKAN BARANG KOS",
+    "TAMU MENGINAP DIKENAKAN BIAYA",
+    "TERMASUK LISTRIK",
+  ];
+  const fasilitasKos = [
+    "WIFI",
+    "AC",
+    "MEJA DAN KURSI",
+    "KASUR",
+    "LEMARI",
+    "K.MANDI DALAM",
+    "KULKAS",
+  ];
   return (
     <div className="max-w-6xl  mx-auto flex flex-col gap-y-[40px] p-3">
       <div className="flex item-center gap-x-3">
@@ -45,9 +73,9 @@ const DataKos = ({ register, errors }: DataKosProps) => {
           <option value="" hidden selected>
             Kategori
           </option>
-          <option value="putra">Putra</option>
-          <option value="putri">Putri</option>
-          <option value="campur">Campur</option>
+          {categoryKos.map((item) => (
+            <option value={item}>{item}</option>
+          ))}
         </select>
         {errors.category && <p className="text-red-500 text-sm">{errors.category.message}</p>}
       </div>
@@ -55,34 +83,33 @@ const DataKos = ({ register, errors }: DataKosProps) => {
         <label htmlFor="peraturan" className="w-52 whitespace-nowrap">
           Peraturan Kos
         </label>
-        <select
-          {...register("kos_rules")}
-          id="peraturan"
-          className="border px-4 py-2 rounded-lg w-full"
-        >
-          <option value="" hidden selected>
-            Kebijakan
-          </option>
-
-          <option value="bebas">Bebas</option>
-        </select>
+        <div className="grid grid-cols-4 w-full gap-3">
+          {peraturanKos.map((rule) => (
+            <div className="flex gap-x-2 items-center text-sm text-slate-600 ">
+              <input type="checkbox" {...register("kos_rules")} value={rule} id={rule} />
+              <label htmlFor={rule}>{rule}</label>
+            </div>
+          ))}
+        </div>
         {errors.kos_rules && <p className="text-red-500 text-sm">{errors.kos_rules.message}</p>}
       </div>
       <div className="flex item-center gap-x-3">
         <label htmlFor="fasilitas" className="w-52 whitespace-nowrap">
           Fasilitas Kos
         </label>
-        <select
-          {...register("kos_facilities")}
-          id="fasilitas"
-          className="border px-4 py-2 rounded-lg w-full"
-        >
-          <option value="" hidden selected>
-            Fasilitas
-          </option>
-
-          <option value="banyak">banyak</option>
-        </select>
+        <div className="grid grid-cols-4 w-full gap-3">
+          {fasilitasKos.map((fasilitas) => (
+            <div className="flex gap-x-2 items-center text-sm text-slate-600">
+              <input
+                type="checkbox"
+                {...register("kos_facilities")}
+                value={fasilitas}
+                id={fasilitas}
+              />
+              <label htmlFor={fasilitas}>{fasilitas}</label>
+            </div>
+          ))}
+        </div>
         {errors.kos_facilities && (
           <p className="text-red-500 text-sm">{errors.kos_facilities.message}</p>
         )}

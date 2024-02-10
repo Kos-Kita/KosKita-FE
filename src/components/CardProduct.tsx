@@ -6,6 +6,7 @@ import AlertDelete from "./AlertDelete";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { toast } from "./ui/use-toast";
 import { deleteKos } from "@/utils/apis/kos/api";
+import AddKos from "@/pages/kos/AddKos";
 export interface searchKos {
   hidden: boolean;
   kos_name: string | undefined;
@@ -14,7 +15,10 @@ export interface searchKos {
   rooms?: string | undefined;
   category?: string | undefined;
   address?: string | undefined;
-  kos_facilities?: string | undefined;
+  kos_facilities?: {
+    id: number;
+    facility: string;
+  }[];
   photo_kos: string | any | undefined;
   direct?: ReactEventHandler | undefined;
   id?: any | undefined;
@@ -90,7 +94,10 @@ const CardProduct: FC<searchKos> = (props: searchKos) => {
                         <MoreHorizontal />
                       </PopoverTrigger>
                       <PopoverContent className="max-w-32 space-1 p-0">
-                        <div className="w-full flex items-center gap-x-2 cursor-pointer px-3 py-2 hover:bg-slate-100">
+                        <div
+                          className="w-full flex items-center gap-x-2 cursor-pointer px-3 py-2 hover:bg-slate-100"
+                          // onClick={() => <AddKos id={props.id} />}
+                        >
                           <Edit className="size-4 text-teal-500" /> Edit
                         </div>
                         <Separator />
@@ -106,7 +113,7 @@ const CardProduct: FC<searchKos> = (props: searchKos) => {
               </div>
               <div className="flex items-center w-full gap-5 mt-4 md:mt-8 flex-wrap">
                 <div className="text-sm leading-4 gap-5 whitespace-nowrap text-neutral-900">
-                  {kos_facilities}
+                  {kos_facilities?.slice(3).map((item) => item.facility)}
                 </div>
                 {!hidden && (
                   <div className="text-sm leading-4 gap-5 whitespace-nowrap text-neutral-900">

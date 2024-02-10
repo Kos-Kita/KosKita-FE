@@ -92,16 +92,16 @@ const App = () => {
           </div>
         </section>
 
-        <section className="flex flex-col gap-y-[60px] items-center justify-center py-20">
+        <section className="flex flex-col gap-y-[60px] items-center justify-center py-20 ">
           <h1 className="text-4xl font-medium">Rekomendasi Kos</h1>
           <Carousel
-            className="p-5"
+            className="p-5 "
             opts={{
               align: "center",
               loop: true,
             }}
           >
-            <CarouselContent className="gap-x-10">
+            <CarouselContent className="gap-x-10 ">
               {kosRecomend?.map((data) => (
                 <>
                   <CarouselItem
@@ -138,16 +138,17 @@ const App = () => {
                           <MapPin size={16} className="w-8" />
                           <span className="leading-tight ">{data.address}</span>
                         </div>
-                        <div className="flex items-center w-full">
-                          <div className="flex flex-col gap-y-2 ">
-                            <span className="text-sm text-slate-800 ">
-                              {data.kos_facilities.replace(/ /g, "-").toLocaleLowerCase()}
-                            </span>
-
-                            <span className="text-sm font-medium text-[#4CA02E]">
-                              {formattedAmount(data.price)}/bulan
-                            </span>
+                        <div className="flex flex-col gap-y-2 items-center w-full">
+                          <div className="flex items-center flex-wrap gap-x-1 ">
+                            {data.kos_facilities.slice(0, 3).map((item) => (
+                              <span className="text-sm text-slate-800">
+                                {item.facility.replace("", " - ")}
+                              </span>
+                            ))}
                           </div>
+                          <span className="text-sm font-medium text-[#4CA02E] w-full">
+                            {formattedAmount(data.price)}/bulan
+                          </span>
                         </div>
                       </div>
                     </div>

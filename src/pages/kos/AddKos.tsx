@@ -14,7 +14,7 @@ import { toast } from "@/components/ui/use-toast";
 import { createKos } from "@/utils/apis/kos/api";
 import { Loader2 } from "lucide-react";
 
-const AddKos = () => {
+const AddKos = ({ id }: { id?: number }) => {
   const steps = ["Data Kos", "Foto Kos", "Alamat Kos", "Harga Kos"];
   const [searchParam, setSearchParam] = useSearchParams();
   const stepTab = searchParam.get("step");
@@ -23,6 +23,7 @@ const AddKos = () => {
     register,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<IKosType>({
     resolver: zodResolver(kosSchema),
@@ -33,22 +34,22 @@ const AddKos = () => {
       searchParam.set("step", "1");
       setSearchParam(searchParam);
     }
+    console.log(getValues());
   }, [stepTab]);
 
   const handleCreateKos = async (body: IKosType) => {
-    console.log(body);
-    // try {
-    //   const result = await createKos(body);
-    //   toast({
-    //     description: result?.message,
-    //   });
-    //   navigate("/");
-    // } catch (error) {
-    //   toast({
-    //     variant: "destructive",
-    //     description: (error as Error).message,
-    //   });
-    // }
+    try {
+      const result = await createKos(body);
+      toast({
+        description: result?.message,
+      });
+      // navigate("/");
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        description: (error as Error).message,
+      });
+    }
   };
 
   const handleNextStep = () => {
