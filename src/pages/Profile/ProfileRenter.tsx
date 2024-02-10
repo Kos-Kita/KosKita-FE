@@ -319,8 +319,13 @@ const ProfileRenter = () => {
                         <button type="submit" className="grow justify-center px-3 py-2 md:px-4 md:py-3 bg-lime-600 rounded shadow-sm">
                           Edit Akun
                         </button>
+<<<<<<< HEAD
+                        <AlertDelete onAction={() => deleteProfile} title="Apakah anda yakin?" description="Penghapusan data ini tidak dapat dikembalikan, dan bersifat permanen" background="bg-red-600 hover:bg-red-400">
+                          <button className="grow justify-center md:px-3 md:py-4 px-3 py-2 bg-red-600 rounded shadow-sm hover:bg-red-400">Hapus Akun</button>
+=======
                         <AlertDelete onAction={() => deleteProfile}>
                           <button className="grow justify-center md:px-3 md:py-4 px-3 py-2 bg-red-600 rounded shadow-sm">Hapus Akun</button>
+>>>>>>> deae3792a685ee5258ed41db56d4a8e134c57a69
                         </AlertDelete>
                       </div>
                     </div>
