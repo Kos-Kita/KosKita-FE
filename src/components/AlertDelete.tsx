@@ -3,19 +3,22 @@ import { ReactNode } from "react";
 interface AlertDeleteProps {
   children: ReactNode;
   onAction: () => void;
+  background: string;
+  title: string;
+  description: string;
 }
-const AlertDelete = ({ children, onAction }: AlertDeleteProps) => {
+const AlertDelete = ({ children, onAction, background, title, description }: AlertDeleteProps) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Apakah anda yakin?</AlertDialogTitle>
-          <AlertDialogDescription>Penghapusan data ini tidak dapat dikembalikan, dan bersifat permanen</AlertDialogDescription>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Batal</AlertDialogCancel>
-          <AlertDialogAction className="bg-red-500" onClick={onAction}>
+          <AlertDialogAction className={background} onClick={onAction}>
             Lanjutkan
           </AlertDialogAction>
         </AlertDialogFooter>
