@@ -84,7 +84,7 @@ const EditKos = () => {
   };
   return (
     <Layout>
-      <div className="min-h-screen ">
+      <div className="min-h-screen">
         <form onSubmit={handleSubmit(handleUpdateKos)} className="py-16 space-y-12">
           <div className="bg-white container rounded-sm shadow mx-auto p-6 space-y-8">
             <h1 className="text-2xl px-8 tracking-wide">Data Kos</h1>
