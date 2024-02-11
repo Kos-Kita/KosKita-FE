@@ -5,23 +5,10 @@ import { useAuth } from "@/utils/context/auth";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-
-interface detail {
-  price: string;
-}
-
-interface detailPayment {
-  booking_code: string;
-  payment_expired: string;
-  virtual_number: string;
-  total: string;
-}
-
-interface pembayaranType {
-  payment_type: string;
-  kos_id: number;
-  bank: string;
-}
+import { detail } from "@/utils/types/type";
+import { detailPayment } from "@/utils/types/type";
+import { formatTime } from "./functions";
+import { pembayaranType } from "@/utils/types/type";
 
 const BookingPage = () => {
   const location = useLocation();
@@ -31,6 +18,7 @@ const BookingPage = () => {
   const { user } = useAuth();
   const token = localStorage.getItem("token");
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
+  const [popupTimer, setPopupTimer] = useState<number>(24 * 60 * 60 * 1000);
   const handlePaymentMethodChange = (event: any) => {
     setSelectedPaymentMethod(event.target.value);
   };
@@ -38,9 +26,20 @@ const BookingPage = () => {
     price: "",
   });
 
+  const copyToClipboard = () => {
+    const vaCodeInput = document.createElement("input");
+    vaCodeInput.value = dPayment.virtual_number;
+    document.body.appendChild(vaCodeInput);
+    vaCodeInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(vaCodeInput);
+    toast({
+      description: "Berhasil disalin",
+    });
+  };
+
   const [dPayment, setPayment] = useState<detailPayment>({
     booking_code: "",
-    payment_expired: "",
     virtual_number: "",
     total: "",
   });
@@ -79,7 +78,6 @@ const BookingPage = () => {
       });
       setPayment({
         booking_code: response.data.data.booking_code,
-        payment_expired: response.data.data.payment_expired,
         total: response.data.data.total,
         virtual_number: response.data.data.virtual_number,
       });
@@ -92,13 +90,24 @@ const BookingPage = () => {
     }
   };
 
+  const closePopup = () => {
+    setShowPopup(!showPopup);
+  };
+
   useEffect(() => {
     getData();
   }, [selectedPaymentMethod]);
 
-  const closePopup = () => {
-    setShowPopup(!showPopup);
-  };
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setPopupTimer((prev) => prev - 1000);
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [popupTimer]);
+
   return (
     <>
       <Layout>
@@ -141,21 +150,6 @@ const BookingPage = () => {
                       </select>
                     </div>
 
-                    {/* <div className="checkbox-container flex flex-col shadow-md p-3 rounded-md">
-                      <label className="font-medium">
-                        <input type="radio" value="putra" /> Putra
-                      </label>
-                      <label className="font-medium">
-                        <input type="radio" value="putri" /> Putri
-                      </label>
-                      <label className="font-medium">
-                        <input type="radio" value="1.000.000" /> Harga Range 1.000.000 - 2.000.000
-                      </label>
-                      <label className="font-medium">
-                        <input type="radio" value="campur" /> Campur
-                      </label>
-                    </div> */}
-
                     <button onClick={createPayment} className="justify-center self-center px-10 py-3 mt-10 text-lg text-white whitespace-nowrap bg-lime-600 rounded-[40px] max-md:px-5">
                       Confirm and pay
                     </button>
@@ -181,7 +175,7 @@ const BookingPage = () => {
                       <>
                         <div className="fixed inset-0 bg-black opacity-50 z-50"></div>
                         <div className="fixed inset-0 flex items-center justify-center z-50 font-Poppins">
-                          <div className="bg-white w-96 p-8 rounded shadow-lg">
+                          <div className="bg-white w-[25rem] p-8 rounded shadow-lg">
                             <p className="my-2 text-2xl font-semibold text-lime-600">Detail Pembayaran</p>
                             <p className="my-2 text-sm">Booking code: {`${dPayment.booking_code}`}</p>
                             <hr />
@@ -195,9 +189,12 @@ const BookingPage = () => {
                                 <NumberFormatter value={parseInt(dPayment.total)} />
                               </span>
                             </p>
-                            <div className="mb-4 bg-orange-200 p-3 rounded text-lg font-bold">kode VA : {dPayment.virtual_number} </div>
+                            <div className="mb-4 bg-orange-200 p-3 flex items-center justify-between rounded text-lg font-bold">
+                              <span> Kode VA : {dPayment.virtual_number}</span>
+                              <img className="cursor-pointer h-[20px] w-[20px]" width="24" height="24" src="https://img.icons8.com/material-sharp/24/copy.png" alt="copy" onClick={copyToClipboard} />
+                            </div>
                             <p className="my-2 text-sm flex justify-end">
-                              Waktu Berakhir: <span className="text-red-500"> {dPayment.payment_expired}</span>
+                              Waktu Berakhir: <span className="text-red-500 ml-2"> {formatTime(popupTimer)}</span>
                             </p>
                             <div className="flex gap-3">
                               <button className="bg-gray-500 text-white px-4 py-2 mt-5 rounded hover:bg-gray-600" onClick={closePopup}>

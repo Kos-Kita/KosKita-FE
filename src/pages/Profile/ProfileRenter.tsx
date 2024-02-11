@@ -4,20 +4,8 @@ import Layout from "@/components/Layout";
 import { toast } from "@/components/ui/use-toast";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
-interface profile {
-  name: string;
-  user_name: string;
-  email: string;
-  photo_profile: string;
-  gender: string;
-}
-
-interface changePassword {
-  old_password: string;
-  new_password: string;
-  konfirmasi_password: string;
-}
+import { profile } from "@/utils/types/type";
+import { changePassword } from "@/utils/types/type";
 
 const ProfileRenter = () => {
   const [status, setStatus] = useState(true);

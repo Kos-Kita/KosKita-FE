@@ -110,7 +110,7 @@ const CardProduct: FC<searchKos> = (props: searchKos) => {
                 <div className="flex gap-3 justify-between mt-3.5 text-base whitespace-nowrap">
                   {!hidden && <div className=" justify-center px-5 py-1 text-white bg-lime-600 rounded-[30px]">AVAILABLE</div>}
                   <div className="grow my-auto text-neutral-900">
-                    dari <NumberFormatter value={price} /> /bulan
+                    dari <NumberFormatter value={price ? price : 0} /> /bulan
                   </div>
                 </div>
               </div>
