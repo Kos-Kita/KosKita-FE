@@ -1,18 +1,5 @@
 import Layout from "@/components/Layout";
-import {
-  AirVent,
-  Bath,
-  Bed,
-  CigaretteOff,
-  DoorOpen,
-  FishOff,
-  LocateFixed,
-  PartyPopper,
-  PersonStanding,
-  Star,
-  Timer,
-  Wifi,
-} from "lucide-react";
+import { AirVent, Bath, Bed, CigaretteOff, DoorOpen, FishOff, LocateFixed, PartyPopper, PersonStanding, Star, Timer, Wifi } from "lucide-react";
 import { useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { format } from "date-fns";
@@ -22,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/utils";
+import { useNavigate, useParams } from "react-router-dom";
 
 const position = {
   lat: -6.2,
@@ -31,37 +19,19 @@ const position = {
 const DetailKos = () => {
   const [date, setDate] = useState<Date>();
   console.log(date);
+  const navigate = useNavigate();
+  const { id } = useParams();
 
   return (
     <Layout>
       <div className="min-h-screen">
         <section className="flex gap-x-2 h-full max-h-[500px]">
-          <img
-            src="https://source.unsplash.com/1200x800?interior"
-            alt="interior"
-            className="max-h-full rounded"
-          />
+          <img src="https://source.unsplash.com/1200x800?interior" alt="interior" className="max-h-full rounded" />
           <div className="grid grid-cols-2 gap-3 max-h-full p-3">
-            <img
-              src="https://source.unsplash.com/1200x801?interior"
-              alt="interior"
-              className="h-full rounded-md"
-            />
-            <img
-              src="https://source.unsplash.com/1200x802?interior"
-              alt="interior"
-              className="h-full rounded-md"
-            />
-            <img
-              src="https://source.unsplash.com/1200x803?interior"
-              alt="interior"
-              className="h-full rounded-md"
-            />
-            <img
-              src="https://source.unsplash.com/1200x804?interior"
-              alt="interior"
-              className="h-full rounded-md"
-            />
+            <img src="https://source.unsplash.com/1200x801?interior" alt="interior" className="h-full rounded-md" />
+            <img src="https://source.unsplash.com/1200x802?interior" alt="interior" className="h-full rounded-md" />
+            <img src="https://source.unsplash.com/1200x803?interior" alt="interior" className="h-full rounded-md" />
+            <img src="https://source.unsplash.com/1200x804?interior" alt="interior" className="h-full rounded-md" />
           </div>
         </section>
         <section className="py-10">
@@ -70,12 +40,7 @@ const DetailKos = () => {
               <div className="flex items-center gap-x-6">
                 <h1 className="text-4xl font-medium">Kos Bude Bule</h1>
                 <div className="flex items-center gap-x-2 rounded shadow p-2">
-                  <Star
-                    color="yellow"
-                    fill={"yellow"}
-                    className="stroke-slate-100 drop-shadow-sm"
-                    size={20}
-                  />
+                  <Star color="yellow" fill={"yellow"} className="stroke-slate-100 drop-shadow-sm" size={20} />
                   <span>5.0</span>
                 </div>
                 <span className="p-2 rounded shadow">Campur</span>
@@ -93,11 +58,7 @@ const DetailKos = () => {
                 <p>Tersisa 3 Kamar</p>
               </div>
               <div className="flex items-center gap-x-2">
-                <img
-                  src="https://source.unsplash.com/100x100?person"
-                  alt="person"
-                  className="rounded-full size-16"
-                />
+                <img src="https://source.unsplash.com/100x100?person" alt="person" className="rounded-full size-16" />
                 <div className="flex flex-col gap-y-2">
                   <span className="font-medium">Pemilik Kos</span>
                   <span className="text-sm">Ajeng wkwk </span>
@@ -107,13 +68,7 @@ const DetailKos = () => {
             <div className="bg-[#F2F0F2] rounded-3xl flex flex-col items-center max-w-xl  gap-y-4 p-6">
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    className={cn(
-                      "w-[180px] justify-start text-left font-normal bg-slate-100",
-                      !date && "text-muted-foreground"
-                    )}
-                  >
+                  <Button variant={"outline"} className={cn("w-[180px] justify-start text-left font-normal bg-slate-100", !date && "text-muted-foreground")}>
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {date ? format(date, "PPP") : <span>Pick a date</span>}
                   </Button>
@@ -123,16 +78,20 @@ const DetailKos = () => {
                 </PopoverContent>
               </Popover>
               <span className="text-2xl font-semibold">Rp.11.500.000 / Bulan</span>
-              <button className="px-5 py-2 rounded-xl text-sm text-white bg-[#4CA02E]">
+              <button
+                onClick={() =>
+                  navigate("/bookingpage", {
+                    state: {
+                      id: id,
+                    },
+                  })
+                }
+                className="px-5 py-2 rounded-xl text-sm text-white bg-[#4CA02E]"
+              >
                 Lanjutkan pemesanan
               </button>
-              <button className="px-5 py-2 rounded-xl text-sm text-white bg-[#4CA02E]">
-                Kontak Pemilik Kos
-              </button>
-              <p className="text-center text-sm">
-                Ketika Anda memesan kos ini, Lanjutkan Chat Tukang Kos nya dan akan dikonfirmasi
-                secara instan
-              </p>
+              <button className="px-5 py-2 rounded-xl text-sm text-white bg-[#4CA02E]">Kontak Pemilik Kos</button>
+              <p className="text-center text-sm">Ketika Anda memesan kos ini, Lanjutkan Chat Tukang Kos nya dan akan dikonfirmasi secara instan</p>
             </div>
           </div>
         </section>
@@ -140,10 +99,7 @@ const DetailKos = () => {
           <h3 className="text-center text-4xl font-semibold">Lokasi</h3>
           <div className="container max-w-[100rem] ">
             <MapContainer center={position} zoom={13} style={{ height: "400px", width: "100wh" }}>
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
+              <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
               <Marker position={position}>
                 <Popup>Lokasi Kos</Popup>
               </Marker>

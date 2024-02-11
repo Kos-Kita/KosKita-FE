@@ -1,6 +1,104 @@
 import Layout from "@/components/Layout";
+import NumberFormatter from "@/components/NumberFormatter";
+import { toast } from "@/components/ui/use-toast";
+import { useAuth } from "@/utils/context/auth";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+
+interface detail {
+  price: string;
+}
+
+interface detailPayment {
+  booking_code: string;
+  payment_expired: string;
+  virtual_number: string;
+  total: string;
+}
+
+interface pembayaranType {
+  payment_type: string;
+  kos_id: number;
+  bank: string;
+}
 
 const BookingPage = () => {
+  const location = useLocation();
+  const id = location.state.id;
+  const baseurl = import.meta.env.VITE_BASE_URL;
+  const [showPopup, setShowPopup] = useState<Boolean>(false);
+  const { user } = useAuth();
+  const token = localStorage.getItem("token");
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
+  const handlePaymentMethodChange = (event: any) => {
+    setSelectedPaymentMethod(event.target.value);
+  };
+  const [data, setData] = useState<detail>({
+    price: "",
+  });
+
+  const [dPayment, setPayment] = useState<detailPayment>({
+    booking_code: "",
+    payment_expired: "",
+    virtual_number: "",
+    total: "",
+  });
+
+  const [pembayaran, setPembayaran] = useState<pembayaranType>({
+    payment_type: "",
+    kos_id: 0,
+    bank: "",
+  });
+
+  const getData = async () => {
+    try {
+      const response = await axios.get(`${baseurl}/kos/${id}`);
+      setData(response.data.data);
+      setPembayaran((prev) => ({ ...prev, kos_id: id }));
+      if (selectedPaymentMethod !== "mandiri") {
+        setPembayaran((prev) => ({ ...prev, payment_type: "bank_transfer" }));
+      } else {
+        setPembayaran((prev) => ({ ...prev, payment_type: "e-channel" }));
+      }
+      setPembayaran((prev) => ({ ...prev, bank: selectedPaymentMethod }));
+      setPembayaran((prev) => ({ ...prev, kos_id: parseInt(id) }));
+    } catch (error: any) {
+      toast({
+        description: error.response.data.message,
+      });
+    }
+  };
+
+  const createPayment = async () => {
+    try {
+      const response = await axios.post(`https://l3n.my.id/booking`, pembayaran, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setPayment({
+        booking_code: response.data.data.booking_code,
+        payment_expired: response.data.data.payment_expired,
+        total: response.data.data.total,
+        virtual_number: response.data.data.virtual_number,
+      });
+      setShowPopup(!showPopup);
+    } catch (error: any) {
+      toast({
+        description: error.message,
+      });
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [selectedPaymentMethod]);
+
+  const closePopup = () => {
+    setShowPopup(!showPopup);
+  };
   return (
     <>
       <Layout>
@@ -13,11 +111,11 @@ const BookingPage = () => {
                     <div className="text-5xl leading-[59.8px] max-md:max-w-full max-md:text-4xl">Booking review</div>
                     <div className="flex gap-5 justify-start mt-16 text-lg max-md:flex-wrap max-md:mt-10 max-md:max-w-full">
                       <div className="font-semibold">Harga Kos-kosan perbulan</div>
-                      <div className="flex-auto">Rp. 1.500.000</div>
+                      <div className="flex-auto">{<NumberFormatter value={parseInt(data.price)} />}</div>
                     </div>
                     <div className="flex gap-5 justify-between mt-8 text-2xl max-md:flex-wrap max-md:max-w-full">
                       <div>Total</div>
-                      <div className="flex-auto">Rp. 1.500.000,00</div>
+                      <div className="flex-auto">{<NumberFormatter value={parseInt(data.price)} />}</div>
                     </div>
                     <div className="mt-9 text-base tracking-wide text-black max-md:max-w-full">Tanggal kamu mulai mengkos yang tersedia</div>
                     <div className="flex gap-5 justify-start mt-3.5 text-xl tracking-wide leading-8 text-black text-opacity-90 max-md:flex-wrap max-md:max-w-full">
@@ -31,7 +129,7 @@ const BookingPage = () => {
                       </div>
                     </div>
                     <div className="flex gap-2.5 justify-between mt-10 text-sm leading-6 bg-white rounded-md  text-slate-900 max-md:flex-wrap max-md:max-w-full">
-                      <select className="grow focus:outline-none w-[45vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5">
+                      <select value={selectedPaymentMethod} onChange={handlePaymentMethodChange} className="grow focus:outline-none w-[45vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5">
                         <option value="" disabled selected hidden>
                           Metode Pembayaran
                         </option>
@@ -58,7 +156,9 @@ const BookingPage = () => {
                       </label>
                     </div> */}
 
-                    <div className="justify-center self-center px-10 py-3 mt-10 text-lg text-white whitespace-nowrap bg-lime-600 rounded-[40px] max-md:px-5">Confirm and pay</div>
+                    <button onClick={createPayment} className="justify-center self-center px-10 py-3 mt-10 text-lg text-white whitespace-nowrap bg-lime-600 rounded-[40px] max-md:px-5">
+                      Confirm and pay
+                    </button>
                   </div>
                 </div>
                 <div className="flex flex-col ml-5 w-[45%] max-md:ml-0 max-md:w-full">
@@ -76,6 +176,38 @@ const BookingPage = () => {
                         </div>
                       </div>
                     </div>
+
+                    {showPopup && (
+                      <>
+                        <div className="fixed inset-0 bg-black opacity-50 z-50"></div>
+                        <div className="fixed inset-0 flex items-center justify-center z-50 font-Poppins">
+                          <div className="bg-white w-96 p-8 rounded shadow-lg">
+                            <p className="my-2 text-2xl font-semibold text-lime-600">Detail Pembayaran</p>
+                            <p className="my-2 text-sm">Booking code: {`${dPayment.booking_code}`}</p>
+                            <hr />
+                            <p className="my-2 text-sm">Nama: {`${user.name}`}</p>
+                            <hr />
+                            <p className="my-2 text-sm">Metode Pembayaran: {selectedPaymentMethod}</p>
+                            <hr />
+                            <p className="my-2 text-sm font-semibold">
+                              Total Pembayaran:
+                              <span className="font-bold text-lg ml-2">
+                                <NumberFormatter value={parseInt(dPayment.total)} />
+                              </span>
+                            </p>
+                            <div className="mb-4 bg-orange-200 p-3 rounded text-lg font-bold">kode VA : {dPayment.virtual_number} </div>
+                            <p className="my-2 text-sm flex justify-end">
+                              Waktu Berakhir: <span className="text-red-500"> {dPayment.payment_expired}</span>
+                            </p>
+                            <div className="flex gap-3">
+                              <button className="bg-gray-500 text-white px-4 py-2 mt-5 rounded hover:bg-gray-600" onClick={closePopup}>
+                                Tutup
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    )}
 
                     <div className="flex flex-col pl-10">
                       <div className="self-start my-6  font-bold whitespace-nowrap leading-[133%] max-md:mt-10 max-md:ml-2.5">Jenis pembayaran yang di dukung.</div>

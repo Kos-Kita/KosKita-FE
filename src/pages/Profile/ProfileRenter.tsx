@@ -365,7 +365,7 @@ const ProfileRenter = () => {
                       </div>
                     </div>
                   ) : (
-                    <CardProduct hidden={true} kos_name={"Makan agung"} rating={"5"} price={500000} category={"banyak"} kos_facilities="remo" photo_kos={"remo"} />
+                    <CardProduct hidden={true} kos_name={"Makan agung"} rating={"5"} price={500000} category={"banyak"} photo_kos={"remo"} />
                   )}
                   {showPopup && (
                     <div>
