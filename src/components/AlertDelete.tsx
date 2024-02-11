@@ -14,8 +14,8 @@ interface AlertDeleteProps {
   children: ReactNode;
   onAction: () => void;
   background?: string;
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
 }
 const AlertDelete = ({ children, onAction, background, title, description }: AlertDeleteProps) => {
   return (

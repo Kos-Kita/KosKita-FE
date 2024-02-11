@@ -4,20 +4,8 @@ import Layout from "@/components/Layout";
 import { toast } from "@/components/ui/use-toast";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
-interface profile {
-  name: string;
-  user_name: string;
-  email: string;
-  photo_profile: string;
-  gender: string;
-}
-
-interface changePassword {
-  old_password: string;
-  new_password: string;
-  konfirmasi_password: string;
-}
+import { profile } from "@/utils/types/type";
+import { changePassword } from "@/utils/types/type";
 
 const ProfileRenter = () => {
   const [status, setStatus] = useState(true);
@@ -365,7 +353,7 @@ const ProfileRenter = () => {
                       </div>
                     </div>
                   ) : (
-                    <CardProduct hidden={true} kos_name={"Makan agung"} rating={"5"} price={500000} category={"banyak"} kos_facilities="remo" photo_kos={"remo"} />
+                    <CardProduct hidden={true} kos_name={"Makan agung"} rating={"5"} price={500000} category={"banyak"} photo_kos={"remo"} />
                   )}
                   {showPopup && (
                     <div>
