@@ -14,7 +14,9 @@ const HargaKos = ({ register, errors }: HargaKosProps) => {
         </label>
         <div className="flex flex-col gap-y-3 w-full">
           <input
-            {...register("price")}
+            {...register("price", {
+              valueAsNumber: true,
+            })}
             type="text"
             id="harga"
             className="border px-4 py-2 rounded-lg w-full"
@@ -28,7 +30,9 @@ const HargaKos = ({ register, errors }: HargaKosProps) => {
         </label>
         <div className="flex flex-col gap-y-3 w-full">
           <input
-            {...register("rooms")}
+            {...register("rooms", {
+              valueAsNumber: true,
+            })}
             type="text"
             id="JumlahKos"
             className="border px-4 py-2 rounded-lg w-full"

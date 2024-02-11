@@ -6,7 +6,7 @@ import AlertDelete from "./AlertDelete";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { toast } from "./ui/use-toast";
 import { deleteKos } from "@/utils/apis/kos/api";
-import AddKos from "@/pages/kos/AddKos";
+import { useNavigate } from "react-router-dom";
 export interface searchKos {
   hidden: boolean;
   kos_name: string | undefined;
@@ -22,6 +22,7 @@ export interface searchKos {
   photo_kos: string | any | undefined;
   direct?: ReactEventHandler | undefined;
   id?: any | undefined;
+  refetchData?: () => void;
 }
 
 const getSentencesAfterNCommas = (text: string | any, n: number) => {
@@ -55,13 +56,16 @@ const CardProduct: FC<searchKos> = (props: searchKos) => {
     kos_facilities,
     photo_kos,
     direct,
+    refetchData,
   } = props;
+  const navigate = useNavigate();
   const handleDeleteKos = async () => {
     try {
       const result = await deleteKos(props.id);
       toast({
         description: result.message,
       });
+      refetchData!();
     } catch (error) {
       toast({
         description: (error as Error).message,
@@ -96,12 +100,16 @@ const CardProduct: FC<searchKos> = (props: searchKos) => {
                       <PopoverContent className="max-w-32 space-1 p-0">
                         <div
                           className="w-full flex items-center gap-x-2 cursor-pointer px-3 py-2 hover:bg-slate-100"
-                          // onClick={() => <AddKos id={props.id} />}
+                          onClick={() => navigate(`/edit-kos/${props.id}`)}
                         >
                           <Edit className="size-4 text-teal-500" /> Edit
                         </div>
                         <Separator />
-                        <AlertDelete onAction={handleDeleteKos}>
+                        <AlertDelete
+                          title="Delete Kos"
+                          description={"Apakah yakin ingin menghapus ?"}
+                          onAction={handleDeleteKos}
+                        >
                           <div className="w-full flex items-center gap-x-2 cursor-pointer px-3 py-2 hover:bg-slate-100">
                             <Trash2 className="size-4 text-red-500" /> Delete
                           </div>
@@ -113,7 +121,7 @@ const CardProduct: FC<searchKos> = (props: searchKos) => {
               </div>
               <div className="flex items-center w-full gap-5 mt-4 md:mt-8 flex-wrap">
                 <div className="text-sm leading-4 gap-5 whitespace-nowrap text-neutral-900">
-                  {kos_facilities?.slice(3).map((item) => item.facility)}
+                  {kos_facilities?.slice(0, 3).map((item) => item.facility)}
                 </div>
                 {!hidden && (
                   <div className="text-sm leading-4 gap-5 whitespace-nowrap text-neutral-900">

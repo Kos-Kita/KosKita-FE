@@ -1,4 +1,5 @@
-import { IKosType } from "@/utils/apis/kos/types";
+import Checkbox from "@/components/Checkbox";
+import { IKosType, fasilitasKos, peraturanKos } from "@/utils/apis/kos/types";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 
 interface DataKosProps {
@@ -8,36 +9,10 @@ interface DataKosProps {
 
 const DataKos = ({ register, errors }: DataKosProps) => {
   const categoryKos = ["putra", "putri", "campur"];
-  const peraturanKos = [
-    "24 JAM",
-    "TIDAK BOLEH MEROKOK",
-    "TIDAK BOLEH PETS",
-    "TIDAK BOLEH PESTA/EVENTS",
-    "TIDAK BOLEH PASUTRI",
-    "HANYA BISA MAKS. 1 ORANG/ KAMAR",
-    "TIDAK BOLEH BAWA ANAK",
-    "ADA JAM MALAM UNTUK TAMU",
-    "KHUSUS MAHASISWA",
-    "KHUSUS KARYAWAN",
-    "TAMU BEBAS BERKUNJUNG",
-    "TAMU BOLEH MENGINAP",
-    "TAMU DILARANG MENGINAP",
-    "DENDA KERUSAKAN BARANG KOS",
-    "TAMU MENGINAP DIKENAKAN BIAYA",
-    "TERMASUK LISTRIK",
-  ];
-  const fasilitasKos = [
-    "WIFI",
-    "AC",
-    "MEJA DAN KURSI",
-    "KASUR",
-    "LEMARI",
-    "K.MANDI DALAM",
-    "KULKAS",
-  ];
+
   return (
     <div className="max-w-6xl  mx-auto flex flex-col gap-y-[40px] p-3">
-      <div className="flex item-center gap-x-3">
+      <div className="flex items-center gap-x-3">
         <label htmlFor="namaKos" className="w-52 whitespace-nowrap">
           Nama Kos Anda
         </label>
@@ -47,7 +22,9 @@ const DataKos = ({ register, errors }: DataKosProps) => {
           id="namakos"
           className="border px-4 py-2 rounded-lg w-full"
         />
-        {errors.kos_name && <p className="text-red-500 text-sm">{errors.kos_name.message}</p>}
+        {errors.kos_name && (
+          <p className="text-red-500 text-sm whitespace-nowrap ">{errors.kos_name.message}</p>
+        )}
       </div>
       <div className="flex item-center gap-x-3">
         <label htmlFor="deskripsi" className="w-52 whitespace-nowrap">
@@ -59,7 +36,9 @@ const DataKos = ({ register, errors }: DataKosProps) => {
           rows={5}
           className="border px-4 py-2 rounded-lg w-full"
         ></textarea>
-        {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
+        {errors.description && (
+          <p className="text-red-500 text-sm whitespace-nowrap">{errors.description.message}</p>
+        )}
       </div>
       <div className="flex item-center gap-x-3">
         <label htmlFor="kategori" className="w-52 whitespace-nowrap">
@@ -77,7 +56,9 @@ const DataKos = ({ register, errors }: DataKosProps) => {
             <option value={item}>{item}</option>
           ))}
         </select>
-        {errors.category && <p className="text-red-500 text-sm">{errors.category.message}</p>}
+        {errors.category && (
+          <p className="text-red-500 text-sm whitespace-nowrap">{errors.category.message}</p>
+        )}
       </div>
       <div className="flex item-center gap-x-3">
         <label htmlFor="peraturan" className="w-52 whitespace-nowrap">
@@ -85,13 +66,12 @@ const DataKos = ({ register, errors }: DataKosProps) => {
         </label>
         <div className="grid grid-cols-4 w-full gap-3">
           {peraturanKos.map((rule) => (
-            <div className="flex gap-x-2 items-center text-sm text-slate-600 ">
-              <input type="checkbox" {...register("kos_rules")} value={rule} id={rule} />
-              <label htmlFor={rule}>{rule}</label>
-            </div>
+            <Checkbox type="rule" label={rule} register={register} />
           ))}
         </div>
-        {errors.kos_rules && <p className="text-red-500 text-sm">{errors.kos_rules.message}</p>}
+        {errors.kos_rules && (
+          <p className="text-red-500 text-sm whitespace-nowrap">{errors.kos_rules.message}</p>
+        )}
       </div>
       <div className="flex item-center gap-x-3">
         <label htmlFor="fasilitas" className="w-52 whitespace-nowrap">
@@ -99,19 +79,11 @@ const DataKos = ({ register, errors }: DataKosProps) => {
         </label>
         <div className="grid grid-cols-4 w-full gap-3">
           {fasilitasKos.map((fasilitas) => (
-            <div className="flex gap-x-2 items-center text-sm text-slate-600">
-              <input
-                type="checkbox"
-                {...register("kos_facilities")}
-                value={fasilitas}
-                id={fasilitas}
-              />
-              <label htmlFor={fasilitas}>{fasilitas}</label>
-            </div>
+            <Checkbox type="facility" label={fasilitas} register={register} />
           ))}
         </div>
         {errors.kos_facilities && (
-          <p className="text-red-500 text-sm">{errors.kos_facilities.message}</p>
+          <p className="text-red-500 text-sm whitespace-nowrap">{errors.kos_facilities.message}</p>
         )}
       </div>
     </div>

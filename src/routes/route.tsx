@@ -8,6 +8,7 @@ import ProfileOwner from "@/pages/Profile/ProfileOwner";
 import AddKos from "@/pages/kos/AddKos";
 import DetailKos from "@/pages/kos/DetailKos";
 import BookingPage from "@/pages/Payment/BookingPage";
+import EditKos from "@/pages/kos/EditKos";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/profilerenter" element={<ProfileRenter />} />
         <Route path="/profileowner" element={<ProfileOwner />} />
         <Route path="/buat-kos" element={<AddKos />} />
+        <Route path="/edit-kos/:id" element={<EditKos />} />
         <Route path="/kos/:id" element={<DetailKos />} />
         <Route path="/bookingpage" element={<BookingPage />} />
         <Route path="*" element={<>Not found</>} />

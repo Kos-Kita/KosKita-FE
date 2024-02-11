@@ -31,7 +31,10 @@ export interface IMyKosType {
   rating: number;
   price: number;
   address: string;
-  kos_facilities: string;
+  kos_facilities: {
+    id: number;
+    facility: string;
+  }[];
   photo_kos: {
     main_kos_photo: string;
   };

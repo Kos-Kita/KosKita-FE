@@ -1,10 +1,11 @@
-import { IKosType } from "@/utils/apis/kos/types";
-import { useState } from "react";
+import { IKosDetail, IKosType } from "@/utils/apis/kos/types";
+import { useEffect, useState } from "react";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 
 interface FotoKosProps {
   register: UseFormRegister<IKosType>;
   errors: FieldErrors<IKosType>;
+  dataKos?: IKosDetail;
 }
 interface DataImageInput {
   main_photo: string;
@@ -13,8 +14,18 @@ interface DataImageInput {
   frontRoom_photo: string;
   insideRoom_photo: string;
 }
-const FotoKos = ({ register, errors }: FotoKosProps) => {
+const FotoKos = ({ register, errors, dataKos }: FotoKosProps) => {
   const [image, setImage] = useState<Partial<DataImageInput>>();
+  useEffect(() => {
+    setImage({
+      main_photo: dataKos?.photo_kos.main_kos_photo,
+      front_photo: dataKos?.photo_kos.front_kos_photo,
+      back_photo: dataKos?.photo_kos.back_kos_photo,
+      frontRoom_photo: dataKos?.photo_kos.front_room_photo,
+      insideRoom_photo: dataKos?.photo_kos.inside_room_photo,
+    });
+  }, []);
+
   return (
     <div className="max-w-6xl mx-auto flex flex-col gap-y-[40px] p-3 ">
       <div className="flex items-center gap-x-16 ">
@@ -23,8 +34,12 @@ const FotoKos = ({ register, errors }: FotoKosProps) => {
           htmlFor="fotoUtama"
           className="bg-slate-100 rounded-2xl max-w-sm w-full cursor-pointer p-5 h-full flex items-center justify-center overflow-hidden"
         >
-          {image?.main_photo ? (
-            <img src={image?.main_photo} alt="main-photo" className="aspect-[2/2] object-fill" />
+          {image?.main_photo || dataKos?.photo_kos.main_kos_photo ? (
+            <img
+              src={image?.main_photo ?? dataKos?.photo_kos.main_kos_photo}
+              alt="main-photo"
+              className="aspect-[2/2] object-fill"
+            />
           ) : (
             <div className="border-dashed border-2 rounded-2xl p-8 text-sm text-center text-slate-500">
               Click to browse or drag and drop your files
@@ -51,8 +66,12 @@ const FotoKos = ({ register, errors }: FotoKosProps) => {
           htmlFor="fotoDepan"
           className="bg-slate-100 rounded-2xl max-w-sm w-full cursor-pointer p-5 h-full flex items-center justify-center"
         >
-          {image?.front_photo ? (
-            <img src={image?.front_photo} alt="main-photo" className="aspect-[2/2] object-fill" />
+          {image?.front_photo || dataKos?.photo_kos.front_kos_photo ? (
+            <img
+              src={image?.front_photo ?? dataKos?.photo_kos.front_kos_photo}
+              alt="main-photo"
+              className="aspect-[2/2] object-fill"
+            />
           ) : (
             <div className="border-dashed border-2 rounded-2xl p-8 text-sm text-center text-slate-500">
               Click to browse or drag and drop your files
@@ -79,8 +98,12 @@ const FotoKos = ({ register, errors }: FotoKosProps) => {
           htmlFor="fotoBelakang"
           className="bg-slate-100 rounded-2xl max-w-sm w-full cursor-pointer p-5 h-full flex items-center justify-center"
         >
-          {image?.back_photo ? (
-            <img src={image?.back_photo} alt="main-photo" className="aspect-[2/2] object-fill" />
+          {image?.back_photo || dataKos?.photo_kos.back_kos_photo ? (
+            <img
+              src={image?.back_photo ?? dataKos?.photo_kos.back_kos_photo}
+              alt="main-photo"
+              className="aspect-[2/2] object-fill"
+            />
           ) : (
             <div className="border-dashed border-2 rounded-2xl p-8 text-sm text-center text-slate-500">
               Click to browse or drag and drop your files
@@ -107,9 +130,9 @@ const FotoKos = ({ register, errors }: FotoKosProps) => {
           htmlFor="kamarDepan"
           className="bg-slate-100 rounded-2xl max-w-sm w-full cursor-pointer p-5 h-full flex items-center justify-center"
         >
-          {image?.frontRoom_photo ? (
+          {image?.frontRoom_photo || dataKos?.photo_kos.front_room_photo ? (
             <img
-              src={image?.frontRoom_photo}
+              src={image?.frontRoom_photo ?? dataKos?.photo_kos.front_room_photo}
               alt="main-photo"
               className="aspect-[2/2] object-fill"
             />
@@ -139,9 +162,9 @@ const FotoKos = ({ register, errors }: FotoKosProps) => {
           htmlFor="dalamKamar"
           className="bg-slate-100 rounded-2xl max-w-sm w-full cursor-pointer p-5 h-full flex items-center justify-center"
         >
-          {image?.insideRoom_photo ? (
+          {image?.insideRoom_photo || dataKos?.photo_kos.inside_room_photo ? (
             <img
-              src={image?.insideRoom_photo}
+              src={image?.insideRoom_photo ?? dataKos?.photo_kos.inside_room_photo}
               alt="main-photo"
               className="aspect-[2/2] object-fill"
             />

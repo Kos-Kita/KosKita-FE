@@ -16,6 +16,7 @@ const Navbar = () => {
   const { token, user, changeToken } = useAuth();
   const handleLogout = () => {
     changeToken();
+    navigate("/login");
     toast({
       description: "logout succesfuly",
     });
