@@ -56,8 +56,7 @@ const ProfileRenter = () => {
     }
   };
 
-  const deleteProfile = async (e: any) => {
-    e.preventDefault();
+  const deleteProfile = async () => {
     try {
       const response = await axios.delete(`${baseurl}/users`, {
         headers: {
@@ -68,6 +67,7 @@ const ProfileRenter = () => {
         toast({
           description: "Berhasil dihapus",
         });
+        navigate("/login");
       }
     } catch (error) {
       console.log(error);
@@ -151,15 +151,15 @@ const ProfileRenter = () => {
 
   const cekKost = async () => {
     try {
-      const response = await axios.get(`${baseurl}/users/kos`, {
+      const response = await axios.get(`${baseurl}/booking`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       if (response.data.data === null) {
-        setStatus(true);
-      } else {
         setStatus(false);
+      } else {
+        setStatus(true);
       }
     } catch (error: any) {
       toast({
@@ -187,6 +187,10 @@ const ProfileRenter = () => {
     getProfile();
     cekKost();
   }, []);
+
+  useEffect(() => {
+    cekKost();
+  }, [status]);
 
   return (
     <>
@@ -304,7 +308,7 @@ const ProfileRenter = () => {
                         <button type="submit" className="grow justify-center px-3 py-2 md:px-4 md:py-3 bg-lime-600 rounded shadow-sm">
                           Edit Akun
                         </button>
-                        <AlertDelete onAction={() => deleteProfile} title="Apakah anda yakin?" description="Penghapusan data ini tidak dapat dikembalikan, dan bersifat permanen" background="bg-red-600 hover:bg-red-400">
+                        <AlertDelete onAction={deleteProfile} title="Apakah anda yakin?" description="Penghapusan data ini tidak dapat dikembalikan, dan bersifat permanen" background="bg-red-600 hover:bg-red-400">
                           <button className="grow justify-center md:px-3 md:py-4 px-3 py-2 bg-red-600 rounded shadow-sm hover:bg-red-400">Hapus Akun</button>
                         </AlertDelete>
                       </div>
