@@ -40,14 +40,17 @@ const ProfileOwner = () => {
                   {loading ? (
                     <SkeletonProfile />
                   ) : (
-                    <div className="flex gap-4  items-center p-3  border-slate-300">
-                      <img
-                        src="https://source.unsplash.com/80x80?person"
-                        alt="person"
-                        className="rounded-full"
-                      />
-                      <span className="font-bold text-2xl">Junior</span>
-                    </div>
+                    <>
+                      <div className="flex gap-4  items-center p-3  border-slate-300">
+                        <img
+                          src="https://source.unsplash.com/80x80?person"
+                          alt="person"
+                          className="rounded-full"
+                        />
+                        <span className="font-bold text-2xl">Junior</span>
+                      </div>
+                      <div className="w-full border"></div>
+                    </>
                   )}
                 </div>
 

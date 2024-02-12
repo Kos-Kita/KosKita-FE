@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 .kos::-webkit-scrollbar {
-    width: 10px;
-    height: 20px;
+  width: 0.55rem;
+  height: 0.25rem;
   }
 
 

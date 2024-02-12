@@ -37,7 +37,7 @@ import { cn } from "@/utils";
 import { useAuth } from "@/utils/context/auth";
 import { toast } from "@/components/ui/use-toast";
 import { getDetailKos } from "@/utils/apis/kos/api";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IKosDetail } from "@/utils/apis/kos/types";
 
 const DetailKos = () => {
@@ -51,13 +51,15 @@ const DetailKos = () => {
   const { user } = useAuth();
   const mapRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
+  const navigate = useNavigate();
+  const [isValidDate, setIsValidDate] = useState(true);
 
-  console.log(date);
   useEffect(() => {
     getData();
     mapRef.current?.panTo(markerRef.current?.getLatLng());
     window.scrollTo(0, 0);
   }, []);
+
   const getData = async () => {
     try {
       const result = await getDetailKos(id!);
@@ -71,6 +73,16 @@ const DetailKos = () => {
     }
   };
 
+  const handleSubmit = () => {
+    if (!date) {
+      setIsValidDate(false);
+    } else {
+      setIsValidDate(true);
+      navigate("/bookingpage", {
+        state: { kos_id: data?.id, startDate: new Date(), endDate: date },
+      });
+    }
+  };
   return (
     <Layout>
       <div className="min-h-screen">
@@ -159,11 +171,26 @@ const DetailKos = () => {
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0">
-                    <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      fromMonth={new Date(new Date().setMonth(new Date().getMonth() + 1))}
+                      onSelect={setDate}
+                      disabled={(date) =>
+                        new Date(new Date().setMonth(new Date().getMonth() + 1)) >= date
+                      }
+                      initialFocus
+                    />
                   </PopoverContent>
                 </Popover>
+                {!isValidDate && (
+                  <p className="text-sm text-red-500">Masukkan tanggal booking terlebih dahulu</p>
+                )}
                 <span className="text-2xl font-semibold">Rp.11.500.000 / Bulan</span>
-                <button className="px-5 py-2 rounded-xl text-sm text-white bg-[#4CA02E]">
+                <button
+                  className="px-5 py-2 rounded-xl text-sm text-white bg-[#4CA02E] "
+                  onClick={handleSubmit}
+                >
                   Lanjutkan pemesanan
                 </button>
                 <button className="px-5 py-2 rounded-xl text-sm text-white bg-[#4CA02E]">
