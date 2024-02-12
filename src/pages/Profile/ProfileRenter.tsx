@@ -1,5 +1,5 @@
 import AlertDelete from "@/components/AlertDelete";
-import CardProduct from "@/components/CardProduct";
+// import CardProduct from "@/components/CardProduct";
 import Layout from "@/components/Layout";
 import { toast } from "@/components/ui/use-toast";
 import axios from "axios";
@@ -7,8 +7,10 @@ import React, { useEffect, useState } from "react";
 import { profile } from "@/utils/types/type";
 import { changePassword } from "@/utils/types/type";
 import { useNavigate } from "react-router-dom";
+import { IMyKosType } from "@/utils/apis/user/types";
 
 const ProfileRenter = () => {
+  const [dataKos, setDataKos] = useState<IMyKosType[]>();
   const [status, setStatus] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -156,10 +158,12 @@ const ProfileRenter = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      if (response.data.data === null) {
+      if (response.data.data.length < 1) {
         setStatus(false);
       } else {
         setStatus(true);
+        setDataKos(response.data.data);
+        console.log(response.data.data);
       }
     } catch (error: any) {
       toast({
@@ -323,7 +327,7 @@ const ProfileRenter = () => {
                     <img src="https://img.icons8.com/windows/32/smart-home-2.png" alt="home" className="w-[20px]" />
                     <span>Riwayat Kos</span>
                   </div>
-                  {status ? (
+                  {!status ? (
                     <div>
                       <div className="mt-16 text-2xl font-bold leading-9 whitespace-nowrap max-md:mt-10">Kamu belum menyewa kos</div>
                       <div className="mt-10 leading-6 md:w-[409px] w-full">Yuk, sewa di Koskita untuk aktifkan halaman ini Coba cara ngekos modern dengan unik</div>
@@ -354,8 +358,21 @@ const ProfileRenter = () => {
                       </div>
                     </div>
                   ) : (
-                    <CardProduct hidden={true} kos_name={"Makan agung"} rating={"5"} price={500000} category={"banyak"} photo_kos={"remo"} />
+                    <>
+                      {dataKos && (
+                        <>
+                          {dataKos.map((item: any) => {
+                            <div>
+                              <span>nama:{item.kos_name}</span>
+                              <span>total:{item.total_harga}</span>
+                              <span>alamat:{item.address}</span>
+                            </div>;
+                          })}
+                        </>
+                      )}
+                    </>
                   )}
+
                   {showPopup && (
                     <div>
                       <div className="fixed inset-0 bg-black opacity-50 z-50"></div>
