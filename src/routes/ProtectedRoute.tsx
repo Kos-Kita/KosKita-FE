@@ -13,10 +13,9 @@ const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
     "/buat-kos",
     "/edit-kos/:id",
     "/bookingpage",
-    "/admin/inbox",
-    "/admin",
+    "/dashboard",
   ];
-  const adminProtected = ["/admin/inbox", "/admin"];
+  const adminProtected = ["/dashboard", "/admin"];
   const renterProtected = ["/profilerenter", "/bookingpage"];
   const ownerProtected = ["/profileowner", "/buat-kos", "/edit-kos/:id"];
 
