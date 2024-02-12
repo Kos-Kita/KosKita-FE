@@ -39,6 +39,7 @@ import { toast } from "@/components/ui/use-toast";
 import { getDetailKos } from "@/utils/apis/kos/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { IKosDetail } from "@/utils/apis/kos/types";
+import PopupChat from "@/components/PopupChat";
 
 const DetailKos = () => {
   const [position, setPosition] = useState({
@@ -53,6 +54,7 @@ const DetailKos = () => {
   const markerRef = useRef<any>(null);
   const navigate = useNavigate();
   const [isValidDate, setIsValidDate] = useState(true);
+  const [chatOpen, setChatOpen] = useState(false);
 
   useEffect(() => {
     getData();
@@ -85,6 +87,8 @@ const DetailKos = () => {
   };
   return (
     <Layout>
+      <PopupChat chatOpen={chatOpen} setChatOpen={setChatOpen} />
+
       <div className="min-h-screen">
         <section className="flex gap-x-2 h-full max-h-[500px]">
           <img
@@ -115,8 +119,8 @@ const DetailKos = () => {
             />
           </div>
         </section>
-        <section className="py-10">
-          <div className="flex items-start justify-between  max-w-[95rem] mx-auto ">
+        <section className="py-10 px-5 2xl:px-0">
+          <div className="flex items-start justify-between container 2xl:max-w-[100rem] mx-auto">
             <div className="flex flex-col gap-y-7">
               <div className="flex items-center gap-x-6">
                 <h1 className="text-4xl font-medium">{data?.kos_name}</h1>
@@ -193,7 +197,10 @@ const DetailKos = () => {
                 >
                   Lanjutkan pemesanan
                 </button>
-                <button className="px-5 py-2 rounded-xl text-sm text-white bg-[#4CA02E]">
+                <button
+                  className="px-5 py-2 rounded-xl text-sm text-white bg-[#4CA02E]"
+                  onClick={() => setChatOpen(true)}
+                >
                   Kontak Pemilik Kos
                 </button>
                 <p className="text-center text-sm">
@@ -206,7 +213,7 @@ const DetailKos = () => {
         </section>
         <section className="py-16 space-y-10">
           <h3 className="text-center text-4xl font-semibold">Lokasi</h3>
-          <div className="container max-w-[100rem] ">
+          <div className="container 2xl:max-w-[100rem] ">
             <MapContainer
               center={position}
               zoom={13}
@@ -225,10 +232,10 @@ const DetailKos = () => {
         </section>
         <section className="py-20 space-y-14">
           <h3 className="text-center text-4xl font-semibold">Fasilitas Kos</h3>
-          <div className="container mx-auto">
+          <div className="container 2xl:max-w-[95rem] mx-auto">
             <div className="grid grid-cols-3 gap-6 ">
               {data?.kos_facilities?.map((item) => (
-                <div className="flex items-center justify-around">
+                <div className="flex items-center justify-around" key={item.id}>
                   <span className="w-20 whitespace-nowrap">{item.facility}</span>
                   {(() => {
                     switch (item.facility) {
@@ -255,11 +262,11 @@ const DetailKos = () => {
             </div>
           </div>
         </section>
-        <section className="py-20 space-y-14">
+        <section className="py-20 space-y-14 ">
           <h3 className="text-center text-4xl font-semibold">Peraturan Kos</h3>
-          <div className="grid grid-cols-3 gap-3 place-items-center ">
+          <div className="grid grid-cols-3 gap-3 place-items-center container 2xl:max-w-[100rem]">
             {data?.kos_rules?.map((item) => (
-              <div className="flex items-center gap-x-5 w-56">
+              <div className="flex items-center gap-x-5 w-56" key={item.id}>
                 {(() => {
                   switch (item.rule) {
                     case "24 JAM":
