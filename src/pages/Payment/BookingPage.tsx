@@ -126,7 +126,7 @@ const BookingPage = () => {
                       <div>Total</div>
                       <div className="flex-auto">{<NumberFormatter value={parseInt(data.price)} />}</div>
                     </div>
-                    <div className="mt-9 text-base tracking-wide text-black max-md:max-w-full">Tanggal kamu mulai mengkos yang tersedia</div>
+                    <div className="mt-9 text-base tracking-wide text-black max-md:max-w-full">Tanggal kamu mulai ngekos </div>
                     <div className="flex gap-5 justify-start mt-3.5 text-xl tracking-wide leading-8 text-black text-opacity-90 max-md:flex-wrap max-md:max-w-full">
                       <div className="flex gap-5 justify-between px-9 py-3 rounded-md bg-neutral-800 bg-opacity-10 max-md:px-5">
                         <div className="flex-auto">Oct 12, 2018</div>
