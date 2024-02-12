@@ -12,22 +12,28 @@ import { useEffect, useState } from "react";
 import { IKosRecomend } from "@/utils/apis/kos/types";
 import { formattedAmount } from "@/utils/formattedAmount";
 import { toast } from "@/components/ui/use-toast";
+import Homepage from "@/components/skeletons/Homepage";
 
 const App = () => {
   const navigate = useNavigate();
   const [kosRecomend, setkosRecomend] = useState<IKosRecomend[]>();
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     getRecommend();
   }, []);
 
   const getRecommend = async () => {
     try {
+      setLoading(true);
       const result = await getKosRecomend();
       setkosRecomend(result.data);
     } catch (error) {
       toast({
         description: (error as Error).message,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -92,68 +98,70 @@ const App = () => {
           </div>
         </section>
 
-        <section className="flex flex-col gap-y-[60px] items-center justify-center py-20">
+        <section className="flex flex-col gap-y-[60px] items-center justify-center py-20 ">
           <h1 className="text-4xl font-medium">Rekomendasi Kos</h1>
           <Carousel
-            className="p-5"
+            className="p-5 "
             opts={{
               align: "center",
               loop: true,
             }}
           >
-            <CarouselContent className="gap-x-10">
-              {kosRecomend?.map((data) => (
+            <CarouselContent className="gap-x-10 ">
+              {loading ? (
+                <Homepage />
+              ) : (
                 <>
-                  <CarouselItem
-                    className={`${
-                      kosRecomend.length > 1 && kosRecomend.length < 5
-                        ? "basis-1/4"
-                        : kosRecomend.length > 5
-                        ? "basis-1/6"
-                        : ""
-                    }`}
-                    key={data.id}
-                  >
-                    <div
-                      className="flex flex-col items-center gap-y-1 rounded-3xl overflow-hidden bg-[#F2F0F2] cursor-pointer "
-                      onClick={() => navigate(`/kos/${data.id}`)}
-                    >
-                      <img
-                        src={`https://source.unsplash.com/300x30${data.id}?rented-house`}
-                        alt="interior"
-                        className="w-full h-[300px] object-cover"
-                      />
-                      <div className="flex flex-col items-center w-full px-4 py-2 gap-y-3">
-                        <div className="flex items-center justify-start gap-x-2  w-full font-semibold">
-                          <span className="text-sm  py-1 px-4 bg-white/50 shadow rounded-lg ">
-                            Putri
-                          </span>
-                          <div className="flex items-center  rounded-xl gap-x-2">
-                            <Star color="white" fill={"green"} size={16} />
-                            <span className="text-sm">{data.rating}.0</span>
+                  {kosRecomend?.map((data) => (
+                    <>
+                      <CarouselItem className={"basis-1/4"} key={data.id}>
+                        <div
+                          className="flex flex-col items-center gap-y-1 rounded-3xl overflow-hidden bg-[#F2F0F2] cursor-pointer "
+                          onClick={() => navigate(`/kos/${data.id}`)}
+                        >
+                          <img
+                            src={
+                              data.photo_kos.main_kos_photo === ""
+                                ? `https://source.unsplash.com/300x30${data.id}?rented-house`
+                                : data.photo_kos.main_kos_photo
+                            }
+                            alt="main-photo-kos"
+                            className="w-full h-[300px] object-cover"
+                          />
+                          <div className="flex flex-col items-center w-full px-4 py-2 gap-y-3">
+                            <div className="flex items-center justify-start gap-x-2  w-full font-semibold">
+                              <span className="text-sm  py-1 px-4 bg-white/50 shadow rounded-lg ">
+                                Putri
+                              </span>
+                              <div className="flex items-center  rounded-xl gap-x-2">
+                                <Star color="white" fill={"green"} size={16} />
+                                <span className="text-sm">{data.rating}.0</span>
+                              </div>
+                            </div>
+                            <h3 className="font-semibold -mt-2 text-xl w-full">{data.kos_name}</h3>
+                            <div className="flex items-start w-full gap-x-2 text-sm">
+                              <MapPin size={16} className="w-8" />
+                              <span className="leading-tight ">{data.address}</span>
+                            </div>
+                            <div className="flex flex-col gap-y-2 items-center w-full">
+                              <div className="flex items-center flex-wrap gap-x-1  w-full">
+                                {data.kos_facilities.slice(0, 3).map((item) => (
+                                  <span className="text-sm text-slate-800">
+                                    {item.facility.replace("", " - ")}
+                                  </span>
+                                ))}
+                              </div>
+                              <span className="text-sm font-medium text-[#4CA02E] w-full">
+                                {formattedAmount(data.price)}/bulan
+                              </span>
+                            </div>
                           </div>
                         </div>
-                        <h3 className="font-semibold -mt-2 text-xl w-full">{data.kos_name}</h3>
-                        <div className="flex items-start w-full gap-x-2 text-sm">
-                          <MapPin size={16} className="w-8" />
-                          <span className="leading-tight ">{data.address}</span>
-                        </div>
-                        <div className="flex items-center w-full">
-                          <div className="flex flex-col gap-y-2 ">
-                            <span className="text-sm text-slate-800 ">
-                              {data.kos_facilities.replace(/ /g, "-").toLocaleLowerCase()}
-                            </span>
-
-                            <span className="text-sm font-medium text-[#4CA02E]">
-                              {formattedAmount(data.price)}/bulan
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </CarouselItem>
+                      </CarouselItem>
+                    </>
+                  ))}
                 </>
-              ))}
+              )}
             </CarouselContent>
           </Carousel>
         </section>

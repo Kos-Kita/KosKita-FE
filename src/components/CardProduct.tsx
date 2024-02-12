@@ -6,6 +6,7 @@ import AlertDelete from "./AlertDelete";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { toast } from "./ui/use-toast";
 import { deleteKos } from "@/utils/apis/kos/api";
+import { useNavigate } from "react-router-dom";
 export interface searchKos {
   hidden: boolean;
   kos_name: string | undefined;
@@ -14,10 +15,14 @@ export interface searchKos {
   rooms?: string | undefined;
   category?: string | undefined;
   address?: string | undefined;
-  kos_facilities?: string | undefined;
+  kos_facilities?: {
+    id: number;
+    facility: string;
+  }[];
   photo_kos: string | any | undefined;
   direct?: ReactEventHandler | undefined;
   id?: any | undefined;
+  refetchData?: () => void;
 }
 
 const getSentencesAfterNCommas = (text: string | any, n: number) => {
@@ -51,13 +56,16 @@ const CardProduct: FC<searchKos> = (props: searchKos) => {
     kos_facilities,
     photo_kos,
     direct,
+    refetchData,
   } = props;
+  const navigate = useNavigate();
   const handleDeleteKos = async () => {
     try {
       const result = await deleteKos(props.id);
       toast({
         description: result.message,
       });
+      refetchData!();
     } catch (error) {
       toast({
         description: (error as Error).message,
@@ -74,7 +82,7 @@ const CardProduct: FC<searchKos> = (props: searchKos) => {
             <img
               loading="lazy"
               srcSet={photo_kos}
-              className="w-full md:h-[20rem] h-[12rem]  border-2 border-slate-100 "
+              className="w-full md:h-full h-[12rem]  border-2 border-slate-100 "
             />
           </div>
           <div className="flex flex-col ml-5 w-[56%] max-md:ml-0 max-md:w-full">
@@ -90,11 +98,18 @@ const CardProduct: FC<searchKos> = (props: searchKos) => {
                         <MoreHorizontal />
                       </PopoverTrigger>
                       <PopoverContent className="max-w-32 space-1 p-0">
-                        <div className="w-full flex items-center gap-x-2 cursor-pointer px-3 py-2 hover:bg-slate-100">
+                        <div
+                          className="w-full flex items-center gap-x-2 cursor-pointer px-3 py-2 hover:bg-slate-100"
+                          onClick={() => navigate(`/edit-kos/${props.id}`)}
+                        >
                           <Edit className="size-4 text-teal-500" /> Edit
                         </div>
                         <Separator />
-                        <AlertDelete onAction={handleDeleteKos}>
+                        <AlertDelete
+                          title="Delete Kos"
+                          description={"Apakah yakin ingin menghapus ?"}
+                          onAction={handleDeleteKos}
+                        >
                           <div className="w-full flex items-center gap-x-2 cursor-pointer px-3 py-2 hover:bg-slate-100">
                             <Trash2 className="size-4 text-red-500" /> Delete
                           </div>
@@ -106,14 +121,13 @@ const CardProduct: FC<searchKos> = (props: searchKos) => {
               </div>
               <div className="flex items-center w-full gap-5 mt-4 md:mt-8 flex-wrap">
                 <div className="text-sm leading-4 gap-5 whitespace-nowrap text-neutral-900">
-                  {kos_facilities}
+                  {kos_facilities?.slice(0, 3).map((item) => item.facility)}
                 </div>
                 {!hidden && (
-                  <div className="text-sm leading-4 gap-5 whitespace-nowrap text-neutral-900">
-                    tipe kost: {category}
-                  </div>
+                  <div className="text-sm py-1 px-4 bg-white/50 shadow rounded-lg">{category}</div>
                 )}
               </div>
+
               <div>
                 <div className="flex gap-3 justify-between mt-3.5 text-base whitespace-nowrap">
                   {!hidden && (
@@ -122,7 +136,7 @@ const CardProduct: FC<searchKos> = (props: searchKos) => {
                     </div>
                   )}
                   <div className="grow my-auto text-neutral-900">
-                    dari <NumberFormatter value={price} /> /bulan
+                    dari <NumberFormatter value={price ? price : 0} /> /bulan
                   </div>
                 </div>
               </div>

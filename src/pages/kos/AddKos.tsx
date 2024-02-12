@@ -23,10 +23,15 @@ const AddKos = () => {
     register,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<IKosType>({
     resolver: zodResolver(kosSchema),
   });
+
+  useEffect(() => {
+    setValue("mode", "create");
+  }, []);
 
   useEffect(() => {
     if (stepTab === null || stepTab === "" || Number(stepTab) > steps.length) {
@@ -36,19 +41,19 @@ const AddKos = () => {
   }, [stepTab]);
 
   const handleCreateKos = async (body: IKosType) => {
-    console.log(body);
-    // try {
-    //   const result = await createKos(body);
-    //   toast({
-    //     description: result?.message,
-    //   });
-    //   navigate("/");
-    // } catch (error) {
-    //   toast({
-    //     variant: "destructive",
-    //     description: (error as Error).message,
-    //   });
-    // }
+    try {
+      const result = await createKos(body);
+      toast({
+        description: result?.message,
+      });
+      reset();
+      navigate("/profileowner");
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        description: (error as Error).message,
+      });
+    }
   };
 
   const handleNextStep = () => {
