@@ -47,7 +47,7 @@ const Navbar = () => {
             Beranda
           </li>
           <li className={`cursor-pointer `} onClick={() => setChatOpen(true)}>
-            Chats
+            Chat
           </li>
           <li className="cursor-pointer">Kontak</li>
           <li className="cursor-pointer">Tentang</li>

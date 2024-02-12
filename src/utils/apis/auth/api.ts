@@ -13,6 +13,6 @@ export const login = async (body: ILoginType) => {
     const response = await axiosWithConfig.post("/login", body);
     return response.data as Response<ILoginPayload>;
   } catch (error: any) {
-    throw new Error(error.message);
+    throw new Error(error.response.data.message);
   }
 };

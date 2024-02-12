@@ -31,9 +31,10 @@ const Login = () => {
       toast({
         description: result.message,
       });
-    } catch (error: any) {
+    } catch (error) {
       toast({
-        description: error.message,
+        variant: "destructive",
+        description: (error as Error).message,
       });
     }
   };
