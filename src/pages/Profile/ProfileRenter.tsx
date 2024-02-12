@@ -6,6 +6,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { profile } from "@/utils/types/type";
 import { changePassword } from "@/utils/types/type";
+import { useNavigate } from "react-router-dom";
 
 const ProfileRenter = () => {
   const [status, setStatus] = useState(true);
@@ -22,6 +23,7 @@ const ProfileRenter = () => {
     email: "",
     photo_profile: "",
   });
+  const navigate = useNavigate();
 
   const [formPassword, setFormPassword] = useState<changePassword>({
     old_password: "",
@@ -139,10 +141,6 @@ const ProfileRenter = () => {
     }
   };
 
-  const handleStatus = () => {
-    setStatus(!status);
-  };
-
   const handlePopup = () => {
     setShowPopup(!showPopup);
   };
@@ -170,8 +168,6 @@ const ProfileRenter = () => {
     }
   };
 
-  cekKost();
-
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files?.[0];
     if (file) {
@@ -189,6 +185,7 @@ const ProfileRenter = () => {
 
   useEffect(() => {
     getProfile();
+    cekKost();
   }, []);
 
   return (
@@ -346,7 +343,7 @@ const ProfileRenter = () => {
                         </div>
                         <div
                           className="justify-center items-center self-end px-16 py-6 mt-7 mr-6 max-w-full text-center text-white whitespace-nowrap bg-lime-600 rounded-sm shadow-sm leading-[171%] w-[476px] max-md:px-5 max-md:mr-2.5"
-                          onClick={handleStatus}
+                          onClick={() => navigate("/")}
                         >
                           Mulai cari dan sewa kos
                         </div>

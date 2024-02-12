@@ -9,6 +9,7 @@ import AddKos from "@/pages/kos/AddKos";
 import DetailKos from "@/pages/kos/DetailKos";
 import BookingPage from "@/pages/Payment/BookingPage";
 import EditKos from "@/pages/kos/EditKos";
+import Dashboard from "@/pages/admin/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path="/edit-kos/:id" element={<EditKos />} />
           <Route path="/kos/:id" element={<DetailKos />} />
           <Route path="/bookingpage" element={<BookingPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Route>
         <Route path="*" element={<>Not found</>} />
       </Routes>
