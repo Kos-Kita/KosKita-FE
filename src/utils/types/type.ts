@@ -10,6 +10,8 @@ export interface detail {
 export interface detailPayment {
   booking_code: string;
   virtual_number: string;
+  biller_code?: string;
+  bill_key?: string;
   total: string;
 }
 

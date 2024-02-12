@@ -30,11 +30,19 @@ const BookingPage = () => {
 
   const copyToClipboard = () => {
     const vaCodeInput = document.createElement("input");
-    vaCodeInput.value = dPayment.virtual_number;
+    let valueToCopy = "";
+    if (dPayment.virtual_number) {
+      valueToCopy = dPayment.virtual_number;
+    } else {
+      valueToCopy = `Biller Code: ${dPayment.biller_code}, Bill Key: ${dPayment.bill_key}`;
+    }
+
+    vaCodeInput.value = valueToCopy;
     document.body.appendChild(vaCodeInput);
     vaCodeInput.select();
     document.execCommand("copy");
     document.body.removeChild(vaCodeInput);
+
     toast({
       description: "Berhasil disalin",
     });
@@ -43,6 +51,8 @@ const BookingPage = () => {
   const [dPayment, setPayment] = useState<detailPayment>({
     booking_code: "",
     virtual_number: "",
+    bill_key: "",
+    biller_code: "",
     total: "",
   });
 
@@ -191,10 +201,24 @@ const BookingPage = () => {
                                 <NumberFormatter value={parseInt(dPayment.total)} />
                               </span>
                             </p>
-                            <div className="mb-4 bg-orange-200 p-3 flex items-center justify-between rounded text-lg font-bold">
-                              <span> Kode VA : {dPayment.virtual_number}</span>
-                              <img className="cursor-pointer h-[20px] w-[20px]" width="24" height="24" src="https://img.icons8.com/material-sharp/24/copy.png" alt="copy" onClick={copyToClipboard} />
-                            </div>
+                            {selectedPaymentMethod === "mandiri" ? (
+                              <>
+                                <div className="mb-4 bg-orange-200 p-3 flex items-center justify-between rounded text-lg font-bold">
+                                  <span> Biller Code : {dPayment.virtual_number}</span>
+                                  <img className="cursor-pointer h-[20px] w-[20px]" width="24" height="24" src="https://img.icons8.com/material-sharp/24/copy.png" alt="copy" onClick={copyToClipboard} />
+                                </div>
+                                <div className="mb-4 bg-orange-200 p-3 flex items-center justify-between rounded text-lg font-bold">
+                                  <span> Bill Key : {dPayment.virtual_number}</span>
+                                  <img className="cursor-pointer h-[20px] w-[20px]" width="24" height="24" src="https://img.icons8.com/material-sharp/24/copy.png" alt="copy" onClick={copyToClipboard} />
+                                </div>
+                              </>
+                            ) : (
+                              <div className="mb-4 bg-orange-200 p-3 flex items-center justify-between rounded text-lg font-bold">
+                                <span> Kode VA : {dPayment.virtual_number}</span>
+                                <img className="cursor-pointer h-[20px] w-[20px]" width="24" height="24" src="https://img.icons8.com/material-sharp/24/copy.png" alt="copy" onClick={copyToClipboard} />
+                              </div>
+                            )}
+
                             <p className="my-2 text-sm flex justify-end">
                               Waktu Berakhir: <span className="text-red-500 ml-2"> {formatTime(popupTimer)}</span>
                             </p>
