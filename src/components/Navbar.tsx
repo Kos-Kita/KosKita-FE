@@ -10,13 +10,11 @@ import {
 } from "../components/ui/dropdown-menu";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "./ui/use-toast";
-import PopupChat from "./PopupChat";
-import { useState } from "react";
+
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { token, user, changeToken } = useAuth();
-  const [chatOpen, setChatOpen] = useState(false);
 
   const handleLogout = () => {
     changeToken();
@@ -28,8 +26,6 @@ const Navbar = () => {
 
   return (
     <div className="p-3 shadow">
-      <PopupChat chatOpen={chatOpen} setChatOpen={setChatOpen} />
-
       <div className="container flex items-center justify-between ">
         <img
           src={brandLogo}
@@ -45,9 +41,6 @@ const Navbar = () => {
             onClick={() => navigate("/")}
           >
             Beranda
-          </li>
-          <li className={`cursor-pointer `} onClick={() => setChatOpen(true)}>
-            Chat
           </li>
           <li className="cursor-pointer">Kontak</li>
           <li className="cursor-pointer">Tentang</li>

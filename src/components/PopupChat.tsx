@@ -7,6 +7,7 @@ interface PopupChat {
 
 const PopupChat = ({ chatOpen, setChatOpen }: PopupChat) => {
   const [hide, setHide] = useState(false);
+
   return (
     <>
       <div

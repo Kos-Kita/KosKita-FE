@@ -13,6 +13,11 @@ export const login = async (body: ILoginType) => {
     const response = await axiosWithConfig.post("/login", body);
     return response.data as Response<ILoginPayload>;
   } catch (error: any) {
-    throw new Error(error.response.data.message);
+    const isError = error.response.data.message;
+    if (isError.includes("password tidak sesuai")) {
+      throw Error("Password incorrect");
+    } else if (isError.includes("record not found")) {
+      throw Error("Email not registered");
+    }
   }
 };

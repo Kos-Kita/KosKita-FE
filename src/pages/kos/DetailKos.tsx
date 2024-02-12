@@ -39,6 +39,7 @@ import { toast } from "@/components/ui/use-toast";
 import { getDetailKos } from "@/utils/apis/kos/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { IKosDetail } from "@/utils/apis/kos/types";
+import PopupChat from "@/components/PopupChat";
 
 const DetailKos = () => {
   const [position, setPosition] = useState({
@@ -53,6 +54,7 @@ const DetailKos = () => {
   const markerRef = useRef<any>(null);
   const navigate = useNavigate();
   const [isValidDate, setIsValidDate] = useState(true);
+  const [chatOpen, setChatOpen] = useState(false);
 
   useEffect(() => {
     getData();
@@ -85,6 +87,8 @@ const DetailKos = () => {
   };
   return (
     <Layout>
+      <PopupChat chatOpen={chatOpen} setChatOpen={setChatOpen} />
+
       <div className="min-h-screen">
         <section className="flex gap-x-2 h-full max-h-[500px]">
           <img
@@ -193,7 +197,10 @@ const DetailKos = () => {
                 >
                   Lanjutkan pemesanan
                 </button>
-                <button className="px-5 py-2 rounded-xl text-sm text-white bg-[#4CA02E]">
+                <button
+                  className="px-5 py-2 rounded-xl text-sm text-white bg-[#4CA02E]"
+                  onClick={() => setChatOpen(true)}
+                >
                   Kontak Pemilik Kos
                 </button>
                 <p className="text-center text-sm">
