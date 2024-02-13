@@ -13,7 +13,11 @@ import { IKosRecomend } from "@/utils/apis/kos/types";
 import { formattedAmount } from "@/utils/formattedAmount";
 import { toast } from "@/components/ui/use-toast";
 import Homepage from "@/components/skeletons/Homepage";
-
+import jakartaBarat from "@/assets/jakarta1.png";
+import jakartaUtara from "@/assets/jakarta2.png";
+import jakartaPusat from "@/assets/jakarta3.png";
+import jakartaTimur from "@/assets/jakarta4.png";
+import jakartaSelatan from "@/assets/jakarta5.png";
 const App = () => {
   const navigate = useNavigate();
   const [kosRecomend, setkosRecomend] = useState<IKosRecomend[]>();
@@ -89,7 +93,17 @@ const App = () => {
                     : "Jakarta Selatan"}
                 </span>
                 <img
-                  src={`/src/assets/jakarta${index + 1}.png`}
+                  src={
+                    index === 0
+                      ? jakartaBarat
+                      : index === 1
+                      ? jakartaUtara
+                      : index === 2
+                      ? jakartaPusat
+                      : index === 3
+                      ? jakartaTimur
+                      : jakartaSelatan
+                  }
                   alt="jakarta"
                   className="rounded-[30px]"
                 />
