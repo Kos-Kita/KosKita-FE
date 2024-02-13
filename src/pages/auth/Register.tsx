@@ -42,7 +42,10 @@ const Register = () => {
         navigate("/login");
       }
     } catch (error: any) {
-      alert(error.response.data.message);
+      toast({
+        variant: "destructive",
+        description: (error as Error).message,
+      });
     }
   };
 

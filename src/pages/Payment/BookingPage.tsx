@@ -75,6 +75,7 @@ const BookingPage = () => {
       setPembayaran((prev) => ({ ...prev, kos_id: id }));
     } catch (error: any) {
       toast({
+        variant: "destructive",
         description: error.response.data.message,
       });
     }
@@ -95,6 +96,7 @@ const BookingPage = () => {
       setShowPopup(!showPopup);
     } catch (error: any) {
       toast({
+        variant: "destructive",
         description: "Server Pusat Terganggu coba Metode Pembayaran Lainnya",
       });
     }

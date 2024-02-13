@@ -79,6 +79,7 @@ const SearchMenu = () => {
     } catch (error: any) {
       setShowCheckboxes(false);
       toast({
+        variant: "destructive",
         description: error.response.data.message,
       });
     }
@@ -86,7 +87,7 @@ const SearchMenu = () => {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSearchQuery(searchQuery); // Tetapkan nilai searchQuery sesuai dengan input
+    setSearchQuery(searchQuery);
     getSearch();
   };
 
