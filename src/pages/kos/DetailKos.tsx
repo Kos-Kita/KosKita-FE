@@ -76,6 +76,7 @@ const DetailKos = () => {
   //   }
   // };
 
+
   useEffect(() => {
     getData();
     // getRooms();
@@ -125,32 +126,12 @@ const DetailKos = () => {
 
       <div className="min-h-screen">
         <section className="flex gap-x-2 h-full max-h-[500px]">
-          <img
-            src={data?.photo_kos.main_kos_photo}
-            alt="interior"
-            className="max-h-full rounded w-[60%]  object-fill"
-          />
+          <img src={data?.photo_kos.main_kos_photo} alt="interior" className="max-h-full rounded w-[60%]  object-fill" />
           <div className="grid grid-cols-2 place-items-center   gap-3 max-h-full p-3 grow ">
-            <img
-              src={data?.photo_kos.front_kos_photo}
-              alt="interior"
-              className="max-h-32 rounded-md w-full min-h-full "
-            />
-            <img
-              src={data?.photo_kos.back_kos_photo}
-              alt="interior"
-              className="max-h-32 rounded-md w-full min-h-full "
-            />
-            <img
-              src={data?.photo_kos.front_room_photo}
-              alt="interior"
-              className="max-h-32 rounded-md w-full min-h-full "
-            />
-            <img
-              src={data?.photo_kos.inside_room_photo}
-              alt="interior"
-              className="max-h-32 rounded-md w-full min-h-full "
-            />
+            <img src={data?.photo_kos.front_kos_photo} alt="interior" className="max-h-32 rounded-md w-full min-h-full " />
+            <img src={data?.photo_kos.back_kos_photo} alt="interior" className="max-h-32 rounded-md w-full min-h-full " />
+            <img src={data?.photo_kos.front_room_photo} alt="interior" className="max-h-32 rounded-md w-full min-h-full " />
+            <img src={data?.photo_kos.inside_room_photo} alt="interior" className="max-h-32 rounded-md w-full min-h-full " />
           </div>
         </section>
         <section className="py-10 px-5 2xl:px-0">
@@ -159,12 +140,7 @@ const DetailKos = () => {
               <div className="flex items-center gap-x-6">
                 <h1 className="text-4xl font-medium">{data?.kos_name}</h1>
                 <div className="flex items-center gap-x-2 rounded shadow p-2">
-                  <Star
-                    color="yellow"
-                    fill={"yellow"}
-                    className="stroke-slate-100 drop-shadow-sm"
-                    size={20}
-                  />
+                  <Star color="yellow" fill={"yellow"} className="stroke-slate-100 drop-shadow-sm" size={20} />
                   <span>{data?.rating}.0</span>
                 </div>
                 <span className="p-2 rounded shadow">{data?.category}</span>
@@ -182,11 +158,7 @@ const DetailKos = () => {
                 <p>Tersisa {data?.rooms} Kamar</p>
               </div>
               <div className="flex items-center gap-x-2">
-                <img
-                  src="https://source.unsplash.com/100x100?person"
-                  alt="person"
-                  className="rounded-full size-16"
-                />
+                <img src="https://source.unsplash.com/100x100?person" alt="person" className="rounded-full size-16" />
                 <div className="flex flex-col gap-y-2">
                   <span className="font-medium">Pemilik Kos</span>
                   <span className="text-sm">{data?.user.name} </span>
@@ -197,13 +169,7 @@ const DetailKos = () => {
               <div className="bg-[#F2F0F2] rounded-3xl flex flex-col items-center max-w-xl  gap-y-4 p-6">
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-[180px] justify-start text-left font-normal bg-slate-100",
-                        !date && "text-muted-foreground"
-                      )}
-                    >
+                    <Button variant={"outline"} className={cn("w-[180px] justify-start text-left font-normal bg-slate-100", !date && "text-muted-foreground")}>
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {date ? format(date, "PPP") : <span>Pick a date</span>}
                     </Button>
@@ -262,6 +228,7 @@ const DetailKos = () => {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
+
               <Marker position={position} ref={markerRef}>
                 <Popup>Lokasi Kos</Popup>
               </Marker>

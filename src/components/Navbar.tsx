@@ -1,13 +1,6 @@
 import brandLogo from "@/assets/koskitaa.png";
 import { useAuth } from "@/utils/context/auth";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../components/ui/dropdown-menu";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "./ui/use-toast";
 
@@ -27,19 +20,9 @@ const Navbar = () => {
   return (
     <div className="p-3 shadow">
       <div className="container flex items-center justify-between ">
-        <img
-          src={brandLogo}
-          alt="Brand-logo"
-          width={100}
-          height={58}
-          className="cursor-pointer"
-          onClick={() => navigate("/")}
-        />
+        <img src={brandLogo} alt="Brand-logo" width={100} height={58} className="cursor-pointer" onClick={() => navigate("/")} />
         <ul className="flex items-center gap-x-10">
-          <li
-            className={`cursor-pointer ${location.pathname === "/" && "font-medium"}`}
-            onClick={() => navigate("/")}
-          >
+          <li className={`cursor-pointer ${location.pathname === "/" && "font-medium"}`} onClick={() => navigate("/")}>
             Beranda
           </li>
           <li className="cursor-pointer">Kontak</li>
@@ -77,18 +60,12 @@ const Navbar = () => {
                   {user.role !== "admin" ? "Profile" : "Dashboard"}
                 </DropdownMenuItem>
                 {user.role === "owner" ? (
-                  <DropdownMenuItem
-                    className="p-2 hover:bg-slate-100 cursor-pointer"
-                    onClick={() => navigate("/buat-kos")}
-                  >
+                  <DropdownMenuItem className="p-2 hover:bg-slate-100 cursor-pointer" onClick={() => navigate("/buat-kos")}>
                     Buat Kos
                   </DropdownMenuItem>
                 ) : null}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="p-2 hover:bg-slate-100 cursor-pointer"
-                  onClick={() => handleLogout()}
-                >
+                <DropdownMenuItem className="p-2 hover:bg-slate-100 cursor-pointer" onClick={() => handleLogout()}>
                   Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>

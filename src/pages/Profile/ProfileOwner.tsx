@@ -110,7 +110,8 @@ const ProfileOwner = () => {
   const updateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     const token = localStorage.getItem("token");
     const name = formData.name;
-    const user_name = formData.user_name;
+    const 
+    _name = formData.user_name;
     const gender = formData.gender;
     const email = formData.email;
     e.preventDefault();
