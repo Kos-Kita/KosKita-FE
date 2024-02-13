@@ -3,10 +3,12 @@ import { useAuth } from "@/utils/context/auth";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../components/ui/dropdown-menu";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "./ui/use-toast";
+
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { token, user, changeToken } = useAuth();
+
   const handleLogout = () => {
     changeToken();
     navigate("/login");
@@ -14,6 +16,7 @@ const Navbar = () => {
       description: "logout succesfuly",
     });
   };
+
   return (
     <div className="p-3 shadow">
       <div className="container flex items-center justify-between ">
@@ -40,8 +43,21 @@ const Navbar = () => {
               <DropdownMenuContent className="mt-2 w-[200px] ">
                 <DropdownMenuLabel className="p-3">Hi {user.user_name}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="p-2 hover:bg-slate-100 cursor-pointer" onClick={() => navigate(`${user.role === "owner" ? "/profileowner" : "/profilerenter"}`)}>
-                  Profile
+                <DropdownMenuItem
+                  className="p-2 hover:bg-slate-100 cursor-pointer"
+                  onClick={() =>
+                    navigate(
+                      `${
+                        user.role === "owner"
+                          ? "/profileowner"
+                          : user.role === "renter"
+                          ? "/profilerenter"
+                          : "/dashboard"
+                      }`
+                    )
+                  }
+                >
+                  {user.role !== "admin" ? "Profile" : "Dashboard"}
                 </DropdownMenuItem>
                 {user.role === "owner" ? (
                   <DropdownMenuItem className="p-2 hover:bg-slate-100 cursor-pointer" onClick={() => navigate("/buat-kos")}>

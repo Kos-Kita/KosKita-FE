@@ -12,7 +12,9 @@ import { pembayaranType } from "@/utils/types/type";
 
 const BookingPage = () => {
   const location = useLocation();
-  const id = location.state.id;
+  const id = location.state.kos_id;
+  const startDate = location.state.startDate;
+  const endDate = location.state.endDate;
   const baseurl = import.meta.env.VITE_BASE_URL;
   const [showPopup, setShowPopup] = useState<Boolean>(false);
   const { user } = useAuth();
@@ -28,11 +30,18 @@ const BookingPage = () => {
 
   const copyToClipboard = () => {
     const vaCodeInput = document.createElement("input");
-    vaCodeInput.value = dPayment.virtual_number;
+    let valueToCopy = "";
+    if (dPayment.virtual_number) {
+      valueToCopy = dPayment.virtual_number;
+    } else {
+      valueToCopy = `Biller Code: ${dPayment.biller_code}, Bill Key: ${dPayment.bill_key}`;
+    }
+    vaCodeInput.value = valueToCopy;
     document.body.appendChild(vaCodeInput);
     vaCodeInput.select();
     document.execCommand("copy");
     document.body.removeChild(vaCodeInput);
+
     toast({
       description: "Berhasil disalin",
     });
@@ -41,6 +50,8 @@ const BookingPage = () => {
   const [dPayment, setPayment] = useState<detailPayment>({
     booking_code: "",
     virtual_number: "",
+    bill_key: "",
+    biller_code: "",
     total: "",
   });
 
@@ -61,7 +72,7 @@ const BookingPage = () => {
         setPembayaran((prev) => ({ ...prev, payment_type: "e-channel" }));
       }
       setPembayaran((prev) => ({ ...prev, bank: selectedPaymentMethod }));
-      setPembayaran((prev) => ({ ...prev, kos_id: parseInt(id) }));
+      setPembayaran((prev) => ({ ...prev, kos_id: id }));
     } catch (error: any) {
       toast({
         description: error.response.data.message,
@@ -84,9 +95,8 @@ const BookingPage = () => {
       setShowPopup(!showPopup);
     } catch (error: any) {
       toast({
-        description: error.message,
+        description: "Server Pusat Terganggu coba Metode Pembayaran Lainnya",
       });
-      console.log(error);
     }
   };
 
@@ -129,11 +139,11 @@ const BookingPage = () => {
                     <div className="mt-9 text-base tracking-wide text-black max-md:max-w-full">Tanggal kamu mulai ngekos </div>
                     <div className="flex gap-5 justify-start mt-3.5 text-xl tracking-wide leading-8 text-black text-opacity-90 max-md:flex-wrap max-md:max-w-full">
                       <div className="flex gap-5 justify-between px-9 py-3 rounded-md bg-neutral-800 bg-opacity-10 max-md:px-5">
-                        <div className="flex-auto">Oct 12, 2018</div>
+                        <div className="flex-auto">{`${new Date(startDate).toLocaleDateString()}`}</div>
                         <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/c0a0c902b8a9baeaddb815dae11ad0409613584194195c98488cdeb0e797b521?" className="my-auto w-6 aspect-square" />
                       </div>
                       <div className="flex gap-5 justify-between px-9 py-3 rounded-md bg-neutral-800 bg-opacity-10 max-md:px-5">
-                        <div className="flex-auto">Oct 12, 2019</div>
+                        <div className="flex-auto">{`${new Date(endDate).toLocaleDateString()}`}</div>
                         <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/c0a0c902b8a9baeaddb815dae11ad0409613584194195c98488cdeb0e797b521?" className="my-auto w-6 aspect-square" />
                       </div>
                     </div>
@@ -142,7 +152,6 @@ const BookingPage = () => {
                         <option value="" disabled selected hidden>
                           Metode Pembayaran
                         </option>
-                        <option value="mandiri"> Virtual Account Mandiri</option>
                         <option value="bni">Virtual Account Bni</option>
                         <option value="bri">Virtual Account Bri</option>
                         <option value="bca">Virtual Account Bca</option>
@@ -189,10 +198,24 @@ const BookingPage = () => {
                                 <NumberFormatter value={parseInt(dPayment.total)} />
                               </span>
                             </p>
-                            <div className="mb-4 bg-orange-200 p-3 flex items-center justify-between rounded text-lg font-bold">
-                              <span> Kode VA : {dPayment.virtual_number}</span>
-                              <img className="cursor-pointer h-[20px] w-[20px]" width="24" height="24" src="https://img.icons8.com/material-sharp/24/copy.png" alt="copy" onClick={copyToClipboard} />
-                            </div>
+                            {selectedPaymentMethod === "mandiri" ? (
+                              <>
+                                <div className="mb-4 bg-orange-200 p-3 flex items-center justify-between rounded text-lg font-bold">
+                                  <span> Biller Code : {dPayment.virtual_number}</span>
+                                  <img className="cursor-pointer h-[20px] w-[20px]" width="24" height="24" src="https://img.icons8.com/material-sharp/24/copy.png" alt="copy" onClick={copyToClipboard} />
+                                </div>
+                                <div className="mb-4 bg-orange-200 p-3 flex items-center justify-between rounded text-lg font-bold">
+                                  <span> Bill Key : {dPayment.virtual_number}</span>
+                                  <img className="cursor-pointer h-[20px] w-[20px]" width="24" height="24" src="https://img.icons8.com/material-sharp/24/copy.png" alt="copy" onClick={copyToClipboard} />
+                                </div>
+                              </>
+                            ) : (
+                              <div className="mb-4 bg-orange-200 p-3 flex items-center justify-between rounded text-lg font-bold">
+                                <span> Kode VA : {dPayment.virtual_number}</span>
+                                <img className="cursor-pointer h-[20px] w-[20px]" width="24" height="24" src="https://img.icons8.com/material-sharp/24/copy.png" alt="copy" onClick={copyToClipboard} />
+                              </div>
+                            )}
+
                             <p className="my-2 text-sm flex justify-end">
                               Waktu Berakhir: <span className="text-red-500 ml-2"> {formatTime(popupTimer)}</span>
                             </p>
@@ -208,11 +231,6 @@ const BookingPage = () => {
 
                     <div className="flex flex-col pl-10">
                       <div className="self-start my-6  font-bold whitespace-nowrap leading-[133%] max-md:mt-10 max-md:ml-2.5">Jenis pembayaran yang di dukung.</div>
-
-                      <div className="flex gap-5 justify-between self-start mt-2.5 text-sm leading-6 text-black max-md:mr-2.5">
-                        <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/072acca096013ce55657bccf1875e5c554fed78a6ca74f7a927bfe2dce2a6443?" className="aspect-[1.59] w-[38px]" />
-                        <div className="flex-auto my-auto">Mandiri Virtual Account</div>
-                      </div>
                       <div className="flex gap-5 justify-between self-start mt-2.5 text-sm leading-6 text-black max-md:mr-2.5">
                         <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/6c33a2eb40c589f742c070f1deee579712c7e39763e83012190e5ea1718316dd?" className="mt-3 aspect-[1.59] w-[38px]" />
                         <div className="flex-auto my-auto">BRI Virtual Account</div>

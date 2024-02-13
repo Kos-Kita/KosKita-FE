@@ -27,6 +27,10 @@ const AddKos = () => {
     formState: { errors, isSubmitting },
   } = useForm<IKosType>({
     resolver: zodResolver(kosSchema),
+    defaultValues: {
+      price: 0,
+      rooms: 0,
+    },
   });
 
   useEffect(() => {

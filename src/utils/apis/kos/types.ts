@@ -26,7 +26,7 @@ export const createKosSchema = z
     mode: z.literal("create"),
     main_kos_photo: z
       .any()
-      .refine((file) => file[0].name === "", "Main kos photo is required")
+      .refine((file) => file[0].name !== "", "Main kos photo is required")
       .refine((file) => file[0].size <= MAX_FILE_SIZE, "Max image size is 5MB")
       .refine(
         (file) => ACCEPTED_IMAGE_TYPES.includes(file[0].type),
@@ -34,7 +34,7 @@ export const createKosSchema = z
       ),
     front_kos_photo: z
       .any()
-      .refine((file) => file[0].name === "", "Front kos photo is required")
+      .refine((file) => file[0].name !== "", "Front kos photo is required")
       .refine((file) => file[0].size <= MAX_FILE_SIZE, "Max image size is 5MB")
       .refine(
         (file) => ACCEPTED_IMAGE_TYPES.includes(file[0].type),
@@ -42,7 +42,7 @@ export const createKosSchema = z
       ),
     back_kos_photo: z
       .any()
-      .refine((file) => file[0].name === "", "Back kos photo is required")
+      .refine((file) => file[0].name !== "", "Back kos photo is required")
       .refine((file) => file[0].size <= MAX_FILE_SIZE, "Max image size is 5MB")
       .refine(
         (file) => ACCEPTED_IMAGE_TYPES.includes(file[0].type),
@@ -50,7 +50,7 @@ export const createKosSchema = z
       ),
     front_room_photo: z
       .any()
-      .refine((file) => file[0].name === "", "Front room photo is required")
+      .refine((file) => file[0].name !== "", "Front room photo is required")
       .refine((file) => file[0].size <= MAX_FILE_SIZE, "Max image size is 5MB")
       .refine(
         (file) => ACCEPTED_IMAGE_TYPES.includes(file[0].type),
@@ -58,7 +58,7 @@ export const createKosSchema = z
       ),
     inside_room_photo: z
       .any()
-      .refine((file) => file[0].name === "", "Inside room photo is required")
+      .refine((file) => file[0].name !== "", "Inside room photo is required")
       .refine((file) => file[0].size <= MAX_FILE_SIZE, "Max image size is 5MB")
       .refine(
         (file) => ACCEPTED_IMAGE_TYPES.includes(file[0].type),

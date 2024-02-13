@@ -12,6 +12,7 @@ import {
   Hammer,
   HandCoins,
   LocateFixed,
+  MoonStar,
   PartyPopper,
   PersonStanding,
   Refrigerator,
@@ -37,9 +38,11 @@ import { cn } from "@/utils";
 import { useAuth } from "@/utils/context/auth";
 import { toast } from "@/components/ui/use-toast";
 import { getDetailKos } from "@/utils/apis/kos/api";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IKosDetail } from "@/utils/apis/kos/types";
-import { useNavigate } from "react-router-dom";
+import PopupChat from "@/components/PopupChat";
+// import { WebsocketContext } from "@/utils/context/ws-provider";
+import { formattedAmount } from "@/utils/formattedAmount";
 
 const DetailKos = () => {
   const [position, setPosition] = useState({
@@ -53,12 +56,34 @@ const DetailKos = () => {
   const mapRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
   const navigate = useNavigate();
-  console.log(date);
+  const [isValidDate, setIsValidDate] = useState(true);
+  const [chatOpen, setChatOpen] = useState(false);
+  // const [rooms, setRooms] = useState<{ id: string; name: string }[]>([]);
+  // const { setConn } = useContext(WebsocketContext);
+
+  // const getRooms = async () => {
+  //   try {
+  //     const res = await fetch(`l3n.my.id/get-room`, {
+  //       method: "GET",
+  //     });
+  //     console.log(res);
+  //     const data = await res.json();
+  //     if (res.ok) {
+  //       setRooms(data);
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
+
   useEffect(() => {
     getData();
+    // getRooms();
     mapRef.current?.panTo(markerRef.current?.getLatLng());
     window.scrollTo(0, 0);
   }, []);
+
   const getData = async () => {
     try {
       const result = await getDetailKos(id!);
@@ -72,8 +97,33 @@ const DetailKos = () => {
     }
   };
 
+  const handleSubmit = () => {
+    if (!date) {
+      setIsValidDate(false);
+    } else {
+      setIsValidDate(true);
+      navigate("/bookingpage", {
+        state: { kos_id: data?.id, startDate: new Date(), endDate: date },
+      });
+    }
+  };
+
+  // const joinRoom = (roomId: number) => {
+  //   const ws = new WebSocket(
+  //     `l3n.my.id/ws/joinRoom/f9ca37bc58547cf528af91a08f3d756e?userId=1&username=${user.user_name}`
+  //   );
+  //   if (ws.OPEN) {
+  //     setConn(ws);
+  //     setChatOpen(true);
+  //     return;
+  //   }
+  // };
+
+  // console.log(rooms);
   return (
     <Layout>
+      <PopupChat chatOpen={chatOpen} setChatOpen={setChatOpen} />
+
       <div className="min-h-screen">
         <section className="flex gap-x-2 h-full max-h-[500px]">
           <img src={data?.photo_kos.main_kos_photo} alt="interior" className="max-h-full rounded w-[60%]  object-fill" />
@@ -84,8 +134,8 @@ const DetailKos = () => {
             <img src={data?.photo_kos.inside_room_photo} alt="interior" className="max-h-32 rounded-md w-full min-h-full " />
           </div>
         </section>
-        <section className="py-10">
-          <div className="flex items-start justify-between  max-w-[95rem] mx-auto ">
+        <section className="py-10 px-5 2xl:px-0">
+          <div className="flex items-start justify-between container 2xl:max-w-[100rem] mx-auto">
             <div className="flex flex-col gap-y-7">
               <div className="flex items-center gap-x-6">
                 <h1 className="text-4xl font-medium">{data?.kos_name}</h1>
@@ -125,33 +175,60 @@ const DetailKos = () => {
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0">
-                    <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      fromMonth={new Date(new Date().setMonth(new Date().getMonth() + 1))}
+                      onSelect={setDate}
+                      disabled={(date) =>
+                        new Date(new Date().setMonth(new Date().getMonth() + 1)) >= date
+                      }
+                      initialFocus
+                    />
                   </PopoverContent>
                 </Popover>
-                <span className="text-2xl font-semibold">Rp.11.500.000 / Bulan</span>
+                {!isValidDate && (
+                  <p className="text-sm text-red-500">Masukkan tanggal booking terlebih dahulu</p>
+                )}
+                <span className="text-2xl font-semibold">
+                  {formattedAmount(data?.price as number)}/Bulan
+                </span>
                 <button
-                  onClick={() =>
-                    navigate("/bookingpage", {
-                      state: {
-                        id: id,
-                      },
-                    })
-                  }
-                  className="px-5 py-2 rounded-xl text-sm text-white bg-[#4CA02E]"
+                  className="px-5 py-2 rounded-xl text-sm text-white bg-[#4CA02E] "
+                  onClick={handleSubmit}
                 >
                   Lanjutkan pemesanan
                 </button>
-                <button className="px-5 py-2 rounded-xl text-sm text-white bg-[#4CA02E]">Kontak Pemilik Kos</button>
-                <p className="text-center text-sm">Ketika Anda memesan kos ini, Lanjutkan Chat Tukang Kos nya dan akan dikonfirmasi secara instan</p>
+                <button
+                  className="px-5 py-2 rounded-xl text-sm text-white bg-[#4CA02E]"
+                  onClick={() => {
+                    setChatOpen(true);
+                  }}
+                >
+                  Kontak Pemilik Kos
+                </button>
+                <p className="text-center text-sm">
+                  Ketika Anda memesan kos ini, Lanjutkan Chat Tukang Kos nya dan akan dikonfirmasi
+                  secara instan
+                </p>
               </div>
             ) : null}
           </div>
         </section>
         <section className="py-16 space-y-10">
           <h3 className="text-center text-4xl font-semibold">Lokasi</h3>
-          <div className="container max-w-[100rem] ">
-            <MapContainer center={position} zoom={13} style={{ height: "400px", width: "100wh" }} ref={mapRef}>
-              <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <div className="container 2xl:max-w-[100rem] ">
+            <MapContainer
+              center={position}
+              zoom={13}
+              style={{ height: "400px", width: "100wh" }}
+              ref={mapRef}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+
               <Marker position={position} ref={markerRef}>
                 <Popup>Lokasi Kos</Popup>
               </Marker>
@@ -160,10 +237,10 @@ const DetailKos = () => {
         </section>
         <section className="py-20 space-y-14">
           <h3 className="text-center text-4xl font-semibold">Fasilitas Kos</h3>
-          <div className="container mx-auto">
+          <div className="container 2xl:max-w-[95rem] mx-auto">
             <div className="grid grid-cols-3 gap-6 ">
               {data?.kos_facilities?.map((item) => (
-                <div className="flex items-center justify-around">
+                <div className="flex items-center justify-around" key={item.id}>
                   <span className="w-20 whitespace-nowrap">{item.facility}</span>
                   {(() => {
                     switch (item.facility) {
@@ -190,13 +267,15 @@ const DetailKos = () => {
             </div>
           </div>
         </section>
-        <section className="py-20 space-y-14">
+        <section className="py-20 space-y-14 ">
           <h3 className="text-center text-4xl font-semibold">Peraturan Kos</h3>
-          <div className="grid grid-cols-3 gap-3 place-items-center ">
+          <div className="grid grid-cols-3 gap-3 place-items-center container 2xl:max-w-[100rem]">
             {data?.kos_rules?.map((item) => (
-              <div className="flex items-center gap-x-5 w-56">
+              <div className="flex items-center gap-x-5 w-56" key={item.id}>
                 {(() => {
                   switch (item.rule) {
+                    case "ADA JAM MALAM UNTUK TAMU":
+                      return <MoonStar />;
                     case "24 JAM":
                       return <Timer />;
                     case "TIDAK BOLEH MEROKOK":

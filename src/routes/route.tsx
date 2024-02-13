@@ -9,21 +9,26 @@ import AddKos from "@/pages/kos/AddKos";
 import DetailKos from "@/pages/kos/DetailKos";
 import BookingPage from "@/pages/Payment/BookingPage";
 import EditKos from "@/pages/kos/EditKos";
+import Dashboard from "@/pages/admin/Dashboard";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/searchmenu" element={<SearchMenu />} />
-        <Route path="/profilerenter" element={<ProfileRenter />} />
-        <Route path="/profileowner" element={<ProfileOwner />} />
-        <Route path="/buat-kos" element={<AddKos />} />
-        <Route path="/edit-kos/:id" element={<EditKos />} />
-        <Route path="/kos/:id" element={<DetailKos />} />
-        <Route path="/bookingpage" element={<BookingPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/searchmenu" element={<SearchMenu />} />
+          <Route path="/profilerenter" element={<ProfileRenter />} />
+          <Route path="/profileowner" element={<ProfileOwner />} />
+          <Route path="/buat-kos" element={<AddKos />} />
+          <Route path="/edit-kos/:id" element={<EditKos />} />
+          <Route path="/kos/:id" element={<DetailKos />} />
+          <Route path="/bookingpage" element={<BookingPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
         <Route path="*" element={<>Not found</>} />
       </Routes>
     </BrowserRouter>
