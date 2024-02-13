@@ -10,10 +10,12 @@ import { profile } from "@/utils/types/type";
 import axios from "axios";
 import { changePassword } from "@/utils/types/type";
 import AlertDelete from "@/components/AlertDelete";
+import { useAuth } from "@/utils/context/auth";
 
 const ProfileOwner = () => {
   const [dataKos, setDataKos] = useState<IMyKosType[]>();
   const [loading, setLoading] = useState(false);
+  const { changeToken } = useAuth();
   useEffect(() => {
     getDataKos();
   }, []);
@@ -87,10 +89,11 @@ const ProfileOwner = () => {
         },
       });
       if (response) {
+        changeToken();
+        navigate("/login");
         toast({
           description: "Berhasil dihapus",
         });
-        navigate("/login");
       }
     } catch (error) {
       console.log(error);
@@ -127,7 +130,7 @@ const ProfileOwner = () => {
       }
     } catch (error: any) {
       toast({
-        description: `${error.message}`,
+        description: `Error, Anda Harus Mengupload Image dulu`,
       });
       console.log(error);
     }

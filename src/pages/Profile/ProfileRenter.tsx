@@ -8,10 +8,13 @@ import { changePassword } from "@/utils/types/type";
 import { useNavigate } from "react-router-dom";
 import { IMyKosType } from "@/utils/apis/user/types";
 import RatingPopup from "./RatingPopup";
+import { useAuth } from "@/utils/context/auth";
+import NumberFormatter from "@/components/NumberFormatter";
 
 const ProfileRenter = () => {
   const [dataKos, setDataKos] = useState<IMyKosType[]>();
   const [status, setStatus] = useState(true);
+  const { changeToken } = useAuth();
   const [showPopup, setShowPopup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -73,10 +76,11 @@ const ProfileRenter = () => {
         },
       });
       if (response) {
+        changeToken();
+        navigate("/login");
         toast({
           description: "Berhasil dihapus",
         });
-        navigate("/login");
       }
     } catch (error) {
       console.log(error);
@@ -113,7 +117,7 @@ const ProfileRenter = () => {
       }
     } catch (error: any) {
       toast({
-        description: `${error.message}`,
+        description: `Error, Anda Harus Mengupload Image dulu`,
       });
       console.log(error);
     }
@@ -193,15 +197,15 @@ const ProfileRenter = () => {
         },
       });
       if (response.data.data.length < 1) {
-        setStatus(false);
+        setStatus(!status);
       } else {
-        setStatus(true);
+        setStatus(!status);
         setDataKos(response.data.data);
         console.log(response.data.data);
       }
     } catch (error: any) {
       toast({
-        description: error.message,
+        description: "Kamu Belum Pernah Booking Kosan",
       });
     }
   };
@@ -242,7 +246,7 @@ const ProfileRenter = () => {
 
   useEffect(() => {
     cekKost();
-  }, [status]);
+  }, [dataKos]);
 
   return (
     <>
@@ -250,7 +254,7 @@ const ProfileRenter = () => {
         <div className="flex flex-col px-8 pb-4 bg-white shadow-sm ">
           <div className="self-center w-full max-w-[1353px] max-md:max-w-full">
             <div className="flex gap-5 max-md:flex-col max-md:gap-0 max-md:">
-              <div className="flex flex-col w-[44%] max-md:ml-0 max-md:w-full">
+              <div className="flex flex-col w-[40%] max-md:ml-0 max-md:w-full">
                 <div className="flex flex-col grow py-11 pr-12 pl-6 w-full text-base leading-7 bg-white rounded border border-solid shadow-sm border-stone-400 max-md:px-5 max-md:mt-6 max-md:max-w-full">
                   <form onSubmit={updateProfile}>
                     <div className="flex justify-center items-center px-16 text-sm font-medium leading-6 text-black whitespace-nowrap bg-white rounded max-md:px-5 max-md:max-w-full">
@@ -369,13 +373,13 @@ const ProfileRenter = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col ml-5 md:ml-0 w-[56%] max-md:ml-0 max-md:w-full border-[0.3px]">
+              <div className="flex flex-col ml-5 md:ml-0 w-[60%] max-md:ml-0 max-md:w-full border-[0.3px]">
                 <div className="flex flex-col grow items-center px-16 py-11 w-full text-sm bg-white rounded shadow-sm text-zinc-900 max-md:px-5 max-md:mt-6 max-md:max-w-full">
                   <div className="flex items-center self-start gap-2 text-lg leading-7 max-md:max-w-full">
                     <img src="https://img.icons8.com/windows/32/smart-home-2.png" alt="home" className="w-[20px]" />
                     <span>Riwayat Kos</span>
                   </div>
-                  {!status ? (
+                  {status ? (
                     <div>
                       <div className="mt-16 text-2xl font-bold leading-9 whitespace-nowrap max-md:mt-10">Kamu belum menyewa kos</div>
                       <div className="mt-10 leading-6 md:w-[409px] w-full">Yuk, sewa di Koskita untuk aktifkan halaman ini Coba cara ngekos modern dengan unik</div>
@@ -411,11 +415,44 @@ const ProfileRenter = () => {
                         <>
                           {dataKos &&
                             dataKos.map((item: any) => (
-                              <div key={item.id}>
-                                <span>nama: {item.kos_name}</span>
-                                <button onClick={() => addRating(item.id)}>Beri Rating</button>
-                                <button onClick={() => cancelBooking(item.booking_id)}>Cancel Booking</button>
-                              </div>
+                              <>
+                                <div className=" md:pr-20 mt-11 overflow-hidden bg-zinc-100 rounded-[60px_60px_60px_12px] max-md:mt-10 max-md:max-w-full">
+                                  <div className="flex gap-3 max-md:flex-col max-md:gap-0 max-md:">
+                                    <div className="flex flex-col w-[44%] max-md:ml-0 max-md:w-full overflow-hidden">
+                                      <img loading="lazy" srcSet={item.kos_main_foto} className="w-full md:h-full h-[12rem]  border-2 border-slate-100 " />
+                                    </div>
+                                    <div className="flex flex-col ml-5 w-[56%] max-md:ml-0 max-md:w-full">
+                                      <div className="flex flex-col grow py-5 md:py-11 max-md:px-5">
+                                        <div className="flex items-center justify-between">
+                                          <h2 className="cursor-pointer font-bold text-xl hover:text-2xl">{item.kos_name}</h2>
+                                        </div>
+                                        <div className="flex items-center w-full gap-5 mt-4 md:mt-8 flex-wrap"></div>
+                                        <div>
+                                          <div className="flex gap-3 justify-between mt-3.5 text-base whitespace-nowrap">
+                                            <div className="grow my-auto text-neutral-900">
+                                              Total Harga: <NumberFormatter value={item.total_harga ? item.total_harga : 0} /> /bulan
+                                            </div>
+                                          </div>
+                                        </div>
+
+                                        <div className="mt-6  text-base whitespace-nowrap text-neutral-900 max-md:ml-2.5 flex gap-3 justify-start items-center">
+                                          <img width="20" height="20" src="https://img.icons8.com/ios/50/marker--v1.png" alt="marker--v1" /> <span className="text-xs w-full whitespace-pre-line">{item.kos_lokasi}</span>
+                                        </div>
+                                        <div className="flex gap-5 justify-between mt-8 text-xs font-bold leading-5">
+                                          <div className="flex gap-2 justify-between whitespace-nowrap text-stone-950">
+                                            <button onClick={() => cancelBooking(item.booking_id)} className="px-3 py-2 border-2 border-slate-300 rounded-md">
+                                              Cancel Booking
+                                            </button>
+                                            <button onClick={() => addRating(item.kos_id)} className="px-3 py-2 bg-lime-600 text-white rounded-md">
+                                              Add Rating
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </>
                             ))}
                         </>
                       )}

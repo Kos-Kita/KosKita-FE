@@ -36,7 +36,6 @@ const BookingPage = () => {
     } else {
       valueToCopy = `Biller Code: ${dPayment.biller_code}, Bill Key: ${dPayment.bill_key}`;
     }
-
     vaCodeInput.value = valueToCopy;
     document.body.appendChild(vaCodeInput);
     vaCodeInput.select();
@@ -96,9 +95,8 @@ const BookingPage = () => {
       setShowPopup(!showPopup);
     } catch (error: any) {
       toast({
-        description: error.message,
+        description: "Server Pusat Terganggu coba Metode Pembayaran Lainnya",
       });
-      console.log(error);
     }
   };
 
@@ -154,7 +152,6 @@ const BookingPage = () => {
                         <option value="" disabled selected hidden>
                           Metode Pembayaran
                         </option>
-                        <option value="mandiri"> Virtual Account Mandiri</option>
                         <option value="bni">Virtual Account Bni</option>
                         <option value="bri">Virtual Account Bri</option>
                         <option value="bca">Virtual Account Bca</option>
@@ -234,11 +231,6 @@ const BookingPage = () => {
 
                     <div className="flex flex-col pl-10">
                       <div className="self-start my-6  font-bold whitespace-nowrap leading-[133%] max-md:mt-10 max-md:ml-2.5">Jenis pembayaran yang di dukung.</div>
-
-                      <div className="flex gap-5 justify-between self-start mt-2.5 text-sm leading-6 text-black max-md:mr-2.5">
-                        <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/072acca096013ce55657bccf1875e5c554fed78a6ca74f7a927bfe2dce2a6443?" className="aspect-[1.59] w-[38px]" />
-                        <div className="flex-auto my-auto">Mandiri Virtual Account</div>
-                      </div>
                       <div className="flex gap-5 justify-between self-start mt-2.5 text-sm leading-6 text-black max-md:mr-2.5">
                         <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/6c33a2eb40c589f742c070f1deee579712c7e39763e83012190e5ea1718316dd?" className="mt-3 aspect-[1.59] w-[38px]" />
                         <div className="flex-auto my-auto">BRI Virtual Account</div>
