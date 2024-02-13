@@ -41,8 +41,8 @@ const ProfileRenter = () => {
   uploadedImageUrl ? uploadedImageUrl : "";
 
   const addRating = async (id: string) => {
-    setSelectedKosId(id);
     setShowRatingPopup(true);
+    setSelectedKosId(id);
   };
 
   const getProfile = async () => {
@@ -64,7 +64,10 @@ const ProfileRenter = () => {
         setUploadedImageUrl(data.photo_profile);
       }
     } catch (error) {
-      throw new Error();
+      toast({
+        variant: "destructive",
+        description: (error as Error).message,
+      });
     }
   };
 
@@ -83,7 +86,10 @@ const ProfileRenter = () => {
         });
       }
     } catch (error) {
-      console.log(error);
+      toast({
+        variant: "destructive",
+        description: (error as Error).message,
+      });
     }
   };
 
@@ -117,6 +123,7 @@ const ProfileRenter = () => {
       }
     } catch (error: any) {
       toast({
+        variant: "destructive",
         description: `Error, Anda Harus Mengupload Image dulu`,
       });
       console.log(error);
@@ -143,7 +150,8 @@ const ProfileRenter = () => {
         }
       } catch (error: any) {
         toast({
-          description: error.message,
+          variant: "destructive",
+          description: (error as Error).message,
         });
       }
     } else {
@@ -173,7 +181,8 @@ const ProfileRenter = () => {
       }
     } catch (error: any) {
       toast({
-        description: error.message,
+        variant: "destructive",
+        description: (error as Error).message,
       });
     } finally {
       setSelectedKosId(null);
@@ -205,6 +214,7 @@ const ProfileRenter = () => {
       }
     } catch (error: any) {
       toast({
+        variant: "destructive",
         description: "Kamu Belum Pernah Booking Kosan",
       });
     }
@@ -212,8 +222,15 @@ const ProfileRenter = () => {
 
   const cancelBooking = async (bookingId: any) => {
     try {
-      const apiUrl = `${baseurl}/booking/${bookingId}`;
-      const response = await axios.put(apiUrl, { status: "cancelled" });
+      const response = await axios.put(
+        `${baseurl}/booking/${bookingId}`,
+        { status: "cancelled" },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (response) {
         toast({
           description: "Pesanan dibatalkan",
@@ -246,7 +263,7 @@ const ProfileRenter = () => {
 
   useEffect(() => {
     cekKost();
-  }, [dataKos]);
+  }, []);
 
   return (
     <>

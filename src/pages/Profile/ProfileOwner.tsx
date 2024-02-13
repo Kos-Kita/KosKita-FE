@@ -26,6 +26,7 @@ const ProfileOwner = () => {
       setDataKos(result.data);
     } catch (error) {
       toast({
+        variant: "destructive",
         description: (error as Error).message,
       });
     } finally {
@@ -77,7 +78,10 @@ const ProfileOwner = () => {
         setUploadedImageUrl(data.photo_profile);
       }
     } catch (error) {
-      throw new Error();
+      toast({
+        variant: "destructive",
+        description: (error as Error).message,
+      });
     }
   };
 
@@ -96,7 +100,10 @@ const ProfileOwner = () => {
         });
       }
     } catch (error) {
-      console.log(error);
+      toast({
+        variant: "destructive",
+        description: (error as Error).message,
+      });
     }
   };
 
@@ -130,9 +137,9 @@ const ProfileOwner = () => {
       }
     } catch (error: any) {
       toast({
+        variant: "destructive",
         description: `Error, Anda Harus Mengupload Image dulu`,
       });
-      console.log(error);
     }
   };
 
@@ -156,9 +163,9 @@ const ProfileOwner = () => {
         }
       } catch (error: any) {
         toast({
-          description: error.message,
+          variant: "destructive",
+          description: (error as Error).message,
         });
-        console.log(error);
       }
     } else {
       toast({
