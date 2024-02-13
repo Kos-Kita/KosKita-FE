@@ -1,5 +1,4 @@
 import AlertDelete from "@/components/AlertDelete";
-// import CardProduct from "@/components/CardProduct";
 import Layout from "@/components/Layout";
 import { toast } from "@/components/ui/use-toast";
 import axios from "axios";
@@ -8,6 +7,7 @@ import { profile } from "@/utils/types/type";
 import { changePassword } from "@/utils/types/type";
 import { useNavigate } from "react-router-dom";
 import { IMyKosType } from "@/utils/apis/user/types";
+import RatingPopup from "./RatingPopup";
 
 const ProfileRenter = () => {
   const [dataKos, setDataKos] = useState<IMyKosType[]>();
@@ -26,6 +26,8 @@ const ProfileRenter = () => {
     photo_profile: "",
   });
   const navigate = useNavigate();
+  const [showRatingPopup, setShowRatingPopup] = useState(false);
+  const [selectedKosId, setSelectedKosId] = useState<string | null>(null);
 
   const [formPassword, setFormPassword] = useState<changePassword>({
     old_password: "",
@@ -34,6 +36,11 @@ const ProfileRenter = () => {
   });
 
   uploadedImageUrl ? uploadedImageUrl : "";
+
+  const addRating = async (id: string) => {
+    setSelectedKosId(id);
+    setShowRatingPopup(true);
+  };
 
   const getProfile = async () => {
     try {
@@ -134,12 +141,39 @@ const ProfileRenter = () => {
         toast({
           description: error.message,
         });
-        console.log(error);
       }
     } else {
       toast({
         description: "Password baru dan Konfirmasi Password harus sama",
       });
+    }
+  };
+
+  const handleRatingSubmit = async (kosId: string | null, rating: number) => {
+    try {
+      if (kosId) {
+        const response = await axios.put(
+          `${baseurl}/kos/${kosId}/rating`,
+          { scores: rating },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response) {
+          toast({
+            description: "Berhasil menambahkan Rating",
+          });
+        }
+      }
+    } catch (error: any) {
+      toast({
+        description: error.message,
+      });
+    } finally {
+      setSelectedKosId(null);
+      setShowRatingPopup(false);
     }
   };
 
@@ -169,6 +203,20 @@ const ProfileRenter = () => {
       toast({
         description: error.message,
       });
+    }
+  };
+
+  const cancelBooking = async (bookingId: any) => {
+    try {
+      const apiUrl = `${baseurl}/booking/${bookingId}`;
+      const response = await axios.put(apiUrl, { status: "cancelled" });
+      if (response) {
+        toast({
+          description: "Pesanan dibatalkan",
+        });
+      }
+    } catch (error: any) {
+      console.error("Error saat membatalkan pemesanan:", error.message);
     }
   };
 
@@ -361,13 +409,14 @@ const ProfileRenter = () => {
                     <>
                       {dataKos && (
                         <>
-                          {dataKos.map((item: any) => {
-                            <div>
-                              <span>nama:{item.kos_name}</span>
-                              <span>total:{item.total_harga}</span>
-                              <span>alamat:{item.address}</span>
-                            </div>;
-                          })}
+                          {dataKos &&
+                            dataKos.map((item: any) => (
+                              <div key={item.id}>
+                                <span>nama: {item.kos_name}</span>
+                                <button onClick={() => addRating(item.id)}>Beri Rating</button>
+                                <button onClick={() => cancelBooking(item.booking_id)}>Cancel Booking</button>
+                              </div>
+                            ))}
                         </>
                       )}
                     </>
@@ -432,6 +481,7 @@ const ProfileRenter = () => {
                       </div>
                     </div>
                   )}
+                  <RatingPopup show={showRatingPopup} onClose={() => setShowRatingPopup(false)} onRate={(rating: number) => handleRatingSubmit(selectedKosId, rating)} />
                 </div>
               </div>
             </div>
