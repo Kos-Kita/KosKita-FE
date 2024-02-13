@@ -231,6 +231,7 @@ const ProfileRenter = () => {
           },
         }
       );
+
       if (response) {
         toast({
           description: "Pesanan dibatalkan",
@@ -263,7 +264,12 @@ const ProfileRenter = () => {
 
   useEffect(() => {
     cekKost();
+
   }, []);
+
+  useEffect(() => {
+    cekKost();
+  }, [dataKos]);
 
   return (
     <>
