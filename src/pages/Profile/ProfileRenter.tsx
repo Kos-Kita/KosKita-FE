@@ -1,5 +1,4 @@
 import AlertDelete from "@/components/AlertDelete";
-import CardProduct from "@/components/CardProduct";
 import Layout from "@/components/Layout";
 import { toast } from "@/components/ui/use-toast";
 import axios from "axios";
@@ -7,9 +6,15 @@ import React, { useEffect, useState } from "react";
 import { profile } from "@/utils/types/type";
 import { changePassword } from "@/utils/types/type";
 import { useNavigate } from "react-router-dom";
+import { IMyKosType } from "@/utils/apis/user/types";
+import RatingPopup from "./RatingPopup";
+import { useAuth } from "@/utils/context/auth";
+import NumberFormatter from "@/components/NumberFormatter";
 
 const ProfileRenter = () => {
+  const [dataKos, setDataKos] = useState<IMyKosType[]>();
   const [status, setStatus] = useState(true);
+  const { changeToken } = useAuth();
   const [showPopup, setShowPopup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -24,6 +29,8 @@ const ProfileRenter = () => {
     photo_profile: "",
   });
   const navigate = useNavigate();
+  const [showRatingPopup, setShowRatingPopup] = useState(false);
+  const [selectedKosId, setSelectedKosId] = useState<string | null>(null);
 
   const [formPassword, setFormPassword] = useState<changePassword>({
     old_password: "",
@@ -32,6 +39,11 @@ const ProfileRenter = () => {
   });
 
   uploadedImageUrl ? uploadedImageUrl : "";
+
+  const addRating = async (id: string) => {
+    setSelectedKosId(id);
+    setShowRatingPopup(true);
+  };
 
   const getProfile = async () => {
     try {
@@ -56,8 +68,7 @@ const ProfileRenter = () => {
     }
   };
 
-  const deleteProfile = async (e: any) => {
-    e.preventDefault();
+  const deleteProfile = async () => {
     try {
       const response = await axios.delete(`${baseurl}/users`, {
         headers: {
@@ -65,6 +76,8 @@ const ProfileRenter = () => {
         },
       });
       if (response) {
+        changeToken();
+        navigate("/login");
         toast({
           description: "Berhasil dihapus",
         });
@@ -104,7 +117,7 @@ const ProfileRenter = () => {
       }
     } catch (error: any) {
       toast({
-        description: `${error.message}`,
+        description: `Error, Anda Harus Mengupload Image dulu`,
       });
       console.log(error);
     }
@@ -132,12 +145,39 @@ const ProfileRenter = () => {
         toast({
           description: error.message,
         });
-        console.log(error);
       }
     } else {
       toast({
         description: "Password baru dan Konfirmasi Password harus sama",
       });
+    }
+  };
+
+  const handleRatingSubmit = async (kosId: string | null, rating: number) => {
+    try {
+      if (kosId) {
+        const response = await axios.put(
+          `${baseurl}/kos/${kosId}/rating`,
+          { scores: rating },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response) {
+          toast({
+            description: "Berhasil menambahkan Rating",
+          });
+        }
+      }
+    } catch (error: any) {
+      toast({
+        description: error.message,
+      });
+    } finally {
+      setSelectedKosId(null);
+      setShowRatingPopup(false);
     }
   };
 
@@ -151,20 +191,36 @@ const ProfileRenter = () => {
 
   const cekKost = async () => {
     try {
-      const response = await axios.get(`${baseurl}/users/kos`, {
+      const response = await axios.get(`${baseurl}/booking`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      if (response.data.data === null) {
-        setStatus(true);
+      if (response.data.data.length < 1) {
+        setStatus(!status);
       } else {
-        setStatus(false);
+        setStatus(!status);
+        setDataKos(response.data.data);
+        console.log(response.data.data);
       }
     } catch (error: any) {
       toast({
-        description: error.message,
+        description: "Kamu Belum Pernah Booking Kosan",
       });
+    }
+  };
+
+  const cancelBooking = async (bookingId: any) => {
+    try {
+      const apiUrl = `${baseurl}/booking/${bookingId}`;
+      const response = await axios.put(apiUrl, { status: "cancelled" });
+      if (response) {
+        toast({
+          description: "Pesanan dibatalkan",
+        });
+      }
+    } catch (error: any) {
+      console.error("Error saat membatalkan pemesanan:", error.message);
     }
   };
 
@@ -188,13 +244,17 @@ const ProfileRenter = () => {
     cekKost();
   }, []);
 
+  useEffect(() => {
+    cekKost();
+  }, [dataKos]);
+
   return (
     <>
       <Layout>
         <div className="flex flex-col px-8 pb-4 bg-white shadow-sm ">
           <div className="self-center w-full max-w-[1353px] max-md:max-w-full">
             <div className="flex gap-5 max-md:flex-col max-md:gap-0 max-md:">
-              <div className="flex flex-col w-[44%] max-md:ml-0 max-md:w-full">
+              <div className="flex flex-col w-[40%] max-md:ml-0 max-md:w-full">
                 <div className="flex flex-col grow py-11 pr-12 pl-6 w-full text-base leading-7 bg-white rounded border border-solid shadow-sm border-stone-400 max-md:px-5 max-md:mt-6 max-md:max-w-full">
                   <form onSubmit={updateProfile}>
                     <div className="flex justify-center items-center px-16 text-sm font-medium leading-6 text-black whitespace-nowrap bg-white rounded max-md:px-5 max-md:max-w-full">
@@ -304,7 +364,7 @@ const ProfileRenter = () => {
                         <button type="submit" className="grow justify-center px-3 py-2 md:px-4 md:py-3 bg-lime-600 rounded shadow-sm">
                           Edit Akun
                         </button>
-                        <AlertDelete onAction={() => deleteProfile} title="Apakah anda yakin?" description="Penghapusan data ini tidak dapat dikembalikan, dan bersifat permanen" background="bg-red-600 hover:bg-red-400">
+                        <AlertDelete onAction={deleteProfile} title="Apakah anda yakin?" description="Penghapusan data ini tidak dapat dikembalikan, dan bersifat permanen" background="bg-red-600 hover:bg-red-400">
                           <button className="grow justify-center md:px-3 md:py-4 px-3 py-2 bg-red-600 rounded shadow-sm hover:bg-red-400">Hapus Akun</button>
                         </AlertDelete>
                       </div>
@@ -313,7 +373,7 @@ const ProfileRenter = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col ml-5 md:ml-0 w-[56%] max-md:ml-0 max-md:w-full border-[0.3px]">
+              <div className="flex flex-col ml-5 md:ml-0 w-[60%] max-md:ml-0 max-md:w-full border-[0.3px]">
                 <div className="flex flex-col grow items-center px-16 py-11 w-full text-sm bg-white rounded shadow-sm text-zinc-900 max-md:px-5 max-md:mt-6 max-md:max-w-full">
                   <div className="flex items-center self-start gap-2 text-lg leading-7 max-md:max-w-full">
                     <img src="https://img.icons8.com/windows/32/smart-home-2.png" alt="home" className="w-[20px]" />
@@ -350,8 +410,55 @@ const ProfileRenter = () => {
                       </div>
                     </div>
                   ) : (
-                    <CardProduct hidden={true} kos_name={"Makan agung"} rating={"5"} price={500000} category={"banyak"} photo_kos={"remo"} />
+                    <>
+                      {dataKos && (
+                        <>
+                          {dataKos &&
+                            dataKos.map((item: any) => (
+                              <>
+                                <div className=" md:pr-20 mt-11 overflow-hidden bg-zinc-100 rounded-[60px_60px_60px_12px] max-md:mt-10 max-md:max-w-full">
+                                  <div className="flex gap-3 max-md:flex-col max-md:gap-0 max-md:">
+                                    <div className="flex flex-col w-[44%] max-md:ml-0 max-md:w-full overflow-hidden">
+                                      <img loading="lazy" srcSet={item.kos_main_foto} className="w-full md:h-full h-[12rem]  border-2 border-slate-100 " />
+                                    </div>
+                                    <div className="flex flex-col ml-5 w-[56%] max-md:ml-0 max-md:w-full">
+                                      <div className="flex flex-col grow py-5 md:py-11 max-md:px-5">
+                                        <div className="flex items-center justify-between">
+                                          <h2 className="cursor-pointer font-bold text-xl hover:text-2xl">{item.kos_name}</h2>
+                                        </div>
+                                        <div className="flex items-center w-full gap-5 mt-4 md:mt-8 flex-wrap"></div>
+                                        <div>
+                                          <div className="flex gap-3 justify-between mt-3.5 text-base whitespace-nowrap">
+                                            <div className="grow my-auto text-neutral-900">
+                                              Total Harga: <NumberFormatter value={item.total_harga ? item.total_harga : 0} /> /bulan
+                                            </div>
+                                          </div>
+                                        </div>
+
+                                        <div className="mt-6  text-base whitespace-nowrap text-neutral-900 max-md:ml-2.5 flex gap-3 justify-start items-center">
+                                          <img width="20" height="20" src="https://img.icons8.com/ios/50/marker--v1.png" alt="marker--v1" /> <span className="text-xs w-full whitespace-pre-line">{item.kos_lokasi}</span>
+                                        </div>
+                                        <div className="flex gap-5 justify-between mt-8 text-xs font-bold leading-5">
+                                          <div className="flex gap-2 justify-between whitespace-nowrap text-stone-950">
+                                            <button onClick={() => cancelBooking(item.booking_id)} className="px-3 py-2 border-2 border-slate-300 rounded-md">
+                                              Cancel Booking
+                                            </button>
+                                            <button onClick={() => addRating(item.kos_id)} className="px-3 py-2 bg-lime-600 text-white rounded-md">
+                                              Add Rating
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </>
+                            ))}
+                        </>
+                      )}
+                    </>
                   )}
+
                   {showPopup && (
                     <div>
                       <div className="fixed inset-0 bg-black opacity-50 z-50"></div>
@@ -411,6 +518,7 @@ const ProfileRenter = () => {
                       </div>
                     </div>
                   )}
+                  <RatingPopup show={showRatingPopup} onClose={() => setShowRatingPopup(false)} onRate={(rating: number) => handleRatingSubmit(selectedKosId, rating)} />
                 </div>
               </div>
             </div>

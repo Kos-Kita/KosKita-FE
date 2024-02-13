@@ -20,7 +20,6 @@ const Register = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm({
     resolver: zodResolver(registerSchema),
   });
@@ -40,7 +39,7 @@ const Register = () => {
         toast({
           description: "Anda Berhasil Registrasi",
         });
-        reset();
+        navigate("/login");
       }
     } catch (error: any) {
       alert(error.response.data.message);
