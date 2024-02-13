@@ -264,12 +264,7 @@ const ProfileRenter = () => {
 
   useEffect(() => {
     cekKost();
-
   }, []);
-
-  useEffect(() => {
-    cekKost();
-  }, [dataKos]);
 
   return (
     <>

@@ -25,26 +25,33 @@ const Register = () => {
   });
 
   const onSubmit = async (data: any) => {
-    try {
-      const response = await axios.post(`${baseurl}/users`, {
-        name: data.name,
-        user_name: data.user_name,
-        email: data.email,
-        password: data.password,
-        gender: data.gender,
-        role: tabParam,
-      });
-
-      if (response) {
-        toast({
-          description: "Anda Berhasil Registrasi",
+    if (tabParam !== null) {
+      try {
+        const response = await axios.post(`${baseurl}/users`, {
+          name: data.name,
+          user_name: data.user_name,
+          email: data.email,
+          password: data.password,
+          gender: data.gender,
+          role: tabParam,
         });
-        navigate("/login");
+
+        if (response) {
+          toast({
+            description: "Anda Berhasil Registrasi",
+          });
+          navigate("/login");
+        }
+      } catch (error: any) {
+        toast({
+          variant: "destructive",
+          description: (error as Error).message,
+        });
       }
-    } catch (error: any) {
+    } else {
       toast({
         variant: "destructive",
-        description: (error as Error).message,
+        description: "Anda Harus memilih renter atau owner",
       });
     }
   };
@@ -55,7 +62,21 @@ const Register = () => {
         <Tabs />
         <h2 className="text-3xl font-semibold">
           Buat Akun
-          <span className={`${tabParam === "renter" ? "text-[#4CA02E]" : "text-[#B6A563]"}`}>{tabParam === "renter" ? " Renter" : " Owner"}</span> Anda
+          <span
+            className={`${
+              tabParam === ""
+                ? toast({
+                    variant: "destructive",
+                    description: "anda harus pilih, renter atau owner dulu",
+                  })
+                : tabParam === "renter"
+                ? "text-[#4CA02E]"
+                : "text-[#B6A563]"
+            }`}
+          >
+            {tabParam === "renter" ? " Renter" : " Owner"}
+          </span>{" "}
+          Anda
         </h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="p-3 space-y-5">
