@@ -12,6 +12,7 @@ import {
   Hammer,
   HandCoins,
   LocateFixed,
+  MoonStar,
   PartyPopper,
   PersonStanding,
   Refrigerator,
@@ -40,6 +41,8 @@ import { getDetailKos } from "@/utils/apis/kos/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { IKosDetail } from "@/utils/apis/kos/types";
 import PopupChat from "@/components/PopupChat";
+// import { WebsocketContext } from "@/utils/context/ws-provider";
+import { formattedAmount } from "@/utils/formattedAmount";
 
 const DetailKos = () => {
   const [position, setPosition] = useState({
@@ -55,9 +58,27 @@ const DetailKos = () => {
   const navigate = useNavigate();
   const [isValidDate, setIsValidDate] = useState(true);
   const [chatOpen, setChatOpen] = useState(false);
+  // const [rooms, setRooms] = useState<{ id: string; name: string }[]>([]);
+  // const { setConn } = useContext(WebsocketContext);
+
+  // const getRooms = async () => {
+  //   try {
+  //     const res = await fetch(`l3n.my.id/get-room`, {
+  //       method: "GET",
+  //     });
+  //     console.log(res);
+  //     const data = await res.json();
+  //     if (res.ok) {
+  //       setRooms(data);
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   useEffect(() => {
     getData();
+    // getRooms();
     mapRef.current?.panTo(markerRef.current?.getLatLng());
     window.scrollTo(0, 0);
   }, []);
@@ -85,6 +106,19 @@ const DetailKos = () => {
       });
     }
   };
+
+  // const joinRoom = (roomId: number) => {
+  //   const ws = new WebSocket(
+  //     `l3n.my.id/ws/joinRoom/f9ca37bc58547cf528af91a08f3d756e?userId=1&username=${user.user_name}`
+  //   );
+  //   if (ws.OPEN) {
+  //     setConn(ws);
+  //     setChatOpen(true);
+  //     return;
+  //   }
+  // };
+
+  // console.log(rooms);
   return (
     <Layout>
       <PopupChat chatOpen={chatOpen} setChatOpen={setChatOpen} />
@@ -190,7 +224,9 @@ const DetailKos = () => {
                 {!isValidDate && (
                   <p className="text-sm text-red-500">Masukkan tanggal booking terlebih dahulu</p>
                 )}
-                <span className="text-2xl font-semibold">Rp.11.500.000 / Bulan</span>
+                <span className="text-2xl font-semibold">
+                  {formattedAmount(data?.price as number)}/Bulan
+                </span>
                 <button
                   className="px-5 py-2 rounded-xl text-sm text-white bg-[#4CA02E] "
                   onClick={handleSubmit}
@@ -199,7 +235,9 @@ const DetailKos = () => {
                 </button>
                 <button
                   className="px-5 py-2 rounded-xl text-sm text-white bg-[#4CA02E]"
-                  onClick={() => setChatOpen(true)}
+                  onClick={() => {
+                    setChatOpen(true);
+                  }}
                 >
                   Kontak Pemilik Kos
                 </button>
@@ -269,6 +307,8 @@ const DetailKos = () => {
               <div className="flex items-center gap-x-5 w-56" key={item.id}>
                 {(() => {
                   switch (item.rule) {
+                    case "ADA JAM MALAM UNTUK TAMU":
+                      return <MoonStar />;
                     case "24 JAM":
                       return <Timer />;
                     case "TIDAK BOLEH MEROKOK":
