@@ -164,9 +164,9 @@ const ProfileRenter = () => {
   const handleRatingSubmit = async (kosId: string | null, rating: number) => {
     try {
       if (kosId) {
-        const response = await axios.put(
+        const response = await axios.post(
           `${baseurl}/kos/${kosId}/rating`,
-          { scores: rating },
+          { score: rating },
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -180,9 +180,10 @@ const ProfileRenter = () => {
         }
       }
     } catch (error: any) {
+      console.log(error);
       toast({
         variant: "destructive",
-        description: (error as Error).message,
+        description: error.response.data.message,
       });
     } finally {
       setSelectedKosId(null);

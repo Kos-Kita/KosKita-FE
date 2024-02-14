@@ -1,19 +1,90 @@
 import BookingChart from "./Bookingchart";
 import Layout from "@/components/Layout";
 import { useAuth } from "@/utils/context/auth";
-import { ChangeEvent, useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { toast } from "@/components/ui/use-toast";
+import icon from "../../assets/Icon.png";
+
+interface dataBookType {
+  total_user: string;
+  total_booking: string;
+  total_kos: string;
+  total_booking_per_month:
+    | any
+    | [
+        {
+          Januari: string;
+          Februari: string;
+          Maret: string;
+          April: string;
+          Mei: string;
+          Juni: string;
+          Juli: string;
+          Agustus: string;
+          September: string;
+          Oktober: string;
+          November: string;
+          Desember: string;
+        }
+      ];
+}
 
 const Dashboard = () => {
-  const bookingData = [10, 30, 20, 50, 30, 70, 30];
   const { user } = useAuth();
+  const [dataBook, setDataBook] = useState<dataBookType>({
+    total_user: "",
+    total_booking: "",
+    total_kos: "",
+    total_booking_per_month: [],
+  });
+  const bookingData = [
+    dataBook.total_booking_per_month.Januari,
+    dataBook.total_booking_per_month.Februari,
+    dataBook.total_booking_per_month.Maret,
+    dataBook.total_booking_per_month.April,
+    dataBook.total_booking_per_month.Mei,
+    dataBook.total_booking_per_month.Juni,
+    dataBook.total_booking_per_month.Juli,
+    dataBook.total_booking_per_month.Agustus,
+    dataBook.total_booking_per_month.September,
+    dataBook.total_booking_per_month.Oktober,
+    dataBook.total_booking_per_month.November,
+    dataBook.total_booking_per_month.Desember,
+  ];
+  const token = localStorage.getItem("token");
 
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-  const [selectedMonth, setSelectedMonth] = useState(months[0]);
-
-  const handleMonthChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedMonth(event.target.value);
+  const getDataBook = async () => {
+    try {
+      const response = await axios.get(`https://l3n.my.id/admin`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = response.data.data;
+      setDataBook({
+        total_user: data.total_user,
+        total_booking: data.total_booking,
+        total_kos: data.total_kos,
+        total_booking_per_month: data.total_booking_per_month,
+      });
+      console.log(dataBook.total_booking_per_month[0]);
+      if (response) {
+        toast({
+          description: "Berhasil mendapatkan data",
+        });
+      }
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        description: error.response.data.message,
+      });
+    }
   };
+
+  useEffect(() => {
+    getDataBook();
+  }, []);
 
   return (
     <>
@@ -22,7 +93,7 @@ const Dashboard = () => {
           <div className="flex flex-col px-8 pb-4 bg-white shadow-sm h-screen">
             <div className="self-center w-full max-w-[1353px] max-md:max-w-full">
               <div className="flex gap-5 max-md:flex-col max-md:gap-0 max-md:">
-                <div className="flex flex-col w-[20%] max-md:ml-0 max-md:w-full">
+                <div className="flex flex-col w-[24%] max-md:ml-0 max-md:w-full">
                   <div className="flex gap-4  items-center p-3  border-slate-200 border-2">
                     <img
                       src={
@@ -33,24 +104,30 @@ const Dashboard = () => {
                       alt="person"
                       className="rounded-full h-[50px]"
                     />
-                    <span className="font-bold text-2xl">{user.user_name}</span>
+                    <span className="font-bold text-xl">{user.user_name}</span>
                   </div>
                 </div>
 
-                <div className="flex flex-col ml-5 md:ml-0 w-[80%] max-md:ml-0 max-md:w-full">
+                <div className="flex flex-col ml-5 md:ml-0 w-[76%] max-md:ml-0 max-md:w-full">
                   <div className="flex flex-col grow items-center border-2 border-slate-200 px-16 py-11 w-full text-sm bg-white rounded shadow-sm text-zinc-900 max-md:px-5 max-md:mt-6 max-md:max-w-full">
                     <div className="flex flex-col px-5 mt-7 w-full ">
                       <div className="text-3xl font-bold tracking-normal text-neutral-800 max-md:max-w-full">Dashboard</div>
                       <div className="mt-10 max-md:pr-5 max-md:max-w-full">
                         <div className="flex gap-5 max-md:flex-col max-md:gap-0 max-md:">
-                          <div className="flex flex-col w-[33%] max-md:ml-0 max-md:w-full">
-                            <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/69fbd547744d1ee282aef8346ad6f30ad6ff28a5aaed7e7f691ad4957d9d387b?" className="grow max-w-full aspect-[1.64] w-[262px] max-md:mt-8" />
+                          <div className="flex flex-col ml-5 w-[33%] max-md:ml-0 max-md:w-full">
+                            <div className="flex grow gap-5 justify-between items-start px-4 pt-4 pb-12 w-full whitespace-nowrap bg-white rounded-2xl shadow-2xl text-neutral-800 max-md:mt-8">
+                              <div className="flex flex-col mt-1.5">
+                                <div className="text-base font-semibold">Total Users</div>
+                                <div className="mt-7 text-3xl font-bold tracking-wider">{dataBook.total_user}</div>
+                              </div>
+                              <img loading="lazy" src={icon} className="aspect-square w-[60px]" />
+                            </div>
                           </div>
                           <div className="flex flex-col ml-5 w-[33%] max-md:ml-0 max-md:w-full">
                             <div className="flex grow gap-5 justify-between items-start px-4 pt-4 pb-12 w-full whitespace-nowrap bg-white rounded-2xl shadow-2xl text-neutral-800 max-md:mt-8">
                               <div className="flex flex-col mt-1.5">
                                 <div className="text-base font-semibold">Total Booking</div>
-                                <div className="mt-7 text-3xl font-bold tracking-wider">10293</div>
+                                <div className="mt-7 text-3xl font-bold tracking-wider">{dataBook.total_booking}</div>
                               </div>
                               <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/54b27335721f5cf4e99c04fd1199ba51df1b034caaa8e90268381c62be176fa3?" className="aspect-square w-[60px]" />
                             </div>
@@ -59,7 +136,7 @@ const Dashboard = () => {
                             <div className="flex grow gap-5 justify-between items-start px-4 pt-4 pb-12 w-full bg-white rounded-2xl shadow-2xl text-neutral-800 max-md:mt-8">
                               <div className="flex flex-col mt-1.5">
                                 <div className="text-base font-semibold">Total Kos</div>
-                                <div className="mt-7 text-3xl font-bold tracking-wider">$89,000</div>
+                                <div className="mt-7 text-3xl font-bold tracking-wider">{dataBook.total_kos}</div>
                               </div>
                               <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/f3d2d0b486ef24c6675372f31d801a02ffa86d4205077214587fc13bfbfa7aff?" className="aspect-square w-[60px]" />
                             </div>
@@ -69,21 +146,6 @@ const Dashboard = () => {
                       <div className="flex z-10 flex-col px-9 pt-5 pb-12 mt-28 mr-3 bg-white rounded-2xl shadow-[6px_6px_54px_rgba(0,0,0,0.05)] max-md:px-5 max-md:mt-10 max-md:mr-2.5 max-md:max-w-full">
                         <div className="flex gap-5 justify-between pr-8 w-full leading-[83%] max-md:flex-wrap max-md:pr-5 max-md:max-w-full">
                           <div className="flex-auto text-2xl font-bold text-neutral-800">Booking Details</div>
-                          <div>
-                            <div>
-                              <select
-                                className="outline-none flex gap-4 justify-between px-4 py-2.5 text-xs font-semibold text-right whitespace-nowrap bg-white rounded border-solid border-[0.6px] border-neutral-300 text-zinc-800 text-opacity-40"
-                                value={selectedMonth}
-                                onChange={handleMonthChange}
-                              >
-                                {months.map((month, index) => (
-                                  <option key={index} value={month}>
-                                    {month}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-                          </div>
                         </div>
                         <div className="flex gap-5 justify-between items-start mt-12 mb-5 max-md:flex-wrap max-md:mt-10 max-md:max-w-full">
                           <div className="flex flex-col flex-1 mt-1.5 max-md:max-w-full">
