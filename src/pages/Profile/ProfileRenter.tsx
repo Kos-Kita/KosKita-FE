@@ -239,7 +239,10 @@ const ProfileRenter = () => {
         });
       }
     } catch (error: any) {
-      console.error("Error saat membatalkan pemesanan:", error.message);
+      toast({
+        variant: "destructive",
+        description: "Anda tidak dapat membatalkan Pesanan",
+      });
     }
   };
 
@@ -276,7 +279,7 @@ const ProfileRenter = () => {
               <div className="flex flex-col w-[40%] max-md:ml-0 max-md:w-full">
                 <div className="flex flex-col grow py-11 pr-12 pl-6 w-full text-base leading-7 bg-white rounded border border-solid shadow-sm border-stone-400 max-md:px-5 max-md:mt-6 max-md:max-w-full">
                   <form onSubmit={updateProfile}>
-                    <div className="flex justify-center items-center px-16 text-sm font-medium leading-6 text-black whitespace-nowrap bg-white rounded max-md:px-5 max-md:max-w-full">
+                    <div className="flex justify-center items-center px-7 text-sm font-medium leading-6 text-black whitespace-nowrap bg-white rounded max-md:px-5 max-md:max-w-full">
                       <div className="flex flex-col items-center max-w-full w-[118px]">
                         {selectedImage ? (
                           <img loading="lazy" srcSet={URL.createObjectURL(selectedImage)} height={"100px"} width={"100px"} className=" rounded-full " />
@@ -421,7 +424,7 @@ const ProfileRenter = () => {
                           <div className="grow self-center md:text-base text-xs">Cashless, dengan beragam metode pembayaran</div>
                         </div>
                         <div
-                          className="justify-center items-center self-end px-16 py-6 mt-7 mr-6 max-w-full text-center text-white whitespace-nowrap bg-lime-600 rounded-sm shadow-sm leading-[171%] w-[476px] max-md:px-5 max-md:mr-2.5"
+                          className="justify-center cursor-pointer items-center self-end px-16 py-6 mt-7 mr-6 max-w-full text-center text-white whitespace-nowrap bg-lime-600 rounded-sm shadow-sm leading-[171%] w-[476px] max-md:px-5 max-md:mr-2.5"
                           onClick={() => navigate("/")}
                         >
                           Mulai cari dan sewa kos
@@ -445,7 +448,6 @@ const ProfileRenter = () => {
                                         <div className="flex items-center justify-between">
                                           <h2 className="cursor-pointer font-bold text-xl hover:text-2xl">{item.kos_name}</h2>
                                         </div>
-                                        <div className="flex items-center w-full gap-5 mt-4 md:mt-8 flex-wrap"></div>
                                         <div>
                                           <div className="flex gap-3 justify-between mt-3.5 text-base whitespace-nowrap">
                                             <div className="grow my-auto text-neutral-900">
