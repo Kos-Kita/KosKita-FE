@@ -239,7 +239,10 @@ const ProfileRenter = () => {
         });
       }
     } catch (error: any) {
-      console.error("Error saat membatalkan pemesanan:", error.message);
+      toast({
+        variant: "destructive",
+        description: "Anda tidak dapat membatalkan Pesanan",
+      });
     }
   };
 

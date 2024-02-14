@@ -104,7 +104,7 @@ const Dashboard = () => {
                       alt="person"
                       className="rounded-full h-[50px]"
                     />
-                    <span className="font-bold text-xl">{user.user_name}</span>
+                    <span className="font-bold text-xl">{user.role}</span>
                   </div>
                 </div>
 
