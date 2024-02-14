@@ -25,7 +25,7 @@ const Login = () => {
       changeToken(result?.data.token);
       if (result?.data.role === "admin") {
         navigate("/dashboard");
-      } else {
+      } else if (result?.data) {
         navigate("/");
       }
       toast({

@@ -67,7 +67,7 @@ const CardProduct: FC<searchKos> = (props: searchKos) => {
       <div className=" md:pr-20 mt-11 overflow-hidden bg-zinc-100 rounded-[60px_60px_60px_12px] max-md:mt-10 max-md:max-w-full">
         <div className="flex gap-3 max-md:flex-col max-md:gap-0 max-md:">
           <div className="flex flex-col w-[44%] max-md:ml-0 max-md:w-full overflow-hidden">
-            <img loading="lazy" srcSet={photo_kos} className="w-full md:h-full h-[12rem]  border-2 border-slate-100 " />
+            <img loading="lazy" srcSet={photo_kos} className="w-full md:h-[20rem] h-[12rem]  border-2 border-slate-100 " />
           </div>
           <div className="flex flex-col ml-5 w-[56%] max-md:ml-0 max-md:w-full">
             <div className="flex flex-col grow py-5 md:py-11 max-md:px-5">

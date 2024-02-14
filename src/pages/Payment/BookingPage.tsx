@@ -180,8 +180,6 @@ const BookingPage = () => {
                         <div className="fixed inset-0 flex items-center justify-center z-50 font-Poppins">
                           <div className="bg-white w-[25rem] p-8 rounded shadow-lg">
                             <p className="my-2 text-2xl font-semibold text-lime-600">Detail Pembayaran</p>
-                            <p className="my-2 text-sm">Booking code: {`${dPayment.booking_code}`}</p>
-                            <hr />
                             <p className="my-2 text-sm">Nama: {`${user.name}`}</p>
                             <hr />
                             <p className="my-2 text-sm">Metode Pembayaran: {selectedPaymentMethod}</p>
