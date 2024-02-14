@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 
 interface BookingChartProps {
-  data: number[]; // Masukkan data persentase yang diinginkan
+  data: number[];
 }
 
 const BookingChart: React.FC<BookingChartProps> = ({ data }) => {
@@ -18,14 +18,15 @@ const BookingChart: React.FC<BookingChartProps> = ({ data }) => {
       const ctx = chartRef.current.getContext("2d");
       if (ctx) {
         chartInstance.current = new Chart(ctx, {
-          type: "line", // Mengganti jenis diagram menjadi area
+          type: "bar",
           data: {
-            labels: ["1", "2", "15k", "20k", "25k", "30k", "35k", "40k", "45k", "50k", "minggu", "senin", "selasa", "rabu"], // Perbarui labels
+            labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November"],
             datasets: [
               {
+                label: "Grafik Data Tahunan", // Nama grafik
                 data: data,
                 borderColor: "rgba(75, 192, 192, 1)",
-                backgroundColor: "rgba(75, 192, 192, 0.2)", // Menentukan warna pengisian area di bawah garis
+                backgroundColor: "rgba(75, 192, 192, 0.2)",
                 borderWidth: 2,
               },
             ],
@@ -37,7 +38,7 @@ const BookingChart: React.FC<BookingChartProps> = ({ data }) => {
                 max: 100,
                 ticks: {
                   stepSize: 20,
-                  callback: (value) => `${value}%`,
+                  callback: (value) => `${value}`,
                 },
               },
             },
@@ -46,7 +47,6 @@ const BookingChart: React.FC<BookingChartProps> = ({ data }) => {
       }
     }
 
-    // Membersihkan grafik saat komponen di-unmount atau saat data berubah
     return () => {
       if (chartInstance.current) {
         chartInstance.current.destroy();

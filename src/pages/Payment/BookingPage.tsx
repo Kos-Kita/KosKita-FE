@@ -33,8 +33,6 @@ const BookingPage = () => {
     let valueToCopy = "";
     if (dPayment.virtual_number) {
       valueToCopy = dPayment.virtual_number;
-    } else {
-      valueToCopy = `Biller Code: ${dPayment.biller_code}, Bill Key: ${dPayment.bill_key}`;
     }
     vaCodeInput.value = valueToCopy;
     document.body.appendChild(vaCodeInput);
@@ -50,8 +48,6 @@ const BookingPage = () => {
   const [dPayment, setPayment] = useState<detailPayment>({
     booking_code: "",
     virtual_number: "",
-    bill_key: "",
-    biller_code: "",
     total: "",
   });
 
@@ -65,16 +61,12 @@ const BookingPage = () => {
     try {
       const response = await axios.get(`${baseurl}/kos/${id}`);
       setData(response.data.data);
-      setPembayaran((prev) => ({ ...prev, kos_id: id }));
-      if (selectedPaymentMethod !== "mandiri") {
-        setPembayaran((prev) => ({ ...prev, payment_type: "bank_transfer" }));
-      } else {
-        setPembayaran((prev) => ({ ...prev, payment_type: "e-channel" }));
-      }
+      setPembayaran((prev) => ({ ...prev, payment_type: "bank_transfer" }));
       setPembayaran((prev) => ({ ...prev, bank: selectedPaymentMethod }));
       setPembayaran((prev) => ({ ...prev, kos_id: id }));
     } catch (error: any) {
       toast({
+        variant: "destructive",
         description: error.response.data.message,
       });
     }
@@ -92,9 +84,11 @@ const BookingPage = () => {
         total: response.data.data.total,
         virtual_number: response.data.data.virtual_number,
       });
+      console.log(response);
       setShowPopup(!showPopup);
     } catch (error: any) {
       toast({
+        variant: "destructive",
         description: "Server Pusat Terganggu coba Metode Pembayaran Lainnya",
       });
     }
@@ -198,23 +192,10 @@ const BookingPage = () => {
                                 <NumberFormatter value={parseInt(dPayment.total)} />
                               </span>
                             </p>
-                            {selectedPaymentMethod === "mandiri" ? (
-                              <>
-                                <div className="mb-4 bg-orange-200 p-3 flex items-center justify-between rounded text-lg font-bold">
-                                  <span> Biller Code : {dPayment.virtual_number}</span>
-                                  <img className="cursor-pointer h-[20px] w-[20px]" width="24" height="24" src="https://img.icons8.com/material-sharp/24/copy.png" alt="copy" onClick={copyToClipboard} />
-                                </div>
-                                <div className="mb-4 bg-orange-200 p-3 flex items-center justify-between rounded text-lg font-bold">
-                                  <span> Bill Key : {dPayment.virtual_number}</span>
-                                  <img className="cursor-pointer h-[20px] w-[20px]" width="24" height="24" src="https://img.icons8.com/material-sharp/24/copy.png" alt="copy" onClick={copyToClipboard} />
-                                </div>
-                              </>
-                            ) : (
-                              <div className="mb-4 bg-orange-200 p-3 flex items-center justify-between rounded text-lg font-bold">
-                                <span> Kode VA : {dPayment.virtual_number}</span>
-                                <img className="cursor-pointer h-[20px] w-[20px]" width="24" height="24" src="https://img.icons8.com/material-sharp/24/copy.png" alt="copy" onClick={copyToClipboard} />
-                              </div>
-                            )}
+                            <div className="mb-4 bg-orange-200 p-3 flex items-center justify-between rounded text-lg font-bold">
+                              <span> Kode VA : {dPayment.virtual_number}</span>
+                              <img className="cursor-pointer h-[20px] w-[20px]" width="24" height="24" src="https://img.icons8.com/material-sharp/24/copy.png" alt="copy" onClick={copyToClipboard} />
+                            </div>
 
                             <p className="my-2 text-sm flex justify-end">
                               Waktu Berakhir: <span className="text-red-500 ml-2"> {formatTime(popupTimer)}</span>
