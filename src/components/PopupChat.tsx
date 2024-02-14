@@ -1,12 +1,65 @@
+import { useAuth } from "@/utils/context/auth";
+import { WebsocketContext } from "@/utils/context/ws-provider";
 import { MessageSquareIcon, Minus, Send, X } from "lucide-react";
-import { useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 interface PopupChat {
   chatOpen: boolean;
   setChatOpen: (open: boolean) => void;
 }
-
+export type Message = {
+  content: string;
+  client_id: string;
+  username: string;
+  room_id: string;
+  type: "recv" | "self";
+};
 const PopupChat = ({ chatOpen, setChatOpen }: PopupChat) => {
   const [hide, setHide] = useState(false);
+  const { conn } = useContext(WebsocketContext);
+  const textarea = useRef<any>(null);
+  const [users, setUsers] = useState<Array<{ username: string }>>([]);
+  const [messages, setMessage] = useState<Array<Message>>([]);
+  const { user } = useAuth();
+  useEffect(() => {
+    if (conn === null) {
+      setChatOpen(false);
+      return;
+    }
+
+    conn.onmessage = (message) => {
+      const m: Message = JSON.parse(message.data);
+      console.log(message);
+      if (m.content == "A new user has joined the room") {
+        setUsers([...users, { username: m.username }]);
+      }
+
+      if (m.content == "user left the chat") {
+        const deleteUser = users.filter((user) => user.username != m.username);
+        setUsers([...deleteUser]);
+        setMessage([...messages, m]);
+        return;
+      }
+
+      user.user_name == m.username ? (m.type = "self") : (m.type = "recv");
+      setMessage([...messages, m]);
+    };
+
+    conn.onclose = () => {};
+    conn.onerror = () => {};
+    conn.onopen = () => {};
+  }, [textarea, messages, conn, users, setMessage]);
+
+  const sendMessage = () => {
+    if (!textarea.current?.value) return;
+    if (conn === null) {
+      setChatOpen(false);
+      return;
+    }
+
+    conn.send(textarea.current.value);
+    textarea.current.value = "";
+  };
+  console.log(messages);
 
   return (
     <>
@@ -38,13 +91,28 @@ const PopupChat = ({ chatOpen, setChatOpen }: PopupChat) => {
           </div>
         </div>
         <div className="flex-grow overflow-y-auto kos">
-          <div className="flex flex-col space-y-5 p-4">
-            <div className="flex items-center self-end rounded-xl rounded-tr bg-[#eb675312] py-2 px-3 max-w-[80%] ">
-              <p>Mengirim pesan</p>
-            </div>
-            <div className="flex items-center self-start rounded-xl rounded-tl bg-[#f1fcfa] py-2 px-3 max-w-[80%] ">
-              <p>Menerima pesan</p>
-            </div>
+          <div className="flex flex-col space-y-3 p-4">
+            {messages.map((msg) => (
+              <>
+                {msg.type === "self" ? (
+                  <div className="max-w-[80%] flex flex-col  items-start self-end">
+                    <span className="self-end text-sm text-zinc-700">{msg.username}</span>
+                    <div className="self-end rounded-xl rounded-tr border bg-[#eb675312] py-2 px-3 w-full">
+                      {msg.content}
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="max-w-[80%] flex flex-col  items-start self-start">
+                      <span className="self-start text-sm text-zinc-700">{msg.username}</span>
+                      <div className="self-start rounded-xl rounded-tl border bg-[#f1fcfa]  py-2 px-3 w-full">
+                        {msg.content}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </>
+            ))}
           </div>
         </div>
         <div className="flex items-center p-4">
@@ -52,8 +120,12 @@ const PopupChat = ({ chatOpen, setChatOpen }: PopupChat) => {
             type="text"
             placeholder="Type your message..."
             className="w-full rounded-lg border border-gray-300 px-4 py-2 outline-teal-500"
+            ref={textarea}
           />
-          <button className="ml-2 rounded-lg bg-teal-500 px-4 py-2 text-white ">
+          <button
+            className="ml-2 rounded-lg bg-teal-500 px-4 py-2 text-white "
+            onClick={sendMessage}
+          >
             <Send />
           </button>
         </div>
