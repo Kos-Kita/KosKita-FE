@@ -47,7 +47,6 @@ const AlamatKos = ({ register, setValue, errors }: AlamatKosProps) => {
       if (locationInfoByName.length !== 0) {
         setSuggestData(locationInfoByName);
       }
-      console.log("Location Info By Name:", locationInfoByName);
     } catch (error) {
       console.error("Error fetching location info By Name:", error);
     }
