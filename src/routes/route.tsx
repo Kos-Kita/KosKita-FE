@@ -14,6 +14,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import AboutUsPage from "@/pages/about/AboutPage";
 import ContactPage from "@/pages/about/ContactPage";
 
+
 function App() {
   return (
     <BrowserRouter>
