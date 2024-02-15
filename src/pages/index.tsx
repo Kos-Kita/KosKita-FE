@@ -93,6 +93,22 @@ const App = () => {
                     : "Jakarta Selatan"}
                 </span>
                 <img
+                  onClick={() =>
+                    navigate("/searchmenu", {
+                      state: {
+                        data:
+                          index === 0
+                            ? "Jakarta Barat"
+                            : index === 1
+                            ? "Jakarta Utara"
+                            : index === 2
+                            ? "Jakarta Pusat"
+                            : index === 3
+                            ? "Jakarta Timur"
+                            : "Jakarta Selatan",
+                      },
+                    })
+                  }
                   src={
                     index === 0
                       ? jakartaBarat
@@ -105,7 +121,7 @@ const App = () => {
                       : jakartaSelatan
                   }
                   alt="jakarta"
-                  className="rounded-[30px]"
+                  className="rounded-[30px] cursor-pointer"
                 />
               </div>
             ))}
