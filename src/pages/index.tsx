@@ -128,7 +128,7 @@ const App = () => {
                 <>
                   {kosRecomend?.map((data) => (
                     <>
-                      <CarouselItem className={"basis-1/4"} key={data.id}>
+                      <CarouselItem className={"max-w-lg"} key={data.id}>
                         <div
                           className="flex flex-col items-center gap-y-1 rounded-3xl overflow-hidden bg-[#F2F0F2] cursor-pointer "
                           onClick={() => navigate(`/kos/${data.id}`)}
