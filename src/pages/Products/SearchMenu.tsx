@@ -7,8 +7,7 @@ import { toast } from "@/components/ui/use-toast";
 
 const SearchMenu = () => {
   const { state } = useLocation();
-
-  const [showCheckboxes, setShowCheckboxes] = useState(true);
+  const [showCheckboxes, setShowCheckboxes] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [checkboxValues, setCheckboxValues] = useState({
