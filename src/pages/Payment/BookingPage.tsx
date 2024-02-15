@@ -16,6 +16,8 @@ const BookingPage = () => {
   const id = location.state.kos_id;
   const startDate = location.state.endDate;
   const endDate = calculateEndDate(startDate);
+  const resultStartDate = `${new Date(startDate).toLocaleDateString()}`;
+  const resultEndDate = `${new Date(endDate).toLocaleDateString()}`;
   const baseurl = import.meta.env.VITE_BASE_URL;
   const [showPopup, setShowPopup] = useState<Boolean>(false);
   const { user } = useAuth();
@@ -56,6 +58,8 @@ const BookingPage = () => {
     payment_type: "",
     kos_id: 0,
     bank: "",
+    start_date: "",
+    end_date: "",
   });
 
   const getData = async () => {
@@ -65,6 +69,8 @@ const BookingPage = () => {
       setPembayaran((prev) => ({ ...prev, payment_type: "bank_transfer" }));
       setPembayaran((prev) => ({ ...prev, bank: selectedPaymentMethod }));
       setPembayaran((prev) => ({ ...prev, kos_id: id }));
+      setPembayaran((prev) => ({ ...prev, start_date: resultStartDate }));
+      setPembayaran((prev) => ({ ...prev, end_date: resultEndDate }));
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -81,7 +87,7 @@ const BookingPage = () => {
         },
       });
       setPayment({
-        booking_code: response.data.data.booking_code,
+        booking_code: response.data.data.booking_id,
         total: response.data.data.total,
         virtual_number: response.data.data.virtual_number,
       });
@@ -134,11 +140,11 @@ const BookingPage = () => {
                     <div className="mt-9 text-base tracking-wide text-black max-md:max-w-full">Tanggal kamu mulai ngekos </div>
                     <div className="flex gap-5 justify-start mt-3.5 text-xl tracking-wide leading-8 text-black text-opacity-90 max-md:flex-wrap max-md:max-w-full">
                       <div className="flex gap-5 justify-between px-9 py-3 rounded-md bg-neutral-800 bg-opacity-10 max-md:px-5">
-                        <div className="flex-auto">{`${new Date(startDate).toLocaleDateString()}`}</div>
+                        <div className="flex-auto">{resultStartDate}</div>
                         <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/c0a0c902b8a9baeaddb815dae11ad0409613584194195c98488cdeb0e797b521?" className="my-auto w-6 aspect-square" />
                       </div>
                       <div className="flex gap-5 justify-between px-9 py-3 rounded-md bg-neutral-800 bg-opacity-10 max-md:px-5">
-                        <div className="flex-auto">{`${new Date(endDate).toLocaleDateString()}`}</div>
+                        <div className="flex-auto">{resultEndDate}</div>
                         <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/c0a0c902b8a9baeaddb815dae11ad0409613584194195c98488cdeb0e797b521?" className="my-auto w-6 aspect-square" />
                       </div>
                     </div>

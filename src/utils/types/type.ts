@@ -19,6 +19,8 @@ export interface pembayaranType {
   payment_type: string;
   kos_id: number;
   bank: string;
+  start_date?: string;
+  end_date?: string;
 }
 
 export interface profile {

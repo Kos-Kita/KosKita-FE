@@ -10,6 +10,7 @@ import { IMyKosType } from "@/utils/apis/user/types";
 import RatingPopup from "./RatingPopup";
 import { useAuth } from "@/utils/context/auth";
 import NumberFormatter from "@/components/NumberFormatter";
+import logo from "../../assets/koskitaa.png";
 
 const ProfileRenter = () => {
   const [dataKos, setDataKos] = useState<IMyKosType[]>();
@@ -396,7 +397,7 @@ const ProfileRenter = () => {
               </div>
 
               <div className="flex flex-col ml-5 md:ml-0 w-[60%] max-md:ml-0 max-md:w-full border-[0.3px]">
-                <div className="flex flex-col grow items-center px-16 py-11 w-full text-sm bg-white rounded shadow-sm text-zinc-900 max-md:px-5 max-md:mt-6 max-md:max-w-full">
+                <div className="flex flex-col grow items-center px-16 md:px-6 py-11 w-full text-sm bg-white rounded shadow-sm text-zinc-900 max-md:px-5 max-md:mt-6 max-md:max-w-full">
                   <div className="flex items-center self-start gap-2 text-lg leading-7 max-md:max-w-full">
                     <img src="https://img.icons8.com/windows/32/smart-home-2.png" alt="home" className="w-[20px]" />
                     <span>Riwayat Kos</span>
@@ -440,33 +441,47 @@ const ProfileRenter = () => {
                               <>
                                 <div className=" md:pr-20 mt-11 overflow-hidden bg-zinc-100 rounded-[60px_60px_60px_12px] max-md:mt-10 max-md:max-w-full">
                                   <div className="flex gap-3 max-md:flex-col max-md:gap-0 max-md:">
-                                    <div className="flex flex-col w-[44%] max-md:ml-0 max-md:w-full overflow-hidden">
-                                      <img loading="lazy" srcSet={item.kos_main_foto} className="w-full md:h-full h-[12rem]  border-2 border-slate-100 " />
+                                    <div className="flex flex-col w-[55%] max-md:ml-0 max-md:w-full overflow-hidden">
+                                      <img loading="lazy" srcSet={item.kos_main_foto ? item.kos_main_foto : `${logo}`} className="w-full md:h-full h-[12rem]  border-2 border-slate-100 " />
                                     </div>
-                                    <div className="flex flex-col ml-5 w-[56%] max-md:ml-0 max-md:w-full">
+                                    <div className="flex flex-col ml-5 w-[45%] max-md:ml-0 max-md:w-full">
                                       <div className="flex flex-col grow py-5 md:py-11 max-md:px-5">
+                                        <span className="font-bold">Booking id: {item.booking_id}</span>
                                         <div className="flex items-center justify-between">
                                           <h2 className="cursor-pointer font-bold text-xl hover:text-2xl">{item.kos_name}</h2>
                                         </div>
                                         <div>
                                           <div className="flex gap-3 justify-between mt-3.5 text-base whitespace-nowrap">
                                             <div className="grow my-auto text-neutral-900">
-                                              Total Harga: <NumberFormatter value={item.total_harga ? item.total_harga : 0} /> /bulan
+                                              Tanggal Kos : {item.start_date} - {item.end_date}
                                             </div>
+                                          </div>
+                                          <div className="flex gap-3 justify-between mt-3.5 text-base whitespace-nowrap">
+                                            <div className="grow my-auto text-neutral-900">
+                                              Total Harga: <NumberFormatter value={item.total ? item.total : 0} /> /bulan
+                                            </div>
+                                          </div>
+                                          <div className="flex gap-3 justify-between mt-3.5 text-base whitespace-nowrap">
+                                            <div className="grow my-auto text-neutral-900">Status Pembayaran : {item.status}</div>
                                           </div>
                                         </div>
 
                                         <div className="mt-6  text-base whitespace-nowrap text-neutral-900 max-md:ml-2.5 flex gap-3 justify-start items-center">
-                                          <img width="20" height="20" src="https://img.icons8.com/ios/50/marker--v1.png" alt="marker--v1" /> <span className="text-xs w-full whitespace-pre-line">{item.kos_lokasi}</span>
+                                          <img width="20" height="20" src="https://img.icons8.com/ios/50/marker--v1.png" alt="marker--v1" />{" "}
+                                          <span className="text-xs w-full whitespace-pre-line">{item.kos_lokasi ? item.kos_lokasi : "alamat dirahasiakan sistem"}</span>
                                         </div>
                                         <div className="flex gap-5 justify-between mt-8 text-xs font-bold leading-5">
                                           <div className="flex gap-2 justify-between whitespace-nowrap text-stone-950">
-                                            <button onClick={() => cancelBooking(item.booking_id)} className="px-3 py-2 border-2 border-slate-300 rounded-md">
-                                              Cancel Booking
-                                            </button>
-                                            <button onClick={() => addRating(item.kos_id)} className="px-3 py-2 bg-lime-600 text-white rounded-md">
-                                              Add Rating
-                                            </button>
+                                            {item.status !== "cancelled" && (
+                                              <>
+                                                <button onClick={() => cancelBooking(item.booking_id)} className="px-3 py-2 border-2 border-slate-300 rounded-md">
+                                                  Cancel Booking
+                                                </button>
+                                                <button onClick={() => addRating(item.kos_id)} className="px-3 py-2 bg-lime-600 text-white rounded-md">
+                                                  Add Rating
+                                                </button>
+                                              </>
+                                            )}
                                           </div>
                                         </div>
                                       </div>
