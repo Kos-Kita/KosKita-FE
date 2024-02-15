@@ -6,3 +6,9 @@ export const formatTime = (milliseconds: number) => {
 
   return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 };
+
+export const calculateEndDate = (startDate: Date) => {
+  const thirtyDaysLater = new Date(startDate);
+  thirtyDaysLater.setDate(thirtyDaysLater.getDate() + 30);
+  return thirtyDaysLater;
+};

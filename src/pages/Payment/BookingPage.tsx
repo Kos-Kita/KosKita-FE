@@ -9,12 +9,13 @@ import { detail } from "@/utils/types/type";
 import { detailPayment } from "@/utils/types/type";
 import { formatTime } from "./functions";
 import { pembayaranType } from "@/utils/types/type";
+import { calculateEndDate } from "./functions";
 
 const BookingPage = () => {
   const location = useLocation();
   const id = location.state.kos_id;
-  const startDate = location.state.startDate;
-  const endDate = location.state.endDate;
+  const startDate = location.state.endDate;
+  const endDate = calculateEndDate(startDate);
   const baseurl = import.meta.env.VITE_BASE_URL;
   const [showPopup, setShowPopup] = useState<Boolean>(false);
   const { user } = useAuth();
