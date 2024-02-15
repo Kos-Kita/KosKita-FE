@@ -12,7 +12,7 @@ import EditKos from "@/pages/kos/EditKos";
 import Dashboard from "@/pages/admin/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import AboutUsPage from "@/pages/about/AboutPage";
-import ContactPage from "@/pages/about/Contactpage";
+import ContactPage from "@/pages/about/ContactPage";
 
 function App() {
   return (
