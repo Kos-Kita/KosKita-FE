@@ -18,6 +18,8 @@ export const login = async (body: ILoginType) => {
       throw Error("Password incorrect");
     } else if (isError.includes("record not found")) {
       throw Error("Email not registered");
+    } else {
+      throw Error("Account is not registered");
     }
   }
 };

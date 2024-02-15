@@ -1,4 +1,4 @@
-import { useAuth } from "@/utils/context/auth";
+// import { useAuth } from "@/utils/context/auth";
 import { WebsocketContext } from "@/utils/context/ws-provider";
 import { MessageSquareIcon, Minus, Send, X } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -7,10 +7,10 @@ interface PopupChat {
   setChatOpen: (open: boolean) => void;
 }
 export type Message = {
-  content: string;
-  client_id: string;
-  username: string;
+  message: string;
+  receiver_id: string;
   room_id: string;
+  sender_id: string;
   type: "recv" | "self";
 };
 const PopupChat = ({ chatOpen, setChatOpen }: PopupChat) => {
@@ -19,7 +19,7 @@ const PopupChat = ({ chatOpen, setChatOpen }: PopupChat) => {
   const textarea = useRef<any>(null);
   const [users, setUsers] = useState<Array<{ username: string }>>([]);
   const [messages, setMessage] = useState<Array<Message>>([]);
-  const { user } = useAuth();
+  // const { user } = useAuth();
   useEffect(() => {
     if (conn === null) {
       setChatOpen(false);
@@ -28,19 +28,19 @@ const PopupChat = ({ chatOpen, setChatOpen }: PopupChat) => {
 
     conn.onmessage = (message) => {
       const m: Message = JSON.parse(message.data);
-      console.log(message);
-      if (m.content == "A new user has joined the room") {
-        setUsers([...users, { username: m.username }]);
+      console.log(m);
+      if (m.message == "") {
+        setUsers([...users, { username: m.room_id }]);
       }
 
-      if (m.content == "user left the chat") {
-        const deleteUser = users.filter((user) => user.username != m.username);
-        setUsers([...deleteUser]);
-        setMessage([...messages, m]);
-        return;
-      }
+      // if (m.message == "user left the chat") {
+      //   const deleteUser = users.filter((user) => user.username != m.username);
+      //   setUsers([...deleteUser]);
+      //   setMessage([...messages, m]);
+      //   return;
+      // }
 
-      user.user_name == m.username ? (m.type = "self") : (m.type = "recv");
+      10 == Number(m.sender_id) ? (m.type = "self") : (m.type = "recv");
       setMessage([...messages, m]);
     };
 
@@ -94,19 +94,19 @@ const PopupChat = ({ chatOpen, setChatOpen }: PopupChat) => {
           <div className="flex flex-col space-y-3 p-4">
             {messages.map((msg) => (
               <>
-                {msg.type === "self" ? (
+                {Number(msg.receiver_id) === 10 ? (
                   <div className="max-w-[80%] flex flex-col  items-start self-end">
-                    <span className="self-end text-sm text-zinc-700">{msg.username}</span>
+                    <span className="self-end text-sm text-zinc-700">{msg.sender_id}</span>
                     <div className="self-end rounded-xl rounded-tr border bg-[#eb675312] py-2 px-3 w-full">
-                      {msg.content}
+                      {msg.message}
                     </div>
                   </div>
                 ) : (
                   <>
                     <div className="max-w-[80%] flex flex-col  items-start self-start">
-                      <span className="self-start text-sm text-zinc-700">{msg.username}</span>
+                      <span className="self-start text-sm text-zinc-700">{msg.receiver_id}</span>
                       <div className="self-start rounded-xl rounded-tl border bg-[#f1fcfa]  py-2 px-3 w-full">
-                        {msg.content}
+                        {msg.message}
                       </div>
                     </div>
                   </>
