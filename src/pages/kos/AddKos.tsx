@@ -28,9 +28,23 @@ const AddKos = () => {
   } = useForm<IKosType>({
     resolver: zodResolver(kosSchema),
     defaultValues: {
+      kos_name: "",
+      description: "",
+      category: "",
+      kos_rules: [],
+      kos_facilities: [],
+      main_kos_photo: new File([], ""),
+      front_kos_photo: new File([], ""),
+      back_kos_photo: new File([], ""),
+      front_room_photo: new File([], ""),
+      inside_room_photo: new File([], ""),
+      address: "",
+      latitude: "",
+      longitude: "",
       price: 0,
       rooms: 0,
     },
+    mode: "onChange",
   });
 
   useEffect(() => {

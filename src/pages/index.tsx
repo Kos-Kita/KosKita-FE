@@ -54,12 +54,23 @@ const App = () => {
             backgroundImage: `url(${imageBackround})`,
           }}
         >
-          <form onSubmit={handleSearch} className="bg-white/85 shadow rounded-tr-3xl rounded-tl-3xl rounded-br-3xl rounded absolute top-48 left-20 p-8 space-y-10 max-w-lg w-full ">
+          <form
+            onSubmit={handleSearch}
+            className="bg-white/85 shadow rounded-tr-3xl rounded-tl-3xl rounded-br-3xl rounded absolute top-48 left-20 p-8 space-y-10 max-w-lg w-full "
+          >
             <h1 className="text-4xl font-semibold">Anda Cari Kost?</h1>
             <p className="text-lg font-medium text-[#181A18]">Cari disini aja dah</p>
-            <label htmlFor="search" className="bg-white/95 p-1 rounded-2xl flex items-center gap-x-3 overflow-hidden">
+            <label
+              htmlFor="search"
+              className="bg-white/95 p-1 rounded-2xl flex items-center gap-x-3 overflow-hidden"
+            >
               <Search className="size-10" />
-              <input type="text" id="search" placeholder="Select a address" className="w-full h-full outline-none bg-transparent border-none" />
+              <input
+                type="text"
+                id="search"
+                placeholder="Select a address"
+                className="w-full h-full outline-none bg-transparent border-none"
+              />
               <button className="py-4 px-8 bg-[#4CA02E]  text-white rounded-xl">Search</button>
             </label>
           </form>
@@ -70,10 +81,45 @@ const App = () => {
           <div className="grid grid-cols-5 gap-x-16 pt-10">
             {Array.from({ length: 5 }, (_, index) => (
               <div className="flex flex-col items-center gap-y-3" key={index}>
-                <span className="font-medium">{index === 0 ? "Jakarta Barat" : index === 1 ? "Jakarta Utara" : index === 2 ? "Jakarta Pusat" : index === 3 ? "Jakarta Timur" : "Jakarta Selatan"}</span>
+                <span className="font-medium">
+                  {index === 0
+                    ? "Jakarta Barat"
+                    : index === 1
+                    ? "Jakarta Utara"
+                    : index === 2
+                    ? "Jakarta Pusat"
+                    : index === 3
+                    ? "Jakarta Timur"
+                    : "Jakarta Selatan"}
+                </span>
                 <img
-                  onClick={() => navigate("/searchmenu", { state: { data: index === 0 ? "Jakarta Barat" : index === 1 ? "Jakarta Utara" : index === 2 ? "Jakarta Pusat" : index === 3 ? "Jakarta Timur" : "Jakarta Selatan" } })}
-                  src={index === 0 ? jakartaBarat : index === 1 ? jakartaUtara : index === 2 ? jakartaPusat : index === 3 ? jakartaTimur : jakartaSelatan}
+                  onClick={() =>
+                    navigate("/searchmenu", {
+                      state: {
+                        data:
+                          index === 0
+                            ? "Jakarta Barat"
+                            : index === 1
+                            ? "Jakarta Utara"
+                            : index === 2
+                            ? "Jakarta Pusat"
+                            : index === 3
+                            ? "Jakarta Timur"
+                            : "Jakarta Selatan",
+                      },
+                    })
+                  }
+                  src={
+                    index === 0
+                      ? jakartaBarat
+                      : index === 1
+                      ? jakartaUtara
+                      : index === 2
+                      ? jakartaPusat
+                      : index === 3
+                      ? jakartaTimur
+                      : jakartaSelatan
+                  }
                   alt="jakarta"
                   className="rounded-[30px] cursor-pointer"
                 />
@@ -98,12 +144,25 @@ const App = () => {
                 <>
                   {kosRecomend?.map((data) => (
                     <>
-                      <CarouselItem className={"basis-1/4"} key={data.id}>
-                        <div className="flex flex-col items-center gap-y-1 rounded-3xl overflow-hidden bg-[#F2F0F2] cursor-pointer " onClick={() => navigate(`/kos/${data.id}`)}>
-                          <img src={data.photo_kos.main_kos_photo === "" ? `https://source.unsplash.com/300x30${data.id}?rented-house` : data.photo_kos.main_kos_photo} alt="main-photo-kos" className="w-full h-[300px] object-cover" />
+                      <CarouselItem className={"max-w-lg"} key={data.id}>
+                        <div
+                          className="flex flex-col items-center gap-y-1 rounded-3xl overflow-hidden bg-[#F2F0F2] cursor-pointer "
+                          onClick={() => navigate(`/kos/${data.id}`)}
+                        >
+                          <img
+                            src={
+                              data.photo_kos.main_kos_photo === ""
+                                ? `https://source.unsplash.com/300x30${data.id}?rented-house`
+                                : data.photo_kos.main_kos_photo
+                            }
+                            alt="main-photo-kos"
+                            className="w-full h-[300px] object-cover"
+                          />
                           <div className="flex flex-col items-center w-full px-4 py-2 gap-y-3">
                             <div className="flex items-center justify-start gap-x-2  w-full font-semibold">
-                              <span className="text-sm  py-1 px-4 bg-white/50 shadow rounded-lg ">Putri</span>
+                              <span className="text-sm  py-1 px-4 bg-white/50 shadow rounded-lg ">
+                                Putri
+                              </span>
                               <div className="flex items-center  rounded-xl gap-x-2">
                                 <Star color="white" fill={"green"} size={16} />
                                 <span className="text-sm">{data.rating}.0</span>
@@ -117,10 +176,14 @@ const App = () => {
                             <div className="flex flex-col gap-y-2 items-center w-full">
                               <div className="flex items-center flex-wrap gap-x-1  w-full">
                                 {data.kos_facilities.slice(0, 3).map((item) => (
-                                  <span className="text-sm text-slate-800">{item.facility.replace("", " - ")}</span>
+                                  <span className="text-sm text-slate-800">
+                                    {item.facility.replace("", " - ")}
+                                  </span>
                                 ))}
                               </div>
-                              <span className="text-sm font-medium text-[#4CA02E] w-full">{formattedAmount(data.price)}/bulan</span>
+                              <span className="text-sm font-medium text-[#4CA02E] w-full">
+                                {formattedAmount(data.price)}/bulan
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -138,15 +201,31 @@ const App = () => {
             <div className="gap-y-5 flex flex-col items-center">
               <h1 className="text-4xl font-medium text-[#181A18]">Alasan Kenapa KosKita !!!</h1>
               <p className="text-sm text-center max-w-4xl leading-relaxed tracking-wide">
-                Koskita adalah platform inovatif yang dirancang khusus untuk memudahkan pencarian dan penyewaan kos bagi semua kalangan. Dengan antarmuka yang ramah pengguna dan fitur canggih, Koskita membantu Anda menemukan tempat tinggal
-                yang sempurna sesuai dengan kebutuhan dan preferensi Anda.
+                Koskita adalah platform inovatif yang dirancang khusus untuk memudahkan pencarian
+                dan penyewaan kos bagi semua kalangan. Dengan antarmuka yang ramah pengguna dan
+                fitur canggih, Koskita membantu Anda menemukan tempat tinggal yang sempurna sesuai
+                dengan kebutuhan dan preferensi Anda.
               </p>
             </div>
             <div className="grid grid-cols-4 gap-5">
               {Array.from({ length: 4 }, (_, index) => (
                 <div className="bg-[#E2F1E8] rounded-xl flex flex-col gap-y-4 p-10" key={index}>
-                  <img src={index === 0 ? carbonClean : index === 1 ? tag : index === 2 ? signal : message} alt="carbohidrat" className="size-14 object-contain" />
-                  <h3 className="font-semibold text-xl">{index === 0 ? "Hygiene maintained" : index === 1 ? "Low price offered" : index === 2 ? "High-speed Wi-Fi" : "24/7 support"}</h3>
+                  <img
+                    src={
+                      index === 0 ? carbonClean : index === 1 ? tag : index === 2 ? signal : message
+                    }
+                    alt="carbohidrat"
+                    className="size-14 object-contain"
+                  />
+                  <h3 className="font-semibold text-xl">
+                    {index === 0
+                      ? "Hygiene maintained"
+                      : index === 1
+                      ? "Low price offered"
+                      : index === 2
+                      ? "High-speed Wi-Fi"
+                      : "24/7 support"}
+                  </h3>
                   <p className="text-sm">
                     {index === 0
                       ? "Kos nya udah termaintained, jadi kebersihan nya gak perlu diragukan lagi"
