@@ -112,7 +112,11 @@ const AddKos = () => {
               </button>
             )}
             {Number(stepTab) === 4 && (
-              <button className="bg-[#4CA02E] text-white py-2 px-3 text-sm rounded-md flex items-center justify-center">
+              <button
+                className="bg-[#4CA02E] text-white py-2 px-3 text-sm rounded-md flex items-center justify-center disabled:cursor-wait"
+                disabled={isSubmitting}
+                aria-disabled={isSubmitting}
+              >
                 {isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
