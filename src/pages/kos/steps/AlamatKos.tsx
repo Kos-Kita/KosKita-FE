@@ -6,6 +6,9 @@ import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { Marker, Popup } from "react-leaflet";
 import { MapContainer } from "react-leaflet/MapContainer";
 import { TileLayer } from "react-leaflet/TileLayer";
+import L from "leaflet";
+import markerIcon from "@/assets/marker.png";
+
 interface AlamatKosProps {
   register: UseFormRegister<IKosType>;
   setValue: UseFormSetValue<IKosType>;
@@ -66,6 +69,10 @@ const AlamatKos = ({ register, setValue, errors }: AlamatKosProps) => {
   };
 
   const DraggableMarker = () => {
+    const icon = new L.Icon({
+      iconUrl: markerIcon,
+      iconSize: [50, 50],
+    });
     const eventHandlers = useMemo(
       () => ({
         dragend() {
@@ -80,7 +87,13 @@ const AlamatKos = ({ register, setValue, errors }: AlamatKosProps) => {
     );
 
     return (
-      <Marker draggable={true} eventHandlers={eventHandlers} position={position} ref={markerRef}>
+      <Marker
+        draggable={true}
+        eventHandlers={eventHandlers}
+        position={position}
+        ref={markerRef}
+        icon={icon}
+      >
         <Popup minWidth={90}>Marker is draggable</Popup>
       </Marker>
     );

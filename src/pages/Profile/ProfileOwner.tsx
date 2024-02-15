@@ -217,7 +217,13 @@ const ProfileOwner = () => {
                         <div className="flex justify-center items-center px-16 text-sm font-medium leading-6 text-black whitespace-nowrap bg-white rounded max-md:px-5 max-md:max-w-full">
                           <div className="flex flex-col items-center max-w-full w-[118px]">
                             {selectedImage ? (
-                              <img loading="lazy" srcSet={URL.createObjectURL(selectedImage)} height={"100px"} width={"100px"} className=" rounded-full " />
+                              <img
+                                loading="lazy"
+                                srcSet={URL.createObjectURL(selectedImage)}
+                                height={"100px"}
+                                width={"100px"}
+                                className=" rounded-full "
+                              />
                             ) : (
                               <img
                                 loading="lazy"
@@ -231,7 +237,10 @@ const ProfileOwner = () => {
                                 className="w-full rounded-full  "
                               />
                             )}
-                            <div onClick={() => document.getElementById("uploadInput")?.click()} className="justify-center px-3 py-1.5 mt-5 rounded-md bg-zinc-300">
+                            <div
+                              onClick={() => document.getElementById("uploadInput")?.click()}
+                              className="justify-center px-3 py-1.5 mt-5 rounded-md bg-zinc-300"
+                            >
                               Ubah Foto
                             </div>
 
@@ -249,8 +258,23 @@ const ProfileOwner = () => {
                                 alignItems: "flex-start",
                               }}
                             >
-                              <label htmlFor="uploadInput" className="Cover" style={{ width: 70, height: 15, display: "flex", alignItems: "center" }}>
-                                <input type="file" id="uploadInput" accept="image/*" style={{ display: "none" }} onChange={handleImageUpload} />
+                              <label
+                                htmlFor="uploadInput"
+                                className="Cover"
+                                style={{
+                                  width: 70,
+                                  height: 15,
+                                  display: "flex",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <input
+                                  type="file"
+                                  id="uploadInput"
+                                  accept="image/*"
+                                  style={{ display: "none" }}
+                                  onChange={handleImageUpload}
+                                />
                               </label>
                             </div>
                           </div>
@@ -274,7 +298,12 @@ const ProfileOwner = () => {
                         <div className="flex gap-5 justify-between mt-5 text-zinc-900 max-md:flex-wrap max-md:max-w-full">
                           <div className="flex-auto self-center">Jenis Kelamin</div>
                           <div className="input-container">
-                            <select id="gender" onChange={handlePerubahan} value={formData.gender} className="grow focus:outline-none w-[45vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5">
+                            <select
+                              id="gender"
+                              onChange={handlePerubahan}
+                              value={formData.gender}
+                              className="grow focus:outline-none w-[45vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5"
+                            >
                               <option value="" disabled>
                                 Pilih Jenis Kelamin
                               </option>
@@ -314,15 +343,28 @@ const ProfileOwner = () => {
                         </div>
 
                         <div className="flex gap-5 justify-between items-start self-end mt-32 max-w-full w-full max-md:mt-10">
-                          <div className="flex-auto md:self-end md:mt-9 md:text-base text-sm text-sky-400 cursor-pointer" onClick={handlePopup}>
+                          <div
+                            className="flex-auto md:self-end md:mt-9 md:text-base text-sm text-sky-400 cursor-pointer"
+                            onClick={handlePopup}
+                          >
                             Ganti Password
                           </div>
                           <div className="flex gap-5 self-start text-center text-white whitespace-nowrap">
-                            <button type="submit" className="grow justify-center px-3 py-2 md:px-4 md:py-3 bg-lime-600 rounded shadow-sm">
+                            <button
+                              type="submit"
+                              className="grow justify-center px-3 py-2 md:px-4 md:py-3 bg-lime-600 rounded shadow-sm"
+                            >
                               Edit Akun
                             </button>
-                            <AlertDelete onAction={deleteProfile} title="Apakah anda yakin?" description="Penghapusan data ini tidak dapat dikembalikan, dan bersifat permanen" background="bg-red-600 hover:bg-red-400">
-                              <button className="grow justify-center md:px-3 md:py-4 px-3 py-2 bg-red-600 rounded shadow-sm hover:bg-red-400">Hapus Akun</button>
+                            <AlertDelete
+                              onAction={deleteProfile}
+                              title="Apakah anda yakin?"
+                              description="Penghapusan data ini tidak dapat dikembalikan, dan bersifat permanen"
+                              background="bg-red-600 hover:bg-red-400"
+                            >
+                              <button className="grow justify-center md:px-3 md:py-4 px-3 py-2 bg-red-600 rounded shadow-sm hover:bg-red-400">
+                                Hapus Akun
+                              </button>
                             </AlertDelete>
                           </div>
                         </div>
@@ -355,21 +397,43 @@ const ProfileOwner = () => {
                       ) : (
                         <div className="flex flex-col grow items-center px-16 py-11 w-full text-sm bg-white rounded shadow-sm text-zinc-900 max-md:px-5 max-md:mt-6 max-md:max-w-full">
                           <div className="flex items-center self-start gap-2 text-lg leading-7 max-md:max-w-full">
-                            <img src="https://img.icons8.com/windows/32/smart-home-2.png" alt="home" className="w-[20px]" />
+                            <img
+                              src="https://img.icons8.com/windows/32/smart-home-2.png"
+                              alt="home"
+                              className="w-[20px]"
+                            />
                             <span>Riwayat Kos</span>
                           </div>
                           <div className="w-full">
-                            <div className="mt-16 md:text-2xl text-lg font-bold leading-9 whitespace-nowrap max-md:mt-10">Kamu belum posting kos kosan kamu</div>
-                            <div className="mt-10 leading-6 md:w-[409px] w-full">Kamu mempunyai kos-kosan? Yuk posting kos-kosan mu dan sewa kos-kosan mu di KosKita.</div>
+                            <div className="mt-16 md:text-2xl text-lg font-bold leading-9 whitespace-nowrap max-md:mt-10">
+                              Kamu belum posting kos kosan kamu
+                            </div>
+                            <div className="mt-10 leading-6 md:w-[409px] w-full">
+                              Kamu mempunyai kos-kosan? Yuk posting kos-kosan mu dan sewa kos-kosan
+                              mu di KosKita.
+                            </div>
 
                             <div className="flex flex-col justify-start w-full">
                               <div className="flex gap-4 mt-14 whitespace-nowrap leading-[157%] max-md:mt-10">
-                                <img loading="lazy" srcSet="https://img.icons8.com/dotty/80/buy-for-coins--v2.png" alt="buy-for-coins--v2" className="aspect-[0.96] w-[52px]" />
-                                <div className="grow self-center md:text-base text-xs">Tagihan dan kontrak sewa tercatat rapi</div>
+                                <img
+                                  loading="lazy"
+                                  srcSet="https://img.icons8.com/dotty/80/buy-for-coins--v2.png"
+                                  alt="buy-for-coins--v2"
+                                  className="aspect-[0.96] w-[52px]"
+                                />
+                                <div className="grow self-center md:text-base text-xs">
+                                  Tagihan dan kontrak sewa tercatat rapi
+                                </div>
                               </div>
                               <div className="flex gap-5 mt-4 whitespace-nowrap leading-[171%]">
-                                <img loading="lazy" srcSet="https://img.icons8.com/carbon-copy/100/money.png" className="aspect-[0.96] w-[50px]" />
-                                <div className="grow self-start mt-4 md:text-base text-xs">KosKita menjaga keamanan transaksi</div>
+                                <img
+                                  loading="lazy"
+                                  srcSet="https://img.icons8.com/carbon-copy/100/money.png"
+                                  className="aspect-[0.96] w-[50px]"
+                                />
+                                <div className="grow self-start mt-4 md:text-base text-xs">
+                                  KosKita menjaga keamanan transaksi
+                                </div>
                               </div>
                               <div className="flex justify-center items-center gap-5 mt-5 whitespace-nowrap leading-[157%]">
                                 <img
@@ -378,7 +442,9 @@ const ProfileOwner = () => {
                                   alt="external-payment-method-shopping-and-commerce-smashingstocks-detailed-outline-smashing-stocks"
                                   className="w-[50px] h-[40px]"
                                 />
-                                <div className="grow self-center md:text-base text-xs">Cashless, dengan beragam metode pembayaran</div>
+                                <div className="grow self-center md:text-base text-xs">
+                                  Cashless, dengan beragam metode pembayaran
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -399,14 +465,23 @@ const ProfileOwner = () => {
                       <div className="fixed inset-0 flex items-center justify-center z-50 font-Poppins">
                         <form onSubmit={changePassword}>
                           <div className="flex flex-col px-16 py-8 text-sm text-black bg-white rounded-2xl shadow-2xl max-w-[772px] max-md:px-5">
-                            <div className="text-5xl font-bold max-md:max-w-full">Ganti Password</div>
-                            <div className="mt-3.5 text-xs max-md:max-w-full">Password saat ini</div>
+                            <div className="text-5xl font-bold max-md:max-w-full">
+                              Ganti Password
+                            </div>
+                            <div className="mt-3.5 text-xs max-md:max-w-full">
+                              Password saat ini
+                            </div>
                             <input
                               required
                               type={!showPassword ? "password" : "text"}
                               className="justify-center p-3 mt-1.5 whitespace-nowrap bg-white rounded-md border border-solid shadow-sm border-slate-600 border-opacity-40 max-md:max-w-full"
                               placeholder="*******"
-                              onChange={(e: any) => setFormPassword((prev) => ({ ...prev, old_password: e.target.value }))}
+                              onChange={(e: any) =>
+                                setFormPassword((prev) => ({
+                                  ...prev,
+                                  old_password: e.target.value,
+                                }))
+                              }
                             />
 
                             <div className="mt-8 text-xs max-md:max-w-full">Password Baru</div>
@@ -415,27 +490,52 @@ const ProfileOwner = () => {
                               type={!showPassword ? "password" : "text"}
                               className="justify-center p-3 mt-1.5 whitespace-nowrap bg-white rounded-md border border-solid shadow-sm border-slate-600 border-opacity-40 max-md:max-w-full"
                               placeholder="*******"
-                              onChange={(e: any) => setFormPassword((prev) => ({ ...prev, new_password: e.target.value }))}
+                              onChange={(e: any) =>
+                                setFormPassword((prev) => ({
+                                  ...prev,
+                                  new_password: e.target.value,
+                                }))
+                              }
                             />
 
-                            <div className="mt-8 text-xs max-md:max-w-full">Konfirmasi Password Baru</div>
+                            <div className="mt-8 text-xs max-md:max-w-full">
+                              Konfirmasi Password Baru
+                            </div>
                             <input
                               required
                               type={!showPassword ? "password" : "text"}
                               className="justify-center p-3 mt-1.5 whitespace-nowrap bg-white rounded-md border border-solid shadow-sm border-slate-600 border-opacity-40 max-md:max-w-full"
                               placeholder="*******"
-                              onChange={(e: any) => setFormPassword((prev) => ({ ...prev, konfirmasi_password: e.target.value }))}
+                              onChange={(e: any) =>
+                                setFormPassword((prev) => ({
+                                  ...prev,
+                                  konfirmasi_password: e.target.value,
+                                }))
+                              }
                             />
 
                             <span onClick={togglePasswordVisibility} className="mt-5">
                               {!showPassword ? (
                                 <div className="flex gap-3 items-center">
-                                  <img width="30" height="30" className="rounded-full border-2 p-1 border-slate-500" src="https://img.icons8.com/ios/50/closed-eye.png" alt="closed-eye" /> Tampilkan Password
+                                  <img
+                                    width="30"
+                                    height="30"
+                                    className="rounded-full border-2 p-1 border-slate-500"
+                                    src="https://img.icons8.com/ios/50/closed-eye.png"
+                                    alt="closed-eye"
+                                  />{" "}
+                                  Tampilkan Password
                                 </div>
                               ) : (
                                 <div className="flex gap-3 items-center">
-                                  <img width="30" height="30" className="rounded-full border-2 p-1 border-slate-500" src="https://img.icons8.com/tapes/40/experimental-visible-tapes.png" alt="experimental-visible-tapes" /> Sembunyikan
-                                  Password
+                                  <img
+                                    width="30"
+                                    height="30"
+                                    className="rounded-full border-2 p-1 border-slate-500"
+                                    src="https://img.icons8.com/tapes/40/experimental-visible-tapes.png"
+                                    alt="experimental-visible-tapes"
+                                  />{" "}
+                                  Sembunyikan Password
                                 </div>
                               )}
                             </span>
