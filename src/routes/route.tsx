@@ -11,6 +11,8 @@ import BookingPage from "@/pages/Payment/BookingPage";
 import EditKos from "@/pages/kos/EditKos";
 import Dashboard from "@/pages/admin/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
+import AboutUsPage from "@/pages/about/AboutPage";
+import ContactPage from "@/pages/about/Contactpage";
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
           <Route path="/kos/:id" element={<DetailKos />} />
           <Route path="/bookingpage" element={<BookingPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/tentang" element={<AboutUsPage />} />
+          <Route path="/kontak" element={<ContactPage />} />
         </Route>
         <Route path="*" element={<>Not found</>} />
       </Routes>

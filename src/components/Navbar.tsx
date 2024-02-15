@@ -25,8 +25,12 @@ const Navbar = () => {
           <li className={`cursor-pointer ${location.pathname === "/" && "font-medium"}`} onClick={() => navigate("/")}>
             Beranda
           </li>
-          <li className="cursor-pointer">Kontak</li>
-          <li className="cursor-pointer">Tentang</li>
+          <li className="cursor-pointer" onClick={() => navigate("/kontak")}>
+            Kontak
+          </li>
+          <li className="cursor-pointer" onClick={() => navigate("/tentang")}>
+            Tentang
+          </li>
           {token ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -43,20 +47,7 @@ const Navbar = () => {
               <DropdownMenuContent className="mt-2 w-[200px] ">
                 <DropdownMenuLabel className="p-3">Hi {user.user_name}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="p-2 hover:bg-slate-100 cursor-pointer"
-                  onClick={() =>
-                    navigate(
-                      `${
-                        user.role === "owner"
-                          ? "/profileowner"
-                          : user.role === "renter"
-                          ? "/profilerenter"
-                          : "/dashboard"
-                      }`
-                    )
-                  }
-                >
+                <DropdownMenuItem className="p-2 hover:bg-slate-100 cursor-pointer" onClick={() => navigate(`${user.role === "owner" ? "/profileowner" : user.role === "renter" ? "/profilerenter" : "/dashboard"}`)}>
                   {user.role !== "admin" ? "Profile" : "Dashboard"}
                 </DropdownMenuItem>
                 {user.role === "owner" ? (
