@@ -3,3 +3,132 @@ KosKita adalah sebuah website yang akan membantu masyarakat untuk mendapatkan te
 Tech stack yg dipakai di website ini adalah : React JS Vite, Tailwind CSS, Typescript, Axios, Router DOM, Zod, Postman, Core API, Shadcn UI, leaflet, prettiter dan VSCode 
 
 Cara setup dan menjalankan website ini bisa dengan mengakses link deploy: https://koskita.netlify.app
+
+
+ # KosKita API
+  <h1>Welcome to KosKita</h1>
+
+<!-- PROJECT LOGO -->
+![LOGO](docs/koskitaa-high-resolution-logo-black.png)
+
+## 📑 About the Project
+KosKita adalah aplikasi yang dirancang untuk memudahkan pengguna dalam mencari dan memesan kos. Aplikasi ini menawarkan berbagai fitur yang memudahkan pengguna dalam melakukan transaksi, mulai dari pencarian kos hingga pembayaran
+
+## 🌐 Deployment
+ - [VERCEL](https://koskita.netlify.app/)
+
+## 🖼 Prototype
+- [FIGMA](https://www.figma.com/file/SLA82Dp0aP8QOWOSRlJqCE/Kost?type=design&node-id=102%3A323&mode=design&t=NVcmjZWyVzodr9FS-1)
+
+## 🤝 Collaboration
+- [Github Repository for the team](https://github.com/Kos-Kita/)
+- [Discord](https://discord.com/)
+
+### ⚙ Backend
+- [Github Repository for the Backend team](https://github.com/Kos-Kita/KosKita-BE)
+- [Swagger OpenAPI](https://app.swaggerhub.com/apis-docs/L3NONEONE_1/KosKita/1.0.0#/)
+- [Postman Workspace](https://koskita.postman.co/workspace/c8aa6d62-d6b1-489f-8407-086490de72c9)
+
+## 🔮 Features
+- 👤Autentikasi dan Manajemen User
+    - Registrasi User
+    - Login User
+    - Mendapatkan Detail User
+    - Memperbarui Akun User
+    - Memperbarui Sandi User
+    - Menghapus User
+- 🏠Manajemen Kos
+    - Membuat Kos Baru
+    - Mendapatkan Semua Kos
+    - Mendapatkan Detail Kos
+    - Memperbarui Kos
+    - Menghapus Kos
+    - Mendapatkan Kos Berdasarkan User
+    - Mencari Kos
+    - Mencari Kos Berdasarkan Filter
+- 🖼️Foto Kos
+    - Membuat Foto Kos Baru
+    - Memperbarui Foto Kos Baru
+- ⭐Rating Kos
+    - Memberikan Score Rating Untuk Kos
+- 📅Proses Booking dan Pembayaran
+    - Membuat Booking
+    - Membatalkan Booking
+    - Mendapatkan Booking User
+- 💳Payment Gateway
+    - Membuat Pembayaran Booking Baru
+    - Membatalkan Pembayaran Booking
+    - Menerima Notifikasi Pembayaran
+- 💬Real-time Chat
+    - Membuat Ruangan Chat Baru
+    - Mendapatkan Ruangan Chat Yang Dimiliki User
+    - Bergabung Ke Ruangan Chat
+    - Mendapatkan Semua Pesan Di Ruangan Chat 
+- 👮‍♂️Fitur Admin
+    - Mendapatkan Total Semua User, Kos, Booking, Dan Total Booking Per Bulan
+
+[## 🗺️ ERD
+![ERD](docs/ggpm3egf%20(3).png)
+
+## List Endpoint
+
+| Tag | Endpoint |
+| --- | --- |
+|👤User | `POST /login` |
+|👤User | `POST /users` |
+|👤User | `GET /users` |
+|👤User | `PUT /users` |
+|👤User | `DELETE /users` |
+|👤User | `PUT /change-password` |
+|🏠Kos | `POST /kos` |
+|🏠Kos | `PUT /kos/:id` |
+|🏠Kos | `GET /kos` |
+|🏠Kos | `DELETE /kos/:id` |
+|🏠Kos | `GET /kos/:id` |
+|🏠Kos | `GET /users/kos` |
+|🏠Kos | `GET /kos/search` |
+|🖼️Image | `POST /upload-image/:kosid` |
+|🖼️Image | `PUT /upload-image/:kosid` |
+|⭐Rating | `POST /kos/:id/rating` |
+|📅Booking | `POST /booking` |
+|📅Booking | `GET /booking` |
+|📅Booking | `PUT /booking/:booking_id` |
+|💬Message | `POST /create-room` |
+|💬Message | `GET /get-room` |
+|💬Message | `GET /join-room/:roomId` |
+|💬Message | `GET /room/:roomId` |
+|👮‍♂️Admin | `GET /admin` |
+
+[![Tech Stack](https://github-readme-tech-stack.vercel.app/api/cards?title=Tech+Stack&lineCount=1&theme=facebook&width=600&bg=%231a191e&badge=%232a292e&border=%232a292e&titleColor=%231771e6&line1=react%2Creact%2C00c6ff%3Btypescript%2Ctypescript%2C0083ff%3Btailwindcss%2Ctailwindcss%2C00e3ff%3Bzod%2Czod%2C0096ff%3B)
+
+
+ 
+ 
+ ## 🧰 Installation
+Follow these steps to install and set up the KosKita API:
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/Kos-Kita/KosKita-BE.git
+   
+2. **Move to Cloned Repository Folder**
+
+    ```bash
+    cd KosKita-BE
+    
+3. **Update dependecies**
+    
+    ```bash
+    npm install
+
+7. **Run KosKita** 
+8. 
+    ```bash
+    npm run dev
+
+## 🤖 Author
+
+- **Alim Prasetyo Putra Sinambela** - FE 17 ALTA
+  - [Github](https://github.com/alimprasetyo77)
+- **Irsan Jamaludin** - FE 17 ALTA
+  - [Github](https://github.com/IrsanJam)
