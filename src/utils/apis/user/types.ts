@@ -3,6 +3,7 @@ const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 export const userSchema = z.object({
+  id: z.number().optional().readonly(),
   name: z.string().min(1, { message: "Enter your name" }),
   user_name: z.string().min(1, { message: "Enter your username" }),
   email: z.string().email("Enter a valid email").min(1, { message: "Enter email" }),
