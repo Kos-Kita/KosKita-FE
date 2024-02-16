@@ -28,7 +28,9 @@ const HistoryChat = ({
             <div
               className="bg-slate-100 p-3 rounded-lg hover:bg-slate-200 duration-300 text-sm cursor-pointer flex items-center gap-x-4"
               key={index}
-              onClick={() => onOpenChat(room.room_id, room.sender_id)}
+              onClick={() => {
+                onOpenChat(room.room_id, room.sender_id), setOpenHistoryCht(false);
+              }}
             >
               <img
                 src={room.photo_profile !== "" ? room.photo_profile : defaultImg}

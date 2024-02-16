@@ -51,7 +51,7 @@ const PopupChat = () => {
 
       const getMessages = async () => {
         try {
-          const response = await axios.get(`https://l3n.my.id/room/${parts[0]}`);
+          const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/room/${parts[0]}`);
           const result = response.data;
           console.log(result);
           setMessage(result.data);

@@ -48,7 +48,7 @@ const Navbar = () => {
   };
   const handleOpenChat = (room_id: string, recieveId: number) => {
     const ws = new WebSocket(
-      `ws://l3n.my.id/join-room/${room_id}?senderId=${user.id}&receiverId=${recieveId}`
+      `wss://l3n.my.id/join-room/${room_id}?senderId=${user.id}&receiverId=${recieveId}`
     );
     if (ws.OPEN) {
       setConn(ws);
