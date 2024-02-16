@@ -67,8 +67,6 @@ KosKita adalah aplikasi yang dirancang untuk memudahkan pengguna dalam mencari d
 - 👮‍♂️Fitur Admin
     - Mendapatkan Total Semua User, Kos, Booking, Dan Total Booking Per Bulan
 
-[## 🗺️ ERD
-![ERD](docs/ggpm3egf%20(3).png)
 
 ## List Endpoint
 
@@ -99,7 +97,7 @@ KosKita adalah aplikasi yang dirancang untuk memudahkan pengguna dalam mencari d
 |💬Message | `GET /room/:roomId` |
 |👮‍♂️Admin | `GET /admin` |
 
-[![Tech Stack](https://github-readme-tech-stack.vercel.app/api/cards?title=Tech+Stack&lineCount=1&theme=facebook&width=600&bg=%231a191e&badge=%232a292e&border=%232a292e&titleColor=%231771e6&line1=react%2Creact%2C00c6ff%3Btypescript%2Ctypescript%2C0083ff%3Btailwindcss%2Ctailwindcss%2C00e3ff%3Bzod%2Czod%2C0096ff%3B)
+[![Tech Stack](https://github-readme-tech-stack.vercel.app/api/cards?title=Tech+Stack&lineCount=1&theme=facebook&width=900&bg=%231a191e&badge=%232a292e&border=%232a292e&titleColor=%231771e6&line1=react%2Creact%2C00c6ff%3Btypescript%2Ctypescript%2C0083ff%3Btailwindcss%2Ctailwindcss%2C00e3ff%3Bzod%2Czod%2C0096ff%3B)
 
 
  
@@ -109,12 +107,12 @@ Follow these steps to install and set up the KosKita API:
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/Kos-Kita/KosKita-BE.git
+   git clone https://github.com/Kos-Kita/KosKita-FE.git
    
 2. **Move to Cloned Repository Folder**
 
     ```bash
-    cd KosKita-BE
+    cd KosKita-FE
     
 3. **Update dependecies**
     
