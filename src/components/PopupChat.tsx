@@ -1,11 +1,10 @@
 // import { useAuth } from "@/utils/context/auth";
+import { useAuth } from "@/utils/context/auth";
 import { WebsocketContext } from "@/utils/context/ws-provider";
+import axios from "axios";
 import { MessageSquareIcon, Minus, Send, X } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
-interface PopupChat {
-  chatOpen: boolean;
-  setChatOpen: (open: boolean) => void;
-}
+
 export type Message = {
   message: string;
   receiver_id: string;
@@ -13,13 +12,14 @@ export type Message = {
   sender_id: string;
   type: "recv" | "self";
 };
-const PopupChat = ({ chatOpen, setChatOpen }: PopupChat) => {
+const PopupChat = () => {
   const [hide, setHide] = useState(false);
-  const { conn } = useContext(WebsocketContext);
+  const { conn, chatOpen, setChatOpen } = useContext(WebsocketContext);
   const textarea = useRef<any>(null);
-  const [users, setUsers] = useState<Array<{ username: string }>>([]);
+  const msgContainer = useRef<any>(null);
+
   const [messages, setMessage] = useState<Array<Message>>([]);
-  // const { user } = useAuth();
+  const { user } = useAuth();
   useEffect(() => {
     if (conn === null) {
       setChatOpen(false);
@@ -28,9 +28,9 @@ const PopupChat = ({ chatOpen, setChatOpen }: PopupChat) => {
 
     conn.onmessage = (message) => {
       const m: Message = JSON.parse(message.data);
-      console.log(m);
-      if (m.message == "") {
-        setUsers([...users, { username: m.room_id }]);
+      if (m.message !== "") {
+        user.id == Number(m.sender_id) ? (m.type = "self") : (m.type = "recv");
+        setMessage([...messages, m]);
       }
 
       // if (m.message == "user left the chat") {
@@ -39,15 +39,29 @@ const PopupChat = ({ chatOpen, setChatOpen }: PopupChat) => {
       //   setMessage([...messages, m]);
       //   return;
       // }
-
-      10 == Number(m.sender_id) ? (m.type = "self") : (m.type = "recv");
-      setMessage([...messages, m]);
     };
 
     conn.onclose = () => {};
-    conn.onerror = () => {};
-    conn.onopen = () => {};
-  }, [textarea, messages, conn, users, setMessage]);
+    conn.onerror = (error) => {
+      console.log(error);
+    };
+    conn.onopen = () => {
+      const roomId = conn.url.split("/")[4];
+      const parts = roomId.split("?");
+
+      const getMessages = async () => {
+        try {
+          const response = await axios.get(`https://l3n.my.id/room/${parts[0]}`);
+          const result = response.data;
+          console.log(result);
+          setMessage(result.data);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      getMessages();
+    };
+  }, [textarea, messages, conn, setMessage]);
 
   const sendMessage = () => {
     if (!textarea.current?.value) return;
@@ -59,7 +73,6 @@ const PopupChat = ({ chatOpen, setChatOpen }: PopupChat) => {
     conn.send(textarea.current.value);
     textarea.current.value = "";
   };
-  console.log(messages);
 
   return (
     <>
@@ -90,13 +103,12 @@ const PopupChat = ({ chatOpen, setChatOpen }: PopupChat) => {
             </button>
           </div>
         </div>
-        <div className="flex-grow overflow-y-auto kos">
+        <div className="flex-grow overflow-y-auto kos" ref={msgContainer}>
           <div className="flex flex-col space-y-3 p-4">
             {messages.map((msg) => (
               <>
-                {Number(msg.receiver_id) === 10 ? (
+                {msg.type === "self" ? (
                   <div className="max-w-[80%] flex flex-col  items-start self-end">
-                    <span className="self-end text-sm text-zinc-700">{msg.sender_id}</span>
                     <div className="self-end rounded-xl rounded-tr border bg-[#eb675312] py-2 px-3 w-full">
                       {msg.message}
                     </div>
@@ -104,7 +116,6 @@ const PopupChat = ({ chatOpen, setChatOpen }: PopupChat) => {
                 ) : (
                   <>
                     <div className="max-w-[80%] flex flex-col  items-start self-start">
-                      <span className="self-start text-sm text-zinc-700">{msg.receiver_id}</span>
                       <div className="self-start rounded-xl rounded-tl border bg-[#f1fcfa]  py-2 px-3 w-full">
                         {msg.message}
                       </div>
@@ -121,6 +132,9 @@ const PopupChat = ({ chatOpen, setChatOpen }: PopupChat) => {
             placeholder="Type your message..."
             className="w-full rounded-lg border border-gray-300 px-4 py-2 outline-teal-500"
             ref={textarea}
+            onKeyDown={(e) => {
+              e.key === "Enter" && sendMessage();
+            }}
           />
           <button
             className="ml-2 rounded-lg bg-teal-500 px-4 py-2 text-white "

@@ -148,6 +148,7 @@ export interface IKosDetail extends IKosRecomend {
     id: number;
     name: string;
     user_name: string;
+    photo_profile: string;
   };
 }
 

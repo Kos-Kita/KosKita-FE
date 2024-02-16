@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 import { getKosRecomend } from "@/utils/apis/kos/api";
 import { useEffect, useState } from "react";
 import { IKosRecomend } from "@/utils/apis/kos/types";
-import { formattedAmount } from "@/utils/formattedAmount";
 import { toast } from "@/components/ui/use-toast";
 import Homepage from "@/components/skeletons/Homepage";
 import jakartaBarat from "@/assets/jakarta1.png";
@@ -18,6 +17,7 @@ import jakartaUtara from "@/assets/jakarta2.png";
 import jakartaPusat from "@/assets/jakarta3.png";
 import jakartaTimur from "@/assets/jakarta4.png";
 import jakartaSelatan from "@/assets/jakarta5.png";
+import NumberFormatter from "@/components/NumberFormatter";
 const App = () => {
   const navigate = useNavigate();
   const [kosRecomend, setkosRecomend] = useState<IKosRecomend[]>();
@@ -181,8 +181,9 @@ const App = () => {
                                   </span>
                                 ))}
                               </div>
-                              <span className="text-sm font-medium text-[#4CA02E] w-full">
-                                {formattedAmount(data.price)}/bulan
+                              <span className="text-sm w-full">
+                                <NumberFormatter value={data.price} />
+                                <span className="font-normal ml-px text-black/80">/bulan</span>
                               </span>
                             </div>
                           </div>

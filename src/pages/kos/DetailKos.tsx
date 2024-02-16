@@ -40,12 +40,13 @@ import { toast } from "@/components/ui/use-toast";
 import { getDetailKos } from "@/utils/apis/kos/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { IKosDetail } from "@/utils/apis/kos/types";
-import PopupChat from "@/components/PopupChat";
 import { WebsocketContext } from "@/utils/context/ws-provider";
-import { formattedAmount } from "@/utils/formattedAmount";
 import markerIcon from "@/assets/marker.png";
 import L from "leaflet";
 import axios, { AxiosResponse } from "axios";
+import defaultImg from "@/assets/download.png";
+import axiosWithConfig from "@/utils/apis/axiosWithConfig";
+import NumberFormatter from "@/components/NumberFormatter";
 
 const DetailKos = () => {
   const [position, setPosition] = useState({
@@ -60,32 +61,12 @@ const DetailKos = () => {
   const markerRef = useRef<any>(null);
   const navigate = useNavigate();
   const [isValidDate, setIsValidDate] = useState(true);
-  const [chatOpen, setChatOpen] = useState(false);
-  const [rooms, setRooms] = useState<{ id: string }>();
-  const { setConn } = useContext(WebsocketContext);
-
-  const getRooms = async () => {
-    try {
-      const res: AxiosResponse<{ room_id: string }> = await axios.post(
-        `http://l3n.my.id/create-room`,
-        {
-          receiver_id: 2,
-          sender_id: 1,
-        }
-      );
-      if (res.status === 200) {
-        setRooms({ id: res.data.room_id });
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const { setConn, setChatOpen } = useContext(WebsocketContext);
 
   useEffect(() => {
     getData();
-    getRooms();
     mapRef.current?.panTo(markerRef.current?.getLatLng());
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
   }, []);
 
   const getData = async () => {
@@ -113,24 +94,48 @@ const DetailKos = () => {
   };
 
   const joinRoom = async () => {
-    console.log(rooms?.id);
-    const ws = new WebSocket(
-      `ws://l3n.my.id/join-room/${rooms?.id}?userId=10&username=${user.user_name}`
-    );
-    if (ws.OPEN) {
-      setConn(ws);
-      setChatOpen(true);
-      return;
+    try {
+      const result: AxiosResponse<any> = await axiosWithConfig.get("/get-room");
+      if (result.data.data !== null) {
+        const existRoom = result.data.data.find((value: any) => value.sender_id === data?.user.id);
+        const ws = new WebSocket(
+          `ws://l3n.my.id/join-room/${existRoom?.room_id}?senderId=${user.id}&receiverId=${data?.user.id}`
+        );
+        if (ws.OPEN) {
+          setConn(ws);
+          setChatOpen(true);
+          return;
+        }
+      } else {
+        const res: AxiosResponse<{ room_id: string }> = await axios.post(
+          `http://l3n.my.id/create-room`,
+          {
+            receiver_id: data?.user.id,
+            sender_id: user.id,
+          }
+        );
+        if (res.status === 200) {
+          const ws = new WebSocket(
+            `ws://l3n.my.id/join-room/${res.data.room_id}?senderId=${user.id}&receiverId=${data?.user.id}`
+          );
+          if (ws.OPEN) {
+            setConn(ws);
+            setChatOpen(true);
+            return;
+          }
+        }
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
+
   const icon = new L.Icon({
     iconUrl: markerIcon,
     iconSize: [50, 50],
   });
   return (
     <Layout>
-      <PopupChat chatOpen={chatOpen} setChatOpen={setChatOpen} />
-
       <div className="min-h-screen">
         <section className="flex gap-x-2 h-full max-h-[500px]">
           <img
@@ -163,7 +168,7 @@ const DetailKos = () => {
         </section>
         <section className="py-10 px-5 2xl:px-0">
           <div className="flex items-start justify-between container 2xl:max-w-[100rem] mx-auto">
-            <div className="flex flex-col gap-y-7">
+            <div className="flex flex-col gap-y-7 max-w-[50rem]">
               <div className="flex items-center  gap-x-6">
                 <h1 className="text-4xl font-medium">{data?.kos_name}</h1>
                 <div className="flex items-center gap-x-2 rounded  p-2">
@@ -182,7 +187,7 @@ const DetailKos = () => {
                 <span>{data?.address}</span>
               </div>
               <div className="flex flex-col ">
-                <h3 className="text-xl ">Description</h3>
+                <h3 className="text-xl leading-relaxed tracking-wide">Description</h3>
                 <p>{data?.description}</p>
               </div>
               <div className="flex flex-col ">
@@ -190,7 +195,7 @@ const DetailKos = () => {
               </div>
               <div className="flex items-center gap-x-2">
                 <img
-                  src="https://source.unsplash.com/100x100?person"
+                  src={data?.user.photo_profile !== "" ? data?.user.photo_profile : defaultImg}
                   alt="person"
                   className="rounded-full size-16"
                 />
@@ -232,7 +237,8 @@ const DetailKos = () => {
                   <p className="text-sm text-red-500">Masukkan tanggal booking terlebih dahulu</p>
                 )}
                 <span className="text-2xl font-semibold">
-                  {formattedAmount(data?.price as number)}/Bulan
+                  <NumberFormatter value={data?.price as number} />
+                  <span className="font-normal ml-px text-black/80">/bulan</span>
                 </span>
                 <button
                   className="px-5 py-2 rounded-xl text-sm text-white bg-[#4CA02E] "
