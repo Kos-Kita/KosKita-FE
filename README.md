@@ -65,38 +65,11 @@ KosKita adalah aplikasi yang dirancang untuk memudahkan pengguna dalam mencari d
     - Mendapatkan Total Semua User, Kos, Booking, Dan Total Booking Per Bulan
 
 
-## List Endpoint
-
-| Tag | Endpoint |
-| --- | --- |
-|👤User | `POST /login` |
-|👤User | `POST /users` |
-|👤User | `GET /users` |
-|👤User | `PUT /users` |
-|👤User | `DELETE /users` |
-|👤User | `PUT /change-password` |
-|🏠Kos | `POST /kos` |
-|🏠Kos | `PUT /kos/:id` |
-|🏠Kos | `GET /kos` |
-|🏠Kos | `DELETE /kos/:id` |
-|🏠Kos | `GET /kos/:id` |
-|🏠Kos | `GET /users/kos` |
-|🏠Kos | `GET /kos/search` |
-|🖼️Image | `POST /upload-image/:kosid` |
-|🖼️Image | `PUT /upload-image/:kosid` |
-|⭐Rating | `POST /kos/:id/rating` |
-|📅Booking | `POST /booking` |
-|📅Booking | `GET /booking` |
-|📅Booking | `PUT /booking/:booking_id` |
-|💬Message | `POST /create-room` |
-|💬Message | `GET /get-room` |
-|💬Message | `GET /join-room/:roomId` |
-|💬Message | `GET /room/:roomId` |
-|👮‍♂️Admin | `GET /admin` |
-
 
 
 ![Tech Stack](https://github-readme-tech-stack.vercel.app/api/cards?title=Tech+Stack&fontSize=20&lineCount=1&theme=facebook&width=1200&bg=%231a191e&badge=%232a292e&border=%232a292e&titleColor=%231771e6&line1=react%2Creact%2C00c6ff%3Btypescript%2Ctypescript%2C0083ff%3Btailwindcss%2Ctailwindcss%2C00e3ff%3Bzod%2Czod%2C0096ff%3Breact+router+dom%2Creact+router+dom%2C00ff79%3Bleaflet%2Cleaflet%2Ca3c98b%3Baxios%2Caxios%2C66266e%3Bprettier%2Cprettier%2C2930a7%3Bshadcn+ui%2Cshadcn+ui%2Cd36d87%3B)
+
+
  
  
  ## 🧰 Installation
