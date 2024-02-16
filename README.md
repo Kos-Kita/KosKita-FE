@@ -96,7 +96,7 @@ KosKita adalah aplikasi yang dirancang untuk memudahkan pengguna dalam mencari d
 
 
 
-![Tech Stack](https://github-readme-tech-stack.vercel.app/api/cards?title=Tech+Stack&fontSize=20&lineCount=1&theme=facebook&width=1500&bg=%231a191e&badge=%232a292e&border=%232a292e&titleColor=%231771e6&line1=react%2Creact%2C00c6ff%3Btypescript%2Ctypescript%2C0083ff%3Btailwindcss%2Ctailwindcss%2C00e3ff%3Bzod%2Czod%2C0096ff%3Breact+router+dom%2Creact+router+dom%2C00ff79%3Bleaflet%2Cleaflet%2Ca3c98b%3Baxios%2Caxios%2C66266e%3Bprettier%2Cprettier%2C2930a7%3Bshadcn+ui%2Cshadcn+ui%2Cd36d87%3B)
+![Tech Stack](https://github-readme-tech-stack.vercel.app/api/cards?title=Tech+Stack&fontSize=20&lineCount=1&theme=facebook&width=1200&bg=%231a191e&badge=%232a292e&border=%232a292e&titleColor=%231771e6&line1=react%2Creact%2C00c6ff%3Btypescript%2Ctypescript%2C0083ff%3Btailwindcss%2Ctailwindcss%2C00e3ff%3Bzod%2Czod%2C0096ff%3Breact+router+dom%2Creact+router+dom%2C00ff79%3Bleaflet%2Cleaflet%2Ca3c98b%3Baxios%2Caxios%2C66266e%3Bprettier%2Cprettier%2C2930a7%3Bshadcn+ui%2Cshadcn+ui%2Cd36d87%3B)
  
  
  ## 🧰 Installation
