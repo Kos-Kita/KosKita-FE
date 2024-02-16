@@ -99,7 +99,7 @@ const DetailKos = () => {
       if (result.data.data !== null) {
         const existRoom = result.data.data.find((value: any) => value.sender_id === data?.user.id);
         const ws = new WebSocket(
-          `ws://l3n.my.id/join-room/${existRoom?.room_id}?senderId=${user.id}&receiverId=${data?.user.id}`
+          `wss://l3n.my.id/join-room/${existRoom?.room_id}?senderId=${user.id}&receiverId=${data?.user.id}`
         );
         if (ws.OPEN) {
           setConn(ws);
@@ -108,7 +108,7 @@ const DetailKos = () => {
         }
       } else {
         const res: AxiosResponse<{ room_id: string }> = await axios.post(
-          `http://l3n.my.id/create-room`,
+          `${import.meta.env.VITE_BASE_URL}/create-room`,
           {
             receiver_id: data?.user.id,
             sender_id: user.id,
@@ -116,7 +116,7 @@ const DetailKos = () => {
         );
         if (res.status === 200) {
           const ws = new WebSocket(
-            `ws://l3n.my.id/join-room/${res.data.room_id}?senderId=${user.id}&receiverId=${data?.user.id}`
+            `wss://l3n.my.id/join-room/${res.data.room_id}?senderId=${user.id}&receiverId=${data?.user.id}`
           );
           if (ws.OPEN) {
             setConn(ws);
