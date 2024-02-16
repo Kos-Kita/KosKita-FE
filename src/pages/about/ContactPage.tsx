@@ -7,19 +7,13 @@ const ContactPage: React.FC = () => {
   return (
     <div className="bg-white">
       <Navbar />
-      <div className="container mx-auto pt-16 pb-7  min-h-screen">
+      <div className="container mx-auto 2xl:pt-16 pb-7  min-h-screen">
         <div className="rounded-lg p-8 ">
           <h1 className="text-3xl font-bold text-gray-800 mb-6">Hubungi Kami</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                <img
-                  width="30"
-                  height="30"
-                  src="https://img.icons8.com/carbon-copy/100/link-company-parent.png"
-                  alt="link-company-parent"
-                />{" "}
-                Kantor Pusat
+                <img width="30" height="30" src="https://img.icons8.com/carbon-copy/100/link-company-parent.png" alt="link-company-parent" /> Kantor Pusat
               </h2>
               <p className="text-gray-700 mb-2">Jl. Kapt Piere Tendean</p>
               <p className="text-gray-700 mb-2">Kota Jakarta Selatan</p>
@@ -29,27 +23,17 @@ const ContactPage: React.FC = () => {
             <div>
               <h2 className="text-xl font-semibold text-gray-800 mb-4">Kontak</h2>
               <p className="text-gray-700 mb-2 flex items-center gap-3">
-                <img
-                  width="20"
-                  height="20"
-                  src="https://img.icons8.com/ios/50/phone--v1.png"
-                  alt="phone--v1"
-                />
+                <img width="20" height="20" src="https://img.icons8.com/ios/50/phone--v1.png" alt="phone--v1" />
                 Nomor Telepon:{" "}
                 <a href="tel:081234567890" className="text-lime-600 font-medium">
                   081234567890
                 </a>
               </p>
               <p className="text-gray-700 mb-2 flex items-center gap-3">
-                <img
-                  width="20"
-                  height="20"
-                  src="https://img.icons8.com/ios/50/mail.png"
-                  alt="mail"
-                />
+                <img width="20" height="20" src="https://img.icons8.com/ios/50/mail.png" alt="mail" />
                 Email:{" "}
-                <a href="mailto:info@kosankita.com" className="text-lime-600 font-medium">
-                  info@kosankita.com
+                <a href="mailto:info@koskita.com" className="text-lime-600 font-medium">
+                  info@koskita.com
                 </a>
               </p>
             </div>
@@ -65,17 +49,13 @@ const ContactPage: React.FC = () => {
               alt="Company 2"
               className="h-full rounded-lg"
             />
-            <img
-              src="https://eticon.co.id/wp-content/uploads/2021/08/Bangunan-apartemen-di-Jakarta.jpg"
-              alt="Company 3"
-              className="h-full rounded-lg"
-            />
+            <img src="https://eticon.co.id/wp-content/uploads/2021/08/Bangunan-apartemen-di-Jakarta.jpg" alt="Company 3" className="h-full rounded-lg" />
           </div>
         </div>
       </div>
       <footer className="bg-lime-600 relative bottom-0 w-full text-white py-4">
         <div className="container mx-auto text-center">
-          <p>Hak Cipta © {new Date().getFullYear()} KosanKita. All rights reserved.</p>
+          <p>Hak Cipta © {new Date().getFullYear()} KosKita. All rights reserved.</p>
         </div>
       </footer>
     </div>
