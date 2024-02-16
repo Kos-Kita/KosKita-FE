@@ -11,9 +11,19 @@ import RatingPopup from "./RatingPopup";
 import { useAuth } from "@/utils/context/auth";
 import NumberFormatter from "@/components/NumberFormatter";
 import logo from "../../assets/koskitaa.png";
+import { calculateEndDate } from "../Payment/functions";
 
 const ProfileRenter = () => {
+  const [rating, showRating] = useState<boolean>(false);
   const [dataKos, setDataKos] = useState<IMyKosType[]>();
+  const endDate = dataKos?.map((item: any) => item.start_date);
+  const splitDates = endDate?.map((date: string) => date.split("/"));
+  const parsedDates = splitDates?.map((dateParts: string[]) => {
+    const [day, month, year] = dateParts;
+    return { day: parseInt(day), month: parseInt(month) - 1, year: parseInt(year) };
+  });
+  const startDate = parsedDates && parsedDates.length > 0 ? new Date(parsedDates[0].year, parsedDates[0].month, parsedDates[0].day) : new Date();
+  const resultEndDate = `${new Date(calculateEndDate(startDate)).toLocaleDateString()}`;
   const [status, setStatus] = useState(true);
   const { changeToken } = useAuth();
   const [showPopup, setShowPopup] = useState(false);
@@ -178,6 +188,7 @@ const ProfileRenter = () => {
           toast({
             description: "Berhasil menambahkan Rating",
           });
+          showRating(true);
         }
       }
     } catch (error: any) {
@@ -186,6 +197,7 @@ const ProfileRenter = () => {
         variant: "destructive",
         description: error.response.data.message,
       });
+      showRating(true);
     } finally {
       setSelectedKosId(null);
       setShowRatingPopup(false);
@@ -212,7 +224,6 @@ const ProfileRenter = () => {
       } else {
         setStatus(!status);
         setDataKos(response.data.data);
-        console.log(response.data.data);
       }
     } catch (error: any) {
       toast({
@@ -281,9 +292,9 @@ const ProfileRenter = () => {
                 <div className="flex flex-col grow py-11 pr-12 pl-6 w-full text-base leading-7 bg-white rounded border border-solid shadow-sm border-stone-400 max-md:px-5 max-md:mt-6 max-md:max-w-full">
                   <form onSubmit={updateProfile}>
                     <div className="flex justify-center items-center px-7 text-sm font-medium leading-6 text-black whitespace-nowrap bg-white rounded max-md:px-5 max-md:max-w-full">
-                      <div className="flex flex-col items-center max-w-full w-[118px]">
+                      <div className="flex flex-col items-center max-w-full w-[158px]">
                         {selectedImage ? (
-                          <img loading="lazy" srcSet={URL.createObjectURL(selectedImage)} height={"100px"} width={"100px"} className=" rounded-full " />
+                          <img loading="lazy" srcSet={URL.createObjectURL(selectedImage)} className=" rounded-full h-[6rem] w-[6rem]" />
                         ) : (
                           <img
                             loading="lazy"
@@ -340,7 +351,7 @@ const ProfileRenter = () => {
                     <div className="flex gap-5 justify-between mt-5 text-zinc-900 max-md:flex-wrap max-md:max-w-full">
                       <div className="flex-auto self-center">Jenis Kelamin</div>
                       <div className="input-container">
-                        <select id="gender" onChange={handlePerubahan} value={formData.gender} className="grow focus:outline-none w-[45vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5">
+                        <select id="gender" onChange={handlePerubahan} value={formData.gender} className=" focus:outline-none w-[45vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5">
                           <option value="" disabled>
                             Pilih Jenis Kelamin
                           </option>
@@ -350,8 +361,8 @@ const ProfileRenter = () => {
                       </div>
                     </div>
 
-                    <div className="flex gap-5 justify-between mt-4 whitespace-nowrap text-zinc-900 max-md:flex-wrap max-md:max-w-full">
-                      <div className="self-center ">Username</div>
+                    <div className="flex gap-5 justify-between mt-4 w-full whitespace-nowrap text-zinc-900 max-md:flex-wrap max-md:max-w-full">
+                      <div className="self-center">Username</div>
                       <div className="input-container">
                         <input
                           id="user_name"
@@ -439,30 +450,29 @@ const ProfileRenter = () => {
                           {dataKos &&
                             dataKos.map((item: any) => (
                               <>
-                                <div className=" md:pr-20 mt-11 overflow-hidden bg-zinc-100 rounded-[60px_60px_60px_12px] max-md:mt-10 max-md:max-w-full">
-                                  <div className="flex gap-3 max-md:flex-col max-md:gap-0 max-md:">
+                                <div className=" md:pr-11 mt-11 overflow-hidden bg-zinc-100 rounded-[60px_60px_60px_12px] max-md:mt-10 max-md:max-w-full">
+                                  <div className="flex gap-3 max-md:flex-col  max-md:gap-0 max-md:">
                                     <div className="flex flex-col w-[55%] max-md:ml-0 max-md:w-full overflow-hidden">
                                       <img loading="lazy" srcSet={item.kos_main_foto ? item.kos_main_foto : `${logo}`} className="w-full md:h-full h-[12rem]  border-2 border-slate-100 " />
                                     </div>
                                     <div className="flex flex-col ml-5 w-[45%] max-md:ml-0 max-md:w-full">
                                       <div className="flex flex-col grow py-5 md:py-11 max-md:px-5">
-                                        <span className="font-bold">Booking id: {item.booking_id}</span>
                                         <div className="flex items-center justify-between">
-                                          <h2 className="cursor-pointer font-bold text-xl hover:text-2xl">{item.kos_name}</h2>
+                                          <h2 className="cursor-pointer font-bold text-base">{item.kos_name ? item.kos_name : "Abdul"}</h2>
                                         </div>
                                         <div>
                                           <div className="flex gap-3 justify-between mt-3.5 text-base whitespace-nowrap">
-                                            <div className="grow my-auto text-neutral-900">
-                                              Tanggal Kos : {item.start_date} - {item.end_date}
+                                            <div className="grow my-auto text-neutral-900 text-sm">
+                                              Tanggal Kos : {item.start_date} - {`${resultEndDate}`}
                                             </div>
                                           </div>
                                           <div className="flex gap-3 justify-between mt-3.5 text-base whitespace-nowrap">
-                                            <div className="grow my-auto text-neutral-900">
-                                              Total Harga: <NumberFormatter value={item.total ? item.total : 0} /> /bulan
+                                            <div className="grow my-auto text-neutral-900 text-sm">
+                                              Total Harga: <NumberFormatter value={item.total_harga ? item.total_harga : 0} /> /bulan
                                             </div>
                                           </div>
                                           <div className="flex gap-3 justify-between mt-3.5 text-base whitespace-nowrap">
-                                            <div className="grow my-auto text-neutral-900">Status Pembayaran : {item.status}</div>
+                                            <div className="grow my-auto text-neutral-900 text-sm">Status Pembayaran : {item.payment_status}</div>
                                           </div>
                                         </div>
 
@@ -472,15 +482,27 @@ const ProfileRenter = () => {
                                         </div>
                                         <div className="flex gap-5 justify-between mt-8 text-xs font-bold leading-5">
                                           <div className="flex gap-2 justify-between whitespace-nowrap text-stone-950">
-                                            {item.status !== "cancelled" && (
+                                            {item.payment_status !== "cancelled" ? (
                                               <>
-                                                <button onClick={() => cancelBooking(item.booking_id)} className="px-3 py-2 border-2 border-slate-300 rounded-md">
-                                                  Cancel Booking
-                                                </button>
-                                                <button onClick={() => addRating(item.kos_id)} className="px-3 py-2 bg-lime-600 text-white rounded-md">
-                                                  Add Rating
-                                                </button>
+                                                <AlertDelete onAction={() => cancelBooking(item.order_id)} title="Apakah anda yakin ?" background="bg-red-500" description="Apakah anda yakin ingin membatalkan pesanan yang telah dibuat">
+                                                  <button className="px-3 py-2 border-2 border-slate-300 rounded-md">Cancel Booking</button>
+                                                </AlertDelete>
+                                                {!rating ? (
+                                                  <button onClick={() => addRating(item.kos_id)} className="px-3 py-2 bg-lime-600 text-white rounded-md">
+                                                    Add Rating
+                                                  </button>
+                                                ) : (
+                                                  <div className="flex gap-2 justify-between whitespace-nowrap text-stone-950">
+                                                    <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/3064243ec75f1730094f8347466f60fab0cc73015f1520a7cd67831cd2fbc934?" className="w-5 aspect-square" />
+                                                    <div className="my-auto">{item.kos_rating}</div>
+                                                  </div>
+                                                )}
                                               </>
+                                            ) : (
+                                              <div className="flex gap-2 justify-between whitespace-nowrap text-stone-950">
+                                                <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/3064243ec75f1730094f8347466f60fab0cc73015f1520a7cd67831cd2fbc934?" className="w-5 aspect-square" />
+                                                <div className="my-auto">{item.kos_rating}</div>
+                                              </div>
                                             )}
                                           </div>
                                         </div>
