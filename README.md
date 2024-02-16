@@ -9,7 +9,7 @@ Cara setup dan menjalankan website ini bisa dengan mengakses link deploy: https:
   <h1>Welcome to KosKita</h1>
 
 <!-- PROJECT LOGO -->
-![LOGO](docs/koskitaa-high-resolution-logo-black.png)
+![LOGO](src/asset/koskitaa.png)
 
 ## 📑 About the Project
 KosKita adalah aplikasi yang dirancang untuk memudahkan pengguna dalam mencari dan memesan kos. Aplikasi ini menawarkan berbagai fitur yang memudahkan pengguna dalam melakukan transaksi, mulai dari pencarian kos hingga pembayaran
@@ -97,7 +97,7 @@ KosKita adalah aplikasi yang dirancang untuk memudahkan pengguna dalam mencari d
 |💬Message | `GET /room/:roomId` |
 |👮‍♂️Admin | `GET /admin` |
 
-[![Tech Stack](https://github-readme-tech-stack.vercel.app/api/cards?title=Tech+Stack&lineCount=1&theme=facebook&width=900&bg=%231a191e&badge=%232a292e&border=%232a292e&titleColor=%231771e6&line1=react%2Creact%2C00c6ff%3Btypescript%2Ctypescript%2C0083ff%3Btailwindcss%2Ctailwindcss%2C00e3ff%3Bzod%2Czod%2C0096ff%3B)
+![Tech Stack](https://github-readme-tech-stack.vercel.app/api/cards?title=Tech+Stack&lineCount=1&theme=facebook&width=1500&bg=%231a191e&badge=%232a292e&border=%232a292e&titleColor=%231771e6&line1=react%2Creact%2C00c6ff%3Btypescript%2Ctypescript%2C0083ff%3Btailwindcss%2Ctailwindcss%2C00e3ff%3Bzod%2Czod%2C0096ff%3B)
 
 
  
