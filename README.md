@@ -1,8 +1,4 @@
-KosKita adalah sebuah website yang akan membantu masyarakat untuk mendapatkan tempat tinggal sementara di area Jakarta, koskita akan membantu masyarakat mendapatkan kosan yang tersedia diarea yang diinginkan masyarakat dengan mudah, yang disana sudah ada kategori, fasilitas dan aturan kosan yang bisa dipilih masyarakat, dengan kelebihan memberikan ketenangan terkait availability.
 
-Tech stack yg dipakai di website ini adalah : React JS Vite, Tailwind CSS, Typescript, Axios, Router DOM, Zod, Postman, Core API, Shadcn UI, leaflet, prettiter dan VSCode 
-
-Cara setup dan menjalankan website ini bisa dengan mengakses link deploy: https://koskita.netlify.app
 
 
  # KosKita API
@@ -14,7 +10,6 @@ Cara setup dan menjalankan website ini bisa dengan mengakses link deploy: https:
 ## 📑 About the Project
 KosKita adalah aplikasi yang dirancang untuk memudahkan pengguna dalam mencari dan memesan kos. Aplikasi ini menawarkan berbagai fitur yang memudahkan pengguna dalam melakukan transaksi, mulai dari pencarian kos hingga pembayaran
 
-![Tech Stack](https://github-readme-tech-stack.vercel.app/api/cards?title=Tech+Stack&lineCount=1&theme=facebook&width=1000&bg=%231a191e&badge=%232a292e&border=%232a292e&titleColor=%231771e6&line1=react%2Creact%2C00c6ff%3Btypescript%2Ctypescript%2C0083ff%3Btailwindcss%2Ctailwindcss%2C00e3ff%3Bzod%2Czod%2C0096ff%3B)
 
 ## 🌐 Deployment
  - [VERCEL](https://koskita.netlify.app/)
@@ -101,7 +96,7 @@ KosKita adalah aplikasi yang dirancang untuk memudahkan pengguna dalam mencari d
 
 
 
-
+[![Tech Stack](https://github-readme-tech-stack.vercel.app/api/cards?title=Tech+Stack&lineCount=1&theme=facebook&width=600&bg=%231a191e&badge=%232a292e&border=%232a292e&titleColor=%231771e6&line1=react%2Creact%2C00c6ff%3Btypescript%2Ctypescript%2C0083ff%3Btailwindcss%2Ctailwindcss%2C00e3ff%3Bzod%2Czod%2C0096ff%3Breact+router+dom%2Creact+router+dom%2C00ff79%3Bleaflet%2Cleaflet%2Ca3c98b%3Baxios%2Caxios%2C66266e%3Bprettier%2Cprettier%2C2930a7%3Bshadcn+ui%2Cshadcn+ui%2Cd36d87%3B)
  
  
  ## 🧰 Installation
