@@ -32,8 +32,8 @@ const ContactPage: React.FC = () => {
               <p className="text-gray-700 mb-2 flex items-center gap-3">
                 <img width="20" height="20" src="https://img.icons8.com/ios/50/mail.png" alt="mail" />
                 Email:{" "}
-                <a href="mailto:info@kosankita.com" className="text-lime-600 font-medium">
-                  info@kosankita.com
+                <a href="mailto:info@koskita.com" className="text-lime-600 font-medium">
+                  info@koskita.com
                 </a>
               </p>
             </div>
@@ -55,7 +55,7 @@ const ContactPage: React.FC = () => {
       </div>
       <footer className="bg-lime-600 relative bottom-0 w-full text-white py-4">
         <div className="container mx-auto text-center">
-          <p>Hak Cipta © {new Date().getFullYear()} KosanKita. All rights reserved.</p>
+          <p>Hak Cipta © {new Date().getFullYear()} KosKita. All rights reserved.</p>
         </div>
       </footer>
     </div>
