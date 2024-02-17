@@ -111,7 +111,7 @@ const Register = () => {
 
           <div className="flex justify-start items-start text-base leading-5 text-neutral-900 max-md:flex-wrap max-md:max-w-full">
             <div className="flex-auto gap-5 my-5 text-sm text-center items-start justify-start">
-              <input type="checkbox" id="checkbox-register" {...register("terms")} />
+              <input required type="checkbox" id="checkbox-register" {...register("terms")} />
               <label htmlFor="checkbox-register"> Saya menyetujui Syarat dan Ketentuan, Kebijakan Privasi, dan menerima pembaruan melalui email.</label>
             </div>
           </div>
