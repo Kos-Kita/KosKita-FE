@@ -97,7 +97,7 @@ const Register = () => {
                 <img width="36px" onClick={() => setPassword(!showPassword)} height="16px" src="https://img.icons8.com/fluency-systems-filled/48/closed-eye.png" alt="closed-eye" className="p-2" />
               )}
             </div>
-            {errors.password && <p className="text-red-500 text-sm">Password harus memiliki setidaknya 6 karakter</p>}
+            {errors.password && <p className="text-red-500 text-sm">Kata sandi harus mengandung setidaknya satu huruf besar, satu huruf kecil, satu angka, satu karakter khusus, dan memiliki panjang minimal 6 karakter</p>}
 
             <select {...register("gender")} className={`p-3 w-full rounded-md bg-white border-[0.5px] border-slate-400 ${errors.gender ? "border-red-500" : ""}`}>
               <option value="jenis-kelamin" className="ml-10">
