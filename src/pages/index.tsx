@@ -146,7 +146,7 @@ const App = () => {
                     <>
                       <CarouselItem className={"max-w-lg"} key={data.id}>
                         <div
-                          className="flex flex-col items-center gap-y-1 rounded-3xl overflow-hidden bg-[#F2F0F2] cursor-pointer "
+                          className="flex flex-col items-center gap-y-1 rounded-3xl overflow-hidden bg-[#F2F0F2] cursor-pointer h-full "
                           onClick={() => navigate(`/kos/${data.id}`)}
                         >
                           <img
@@ -161,15 +161,15 @@ const App = () => {
                           <div className="flex flex-col items-center w-full px-4 py-2 gap-y-3">
                             <div className="flex items-center justify-start gap-x-2  w-full font-semibold">
                               <span className="text-sm  py-1 px-4 bg-white/50 shadow rounded-lg ">
-                                Putri
+                                {data.category}
                               </span>
                               <div className="flex items-center  rounded-xl gap-x-2">
                                 <Star color="white" fill={"green"} size={16} />
-                                <span className="text-sm">{data.rating}.0</span>
+                                <span className="text-sm">{data.rating}</span>
                               </div>
                             </div>
-                            <h3 className="font-semibold -mt-2 text-xl w-full">{data.kos_name}</h3>
-                            <div className="flex items-start w-full gap-x-2 text-sm">
+                            <h3 className="font-semibold -mt-2 text-xl w-full ">{data.kos_name}</h3>
+                            <div className="flex items-start w-full gap-x-2 text-sm ">
                               <MapPin size={16} className="w-8" />
                               <span className="leading-tight ">{data.address}</span>
                             </div>

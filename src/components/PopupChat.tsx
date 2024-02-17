@@ -1,25 +1,54 @@
 // import { useAuth } from "@/utils/context/auth";
+import { IGetMessage } from "@/utils/apis/chat/types";
 import { useAuth } from "@/utils/context/auth";
 import { WebsocketContext } from "@/utils/context/ws-provider";
-import axios from "axios";
+import { Response } from "@/utils/types/type";
+import axios, { AxiosResponse } from "axios";
 import { MessageSquareIcon, Minus, Send, X } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
 
-export type Message = {
-  message: string;
-  receiver_id: string;
-  room_id: string;
-  sender_id: string;
-  type: "recv" | "self";
-};
+// export type Message = {
+//   room_id: string;
+//   sender_id: string;
+//   receiver_id: string;
+//   message: string;
+//   // type: "recv" | "self";
+// };
 const PopupChat = () => {
   const [hide, setHide] = useState(false);
-  const { conn, chatOpen, setChatOpen } = useContext(WebsocketContext);
+  const { conn, chatOpen, setChatOpen, setLastMsg } = useContext(WebsocketContext);
   const textarea = useRef<any>(null);
   const msgContainer = useRef<any>(null);
 
-  const [messages, setMessage] = useState<Array<Message>>([]);
+  const [messages, setMessage] = useState<Array<IGetMessage>>([]);
   const { user } = useAuth();
+
+  useEffect(() => {
+    if (conn === null) {
+      setChatOpen(false);
+      return;
+    }
+    const roomId = conn?.url.split("/")[4];
+    const parts = roomId?.split("?")[0];
+
+    const getMessages = async () => {
+      try {
+        const response: AxiosResponse<Response<IGetMessage[]>> = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/room/${parts}`
+        );
+
+        const result = response.data.data;
+        const reverseData = result.reverse();
+        setMessage(reverseData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    msgContainer.current.scrollTop = msgContainer.current.scrollHeight;
+
+    getMessages();
+  }, [chatOpen]);
+
   useEffect(() => {
     if (conn === null) {
       setChatOpen(false);
@@ -27,45 +56,35 @@ const PopupChat = () => {
     }
 
     conn.onmessage = (message) => {
-      const m: Message = JSON.parse(message.data);
+      const m: IGetMessage = JSON.parse(message.data);
       if (m.message !== "") {
-        user.id == Number(m.sender_id) ? (m.type = "self") : (m.type = "recv");
         setMessage([...messages, m]);
+        console.log("m ", m);
+        setLastMsg([
+          {
+            message: messages[messages.length - 1].message,
+            roomId: messages[messages.length - 1].room_id,
+          },
+        ]);
       }
-
-      // if (m.message == "user left the chat") {
-      //   const deleteUser = users.filter((user) => user.username != m.username);
-      //   setUsers([...deleteUser]);
-      //   setMessage([...messages, m]);
-      //   return;
-      // }
     };
 
-    conn.onclose = () => {};
+    conn.onclose = (close) => {
+      console.log(close);
+      setMessage([]);
+    };
     conn.onerror = (error) => {
       console.log(error);
     };
     conn.onopen = () => {
-      const roomId = conn.url.split("/")[4];
-      const parts = roomId.split("?");
-
-      const getMessages = async () => {
-        try {
-          const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/room/${parts[0]}`);
-          const result = response.data;
-          console.log(result);
-          setMessage(result.data);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      getMessages();
+      console.log("Connection open");
     };
+    msgContainer.current.scrollTop = msgContainer.current.scrollHeight;
   }, [textarea, messages, conn, setMessage]);
 
   const sendMessage = () => {
     if (!textarea.current?.value) return;
-    if (conn === null) {
+    if (conn === null || conn.readyState == 3) {
       setChatOpen(false);
       return;
     }
@@ -105,17 +124,17 @@ const PopupChat = () => {
         </div>
         <div className="flex-grow overflow-y-auto kos" ref={msgContainer}>
           <div className="flex flex-col space-y-3 p-4">
-            {messages.map((msg) => (
+            {messages.map((msg, index) => (
               <>
-                {msg.type === "self" ? (
-                  <div className="max-w-[80%] flex flex-col  items-start self-end">
+                {msg.sender_id === user.id ?? msg.receiver_id === user.id ? (
+                  <div className="max-w-[80%] flex flex-col  items-start self-end" key={index}>
                     <div className="self-end rounded-xl rounded-tr border bg-[#eb675312] py-2 px-3 w-full">
                       {msg.message}
                     </div>
                   </div>
                 ) : (
                   <>
-                    <div className="max-w-[80%] flex flex-col  items-start self-start">
+                    <div className="max-w-[80%] flex flex-col  items-start self-start" key={index}>
                       <div className="self-start rounded-xl rounded-tl border bg-[#f1fcfa]  py-2 px-3 w-full">
                         {msg.message}
                       </div>

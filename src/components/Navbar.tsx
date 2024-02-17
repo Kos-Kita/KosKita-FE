@@ -15,13 +15,8 @@ import { WebsocketContext } from "@/utils/context/ws-provider";
 import HistoryChat from "./HistoryChat";
 import axiosWithConfig from "@/utils/apis/axiosWithConfig";
 import { AxiosResponse } from "axios";
-
-export interface IRoomType {
-  room_id: string;
-  sender_id: number;
-  name: string;
-  photo_profile: string;
-}
+import { IGetRoom } from "@/utils/apis/chat/types";
+import { Response } from "@/utils/types/type";
 
 const Navbar = () => {
   const { setChatOpen, setConn } = useContext(WebsocketContext);
@@ -29,10 +24,10 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { token, user, changeToken } = useAuth();
   const [openHistoryCht, setOpenHistoryCht] = useState(false);
-  const [rooms, setRooms] = useState<IRoomType[]>();
+  const [rooms, setRooms] = useState<IGetRoom[]>();
   const getRooms = async () => {
     try {
-      const result: AxiosResponse<any> = await axiosWithConfig.get("/get-room");
+      const result: AxiosResponse<Response<IGetRoom[]>> = await axiosWithConfig.get("/get-room");
       setRooms(result.data.data);
     } catch (error) {
       console.log(error);
@@ -46,10 +41,13 @@ const Navbar = () => {
       description: "logout succesfuly",
     });
   };
-  const handleOpenChat = (room_id: string, recieveId: number) => {
+  const handleOpenChat = (room_id: string, senderId: number, recieveId: number) => {
     const ws = new WebSocket(
-      `wss://l3n.my.id/join-room/${room_id}?senderId=${user.id}&receiverId=${recieveId}`
+      `wss://l3n.my.id/join-room/${room_id}?senderId=${user.id}&receiverId=${
+        user.id === recieveId ? senderId : recieveId
+      }`
     );
+    console.log(ws);
     if (ws.OPEN) {
       setConn(ws);
       setChatOpen(true);
@@ -80,16 +78,18 @@ const Navbar = () => {
           <li className="cursor-pointer" onClick={() => navigate("/tentang")}>
             Tentang
           </li>
-          <HistoryChat
-            openHistoryCht={openHistoryCht}
-            setOpenHistoryCht={setOpenHistoryCht}
-            rooms={rooms}
-            onOpenChat={handleOpenChat}
-          >
-            <li className="cursor-pointer" onClick={() => getRooms()}>
-              Chat
-            </li>
-          </HistoryChat>
+          {token ? (
+            <HistoryChat
+              openHistoryCht={openHistoryCht}
+              setOpenHistoryCht={setOpenHistoryCht}
+              rooms={rooms}
+              onOpenChat={handleOpenChat}
+            >
+              <li className="cursor-pointer" onClick={() => getRooms()}>
+                Chat
+              </li>
+            </HistoryChat>
+          ) : null}
           {token ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

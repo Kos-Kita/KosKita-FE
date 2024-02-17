@@ -20,7 +20,6 @@ const EditKos = () => {
     register,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm<IKosType>({
     resolver: zodResolver(kosSchema),
@@ -36,7 +35,6 @@ const EditKos = () => {
   useEffect(() => {
     getDataKos();
     setValue("mode", "edit");
-    console.log(watch());
   }, [id]);
 
   const getDataKos = async () => {
