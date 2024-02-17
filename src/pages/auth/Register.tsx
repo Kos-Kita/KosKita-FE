@@ -97,7 +97,7 @@ const Register = () => {
                 <img width="36px" onClick={() => setPassword(!showPassword)} height="16px" src="https://img.icons8.com/fluency-systems-filled/48/closed-eye.png" alt="closed-eye" className="p-2" />
               )}
             </div>
-            {errors.password && <p className="text-red-500 text-sm">Password harus memiliki setidaknya 6 karakter</p>}
+            {errors.password && <p className="text-red-500 text-sm">Kata sandi harus mengandung setidaknya satu huruf besar, satu huruf kecil, satu angka, satu karakter khusus, dan memiliki panjang minimal 6 karakter</p>}
 
             <select {...register("gender")} className={`p-3 w-full rounded-md bg-white border-[0.5px] border-slate-400 ${errors.gender ? "border-red-500" : ""}`}>
               <option value="jenis-kelamin" className="ml-10">
@@ -111,7 +111,7 @@ const Register = () => {
 
           <div className="flex justify-start items-start text-base leading-5 text-neutral-900 max-md:flex-wrap max-md:max-w-full">
             <div className="flex-auto gap-5 my-5 text-sm text-center items-start justify-start">
-              <input type="checkbox" id="checkbox-register" {...register("terms")} />
+              <input required type="checkbox" id="checkbox-register" {...register("terms")} />
               <label htmlFor="checkbox-register"> Saya menyetujui Syarat dan Ketentuan, Kebijakan Privasi, dan menerima pembaruan melalui email.</label>
             </div>
           </div>
