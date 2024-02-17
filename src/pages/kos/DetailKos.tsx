@@ -47,6 +47,8 @@ import axios, { AxiosResponse } from "axios";
 import defaultImg from "@/assets/download.png";
 import axiosWithConfig from "@/utils/apis/axiosWithConfig";
 import NumberFormatter from "@/components/NumberFormatter";
+import { IGetRoom } from "@/utils/apis/chat/types";
+import { Response } from "@/utils/types/type";
 
 const DetailKos = () => {
   const [position, setPosition] = useState({
@@ -66,7 +68,7 @@ const DetailKos = () => {
   useEffect(() => {
     getData();
     mapRef.current?.panTo(markerRef.current?.getLatLng());
-    // window.scrollTo(0, 0);
+    window.scrollTo(0, 0);
   }, []);
 
   const getData = async () => {
@@ -95,11 +97,21 @@ const DetailKos = () => {
 
   const joinRoom = async () => {
     try {
-      const result: AxiosResponse<any> = await axiosWithConfig.get("/get-room");
-      if (result.data.data !== null) {
-        const existRoom = result.data.data.find((value: any) => value.sender_id === data?.user.id);
+      const result: AxiosResponse<Response<IGetRoom[]>> = await axiosWithConfig.get("/get-room");
+
+      const existRoom =
+        result.data.data !== null &&
+        result.data.data.find(
+          (value) =>
+            value.name === data?.user.name &&
+            value.sender_id === user.id &&
+            value.receiver_id === data?.user.id
+        );
+
+      if (existRoom) {
+        console.log("Join Room");
         const ws = new WebSocket(
-          `wss://l3n.my.id/join-room/${existRoom?.room_id}?senderId=${user.id}&receiverId=${data?.user.id}`
+          `wss://l3n.my.id/join-room/${existRoom?.room_id}?senderId=${existRoom.sender_id}&receiverId=${existRoom.receiver_id}`
         );
         if (ws.OPEN) {
           setConn(ws);
@@ -107,7 +119,8 @@ const DetailKos = () => {
           return;
         }
       } else {
-        const res: AxiosResponse<{ room_id: string }> = await axios.post(
+        console.log("Create Room");
+        const res: AxiosResponse<Response<{ room_id: string }>> = await axios.post(
           `${import.meta.env.VITE_BASE_URL}/create-room`,
           {
             receiver_id: data?.user.id,
@@ -116,7 +129,7 @@ const DetailKos = () => {
         );
         if (res.status === 200) {
           const ws = new WebSocket(
-            `wss://l3n.my.id/join-room/${res.data.room_id}?senderId=${user.id}&receiverId=${data?.user.id}`
+            `wss://l3n.my.id/join-room/${res.data.data.room_id}?senderId=${user.id}&receiverId=${data?.user.id}`
           );
           if (ws.OPEN) {
             setConn(ws);
@@ -248,9 +261,7 @@ const DetailKos = () => {
                 </button>
                 <button
                   className="px-5 py-2 rounded-xl text-sm text-white bg-[#4CA02E]"
-                  onClick={() => {
-                    joinRoom();
-                  }}
+                  onClick={() => joinRoom()}
                 >
                   Kontak Pemilik Kos
                 </button>
@@ -285,9 +296,9 @@ const DetailKos = () => {
         <section className="py-20 space-y-14">
           <h3 className="text-center text-4xl font-semibold">Fasilitas Kos</h3>
           <div className="container 2xl:max-w-[95rem] mx-auto">
-            <div className="grid grid-cols-3 gap-6 ">
+            <div className="grid grid-cols-3 gap-6 place-items-center">
               {data?.kos_facilities?.map((item) => (
-                <div className="flex items-center justify-around" key={item.id}>
+                <div className="flex items-center flex-row-reverse gap-x-5" key={item.id}>
                   <span className="w-20 whitespace-nowrap">{item.facility}</span>
                   {(() => {
                     switch (item.facility) {
