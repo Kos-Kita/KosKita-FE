@@ -163,6 +163,14 @@ const ProfileRenter = () => {
 
   const changePassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (formPassword.new_password.length < 6) {
+      toast({
+        variant: "destructive",
+        description: "Password baru harus terdiri dari setidaknya 6 karakter",
+      });
+      return;
+    }
+
     if (formPassword.new_password === formPassword.konfirmasi_password) {
       try {
         const response = await axios.put(
@@ -182,7 +190,7 @@ const ProfileRenter = () => {
       } catch (error: any) {
         toast({
           variant: "destructive",
-          description: "Password yang anda Masukan Invalid",
+          description: "Password saat ini yang anda Masukan Invalid",
         });
       }
     } else {
