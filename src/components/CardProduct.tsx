@@ -99,7 +99,14 @@ const CardProduct: FC<searchKos> = (props: searchKos) => {
                 ) : null}
               </div>
               <div className="flex items-center w-full gap-5 mt-4 md:mt-8 flex-wrap">
-                <div className="text-sm leading-4 gap-5 whitespace-nowrap text-neutral-900">{kos_facilities?.slice(0, 3).map((item) => item.facility)}</div>
+                <div className="text-sm leading-4 gap-5 whitespace-nowrap text-neutral-900">
+                  {kos_facilities?.slice(0, 3).map((item, index) => (
+                    <span key={index}>
+                      {item.facility}
+                      {index !== 2 && " | "}
+                    </span>
+                  ))}
+                </div>
                 {!hidden && <div className="text-sm py-1 px-4 bg-white/50 shadow rounded-lg">{category}</div>}
               </div>
 
