@@ -184,7 +184,7 @@ const ProfileOwner = () => {
       } catch (error: any) {
         toast({
           variant: "destructive",
-          description: (error as Error).message,
+          description: "Password yang anda Masukan Invalid",
         });
       }
     } else {
