@@ -520,7 +520,7 @@ const ProfileRenter = () => {
                                                 ) : (
                                                   <div className="flex gap-2 justify-between whitespace-nowrap text-stone-950">
                                                     <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/3064243ec75f1730094f8347466f60fab0cc73015f1520a7cd67831cd2fbc934?" className="w-5 aspect-square" />
-                                                    <div className="my-auto">{item.kos_rating}</div>
+                                                    <div className="my-auto">{item.kos_rating === 0 ? showRating(false) : item.kos_rating}</div>
                                                   </div>
                                                 )}
                                               </>
