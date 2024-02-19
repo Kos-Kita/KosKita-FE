@@ -313,10 +313,10 @@ const ProfileRenter = () => {
   return (
     <>
       <Layout>
-        <div className="flex flex-col px-8 pb-4 bg-white shadow-sm ">
+        <div className="flex flex-col min-h-[80vh] justify-center items-center px-8 pb-4 overflow-y-scroll bg-white shadow-sm ">
           <div className="self-center w-full max-w-[1353px] max-md:max-w-full">
             <div className="flex gap-5 max-md:flex-col max-md:gap-0 max-md:">
-              <div className="flex flex-col w-[40%] max-md:ml-0 max-md:w-full">
+              <div className="flex flex-col 2xl:w-[40vw] w-[40%] max-md:ml-0 max-md:w-full">
                 <div className="flex flex-col grow py-11 pr-12 pl-6 w-full text-base leading-7 bg-white rounded border border-solid shadow-sm border-stone-400 max-md:px-5 max-md:mt-6 max-md:max-w-full">
                   <form onSubmit={updateProfile}>
                     <div className="flex justify-center items-center px-7 text-sm font-medium leading-6 text-black whitespace-nowrap bg-white rounded max-md:px-5 max-md:max-w-full">
@@ -369,7 +369,7 @@ const ProfileRenter = () => {
                           value={formData.name}
                           type="text"
                           placeholder="Masukan Nama"
-                          className=" grow focus:outline-none w-[45vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400"
+                          className=" grow focus:outline-none w-[45vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400"
                         />
                       </div>
                     </div>
@@ -377,7 +377,7 @@ const ProfileRenter = () => {
                     <div className="flex gap-5 justify-between mt-5 text-zinc-900 max-md:flex-wrap max-md:max-w-full">
                       <div className="flex-auto self-center">Jenis Kelamin</div>
                       <div className="input-container">
-                        <select id="gender" onChange={handlePerubahan} value={formData.gender} className=" focus:outline-none w-[45vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5">
+                        <select id="gender" onChange={handlePerubahan} value={formData.gender} className=" focus:outline-none w-[45vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5">
                           <option value="" disabled>
                             Pilih Jenis Kelamin
                           </option>
@@ -397,7 +397,7 @@ const ProfileRenter = () => {
                           required
                           type="text"
                           placeholder="Masukan Username"
-                          className="grow  focus:outline-none w-[45vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5"
+                          className="grow  focus:outline-none w-[45vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5"
                         />
                       </div>
                     </div>
@@ -411,7 +411,7 @@ const ProfileRenter = () => {
                           required
                           type="email"
                           placeholder="Masukan Email"
-                          className="grow  focus:outline-none w-[45vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 text-zinc-900 max-md:pr-5"
+                          className="grow  focus:outline-none w-[45vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 text-zinc-900 max-md:pr-5"
                         />
                       </div>
                     </div>
@@ -433,7 +433,7 @@ const ProfileRenter = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col ml-5 md:ml-0 w-[60%] max-md:ml-0 max-md:w-full border-[0.3px]">
+              <div className="flex flex-col ml-5 md:ml-0 2xl:w-[80vw] w-[60%] max-md:ml-0 max-md:w-full border-[0.3px]">
                 <div className="flex flex-col grow items-center px-16 md:px-6 py-11 w-full text-sm bg-white rounded shadow-sm text-zinc-900 max-md:px-5 max-md:mt-6 max-md:max-w-full">
                   <div className="flex items-center self-start gap-2 text-lg leading-7 max-md:max-w-full">
                     <img src="https://img.icons8.com/windows/32/smart-home-2.png" alt="home" className="w-[20px]" />
