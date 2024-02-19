@@ -13,7 +13,6 @@ const PopupChat = () => {
   const { conn, chatOpen, setChatOpen, dataRoom } = useContext(WebsocketContext);
   const textarea = useRef<any>(null);
   const msgContainer = useRef<any>(null);
-
   const [messages, setMessage] = useState<Array<IGetMessage>>([]);
   const { user } = useAuth();
 
@@ -61,6 +60,13 @@ const PopupChat = () => {
 
     conn.onclose = (event) => {
       console.log("Connection closed:", event);
+      const messageClosed: IGetMessage = {
+        message: "Chat connection close",
+        receiver_id: 0,
+        room_id: "",
+        sender_id: 0,
+      };
+      setMessage([...messages, messageClosed]);
     };
     conn.onerror = (error) => {
       console.log("Connection Error : ", error);
@@ -120,17 +126,25 @@ const PopupChat = () => {
         </div>
         <div className="flex-grow overflow-y-auto kos" ref={msgContainer}>
           <div className="flex flex-col space-y-3 p-4">
-            {messages.map((msg, index) => (
+            {messages.map((msg) => (
               <>
                 {msg.sender_id === user.id ? (
-                  <div className="max-w-[80%] flex flex-col  items-start self-end" key={index}>
+                  <div className="max-w-[80%] flex flex-col  items-start self-end">
                     <div className="self-end rounded-xl rounded-tr border bg-[#eb675312] py-2 px-3 w-full">
                       {msg.message}
                     </div>
                   </div>
+                ) : msg.sender_id === 0 ? (
+                  <>
+                    <div className="max-w-[80%] flex flex-col  items-start self-center">
+                      <div className="self-start rounded-xl text-sm border bg-slate-100  py-2 px-3 w-full">
+                        {msg.message}
+                      </div>
+                    </div>
+                  </>
                 ) : (
                   <>
-                    <div className="max-w-[80%] flex flex-col  items-start self-start" key={index}>
+                    <div className="max-w-[80%] flex flex-col  items-start self-start">
                       <div className="self-start rounded-xl rounded-tl border bg-[#f1fcfa]  py-2 px-3 w-full">
                         {msg.message}
                       </div>

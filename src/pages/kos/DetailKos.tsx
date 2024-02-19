@@ -64,6 +64,7 @@ const DetailKos = () => {
   const navigate = useNavigate();
   const [isValidDate, setIsValidDate] = useState(true);
   const { setConn, setChatOpen, setDataRoom } = useContext(WebsocketContext);
+  const [mount, setMount] = useState(false);
 
   useEffect(() => {
     getData();
@@ -77,6 +78,7 @@ const DetailKos = () => {
       setData(result.data);
       setPosition({ lat: Number(result.data.latitude), lng: Number(result.data.longitude) });
       mapRef.current?.panTo(markerRef.current?.getLatLng());
+      setMount(true);
     } catch (error) {
       toast({
         description: (error as Error).message,
@@ -277,21 +279,23 @@ const DetailKos = () => {
         <section className="py-16 space-y-10">
           <h3 className="text-center text-4xl font-semibold">Lokasi</h3>
           <div className="container 2xl:max-w-[100rem] ">
-            <MapContainer
-              center={position}
-              zoom={13}
-              style={{ height: "400px", width: "100wh" }}
-              ref={mapRef}
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
+            {mount ? (
+              <MapContainer
+                center={position}
+                zoom={13}
+                style={{ height: "400px", width: "100wh" }}
+                ref={mapRef}
+              >
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
 
-              <Marker position={position} ref={markerRef} icon={icon}>
-                <Popup>Lokasi Kos</Popup>
-              </Marker>
-            </MapContainer>
+                <Marker position={position} ref={markerRef} icon={icon}>
+                  <Popup>Lokasi Kos</Popup>
+                </Marker>
+              </MapContainer>
+            ) : null}
           </div>
         </section>
         <section className="py-20 space-y-14">
