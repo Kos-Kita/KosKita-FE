@@ -63,7 +63,7 @@ const DetailKos = () => {
   const markerRef = useRef<any>(null);
   const navigate = useNavigate();
   const [isValidDate, setIsValidDate] = useState(true);
-  const { setConn, setChatOpen } = useContext(WebsocketContext);
+  const { setConn, setChatOpen, setDataRoom } = useContext(WebsocketContext);
 
   useEffect(() => {
     getData();
@@ -98,36 +98,37 @@ const DetailKos = () => {
   const joinRoom = async () => {
     try {
       const result: AxiosResponse<Response<IGetRoom[]>> = await axiosWithConfig.get("/get-room");
+      console.log("Get Rooms : ", result.data);
+      if (result.status === 200) {
+        setDataRoom({ name: data?.user.user_name, photo: data?.user.photo_profile });
 
-      const existRoom =
-        result.data.data !== null &&
-        result.data.data.find(
-          (value) =>
-            value.name === data?.user.name &&
-            value.sender_id === user.id &&
-            value.receiver_id === data?.user.id
-        );
-
-      if (existRoom) {
-        console.log("Join Room");
-        const ws = new WebSocket(
-          `wss://l3n.my.id/join-room/${existRoom?.room_id}?senderId=${existRoom.sender_id}&receiverId=${existRoom.receiver_id}`
-        );
-        if (ws.OPEN) {
-          setConn(ws);
-          setChatOpen(true);
-          return;
-        }
-      } else {
-        console.log("Create Room");
-        const res: AxiosResponse<Response<{ room_id: string }>> = await axios.post(
-          `${import.meta.env.VITE_BASE_URL}/create-room`,
-          {
-            receiver_id: data?.user.id,
-            sender_id: user.id,
+        const existRoom =
+          result.data.data !== null &&
+          result.data.data.find((value) => {
+            const isSenderIdMatch = value.sender_id === user.id;
+            const isReceiverIdMatch = value.receiver_id === data?.user.id;
+            return isSenderIdMatch && isReceiverIdMatch;
+          });
+        console.log("Exist Room : ", existRoom);
+        if (existRoom) {
+          console.log("Join Room");
+          const ws = new WebSocket(
+            `wss://l3n.my.id/join-room/${existRoom?.room_id}?senderId=${existRoom.sender_id}&receiverId=${existRoom.receiver_id}`
+          );
+          if (ws.OPEN) {
+            setConn(ws);
+            setChatOpen(true);
+            return;
           }
-        );
-        if (res.status === 200) {
+        } else {
+          console.log("Create Room");
+          const res: AxiosResponse<Response<{ room_id: string }>> = await axios.post(
+            `${import.meta.env.VITE_BASE_URL}/create-room`,
+            {
+              receiver_id: data?.user.id,
+              sender_id: user.id,
+            }
+          );
           const ws = new WebSocket(
             `wss://l3n.my.id/join-room/${res.data.data.room_id}?senderId=${user.id}&receiverId=${data?.user.id}`
           );

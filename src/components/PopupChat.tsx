@@ -6,17 +6,11 @@ import { Response } from "@/utils/types/type";
 import axios, { AxiosResponse } from "axios";
 import { MessageSquareIcon, Minus, Send, X } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
+import defaultImg from "@/assets/download.png";
 
-// export type Message = {
-//   room_id: string;
-//   sender_id: string;
-//   receiver_id: string;
-//   message: string;
-//   // type: "recv" | "self";
-// };
 const PopupChat = () => {
   const [hide, setHide] = useState(false);
-  const { conn, chatOpen, setChatOpen, setLastMsg } = useContext(WebsocketContext);
+  const { conn, chatOpen, setChatOpen, dataRoom } = useContext(WebsocketContext);
   const textarea = useRef<any>(null);
   const msgContainer = useRef<any>(null);
 
@@ -39,7 +33,8 @@ const PopupChat = () => {
 
         const result = response.data.data;
         const reverseData = result.reverse();
-        setMessage(reverseData);
+        const filterData = reverseData.filter((value) => value.message !== "");
+        setMessage(filterData);
       } catch (error) {
         console.log(error);
       }
@@ -57,27 +52,21 @@ const PopupChat = () => {
 
     conn.onmessage = (message) => {
       const m: IGetMessage = JSON.parse(message.data);
-      if (m.message !== "") {
-        setMessage([...messages, m]);
-        console.log("m ", m);
-        setLastMsg([
-          {
-            message: messages[messages.length - 1].message,
-            roomId: messages[messages.length - 1].room_id,
-          },
-        ]);
+      console.log("on message", m);
+      if (m.message === "" && m.receiver_id === 0 && m.sender_id === 0) {
+        return null;
       }
+      setMessage([...messages, m]);
     };
 
-    conn.onclose = (close) => {
-      console.log(close);
-      setMessage([]);
+    conn.onclose = (event) => {
+      console.log("Connection closed:", event);
     };
     conn.onerror = (error) => {
-      console.log(error);
+      console.log("Connection Error : ", error);
     };
-    conn.onopen = () => {
-      console.log("Connection open");
+    conn.onopen = (e) => {
+      console.log("Connection open", e);
     };
     msgContainer.current.scrollTop = msgContainer.current.scrollHeight;
   }, [textarea, messages, conn, setMessage]);
@@ -101,7 +90,14 @@ const PopupChat = () => {
         }`}
       >
         <div className="bg-teal-500 p-4  flex items-center justify-between">
-          <h1 className="text-center text-2xl font-bold text-white">Chat</h1>
+          <div className="flex items-center gap-x-3">
+            <img
+              src={dataRoom.photo !== "" ? dataRoom.photo : defaultImg}
+              alt="photo-profile"
+              className="size-10 rounded-full"
+            />
+            <h1 className="text-center text-base font-medium text-white">{dataRoom.name}</h1>
+          </div>
           <div className="flex items-center gap-x-5">
             <button
               className="hover:bg-teal-400 duration-300 p-2 rounded-lg"
@@ -126,7 +122,7 @@ const PopupChat = () => {
           <div className="flex flex-col space-y-3 p-4">
             {messages.map((msg, index) => (
               <>
-                {msg.sender_id === user.id ?? msg.receiver_id === user.id ? (
+                {msg.sender_id === user.id ? (
                   <div className="max-w-[80%] flex flex-col  items-start self-end" key={index}>
                     <div className="self-end rounded-xl rounded-tr border bg-[#eb675312] py-2 px-3 w-full">
                       {msg.message}

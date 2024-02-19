@@ -8,27 +8,26 @@ export const WebsocketContext = createContext<{
   setConn: (c: Conn) => void;
   chatOpen: boolean;
   setChatOpen: (b: boolean) => void;
-  lastMsg: { roomId: string; message: string }[];
-  setLastMsg: Dispatch<SetStateAction<{ roomId: string; message: string }[]>>;
+  dataRoom: Partial<{ name: string; photo: string }>;
+  setDataRoom: Dispatch<SetStateAction<Partial<{ name: string; photo: string }>>>;
 }>({
   conn: null,
   setConn: () => {},
   chatOpen: false,
   setChatOpen: () => boolean,
-  lastMsg: [{ roomId: "", message: "" }],
-  setLastMsg: () => {},
+  dataRoom: {},
+  setDataRoom: () => {},
 });
 
 const WebSocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [chatOpen, setChatOpen] = useState(false);
   const [conn, setConn] = useState<Conn>(null);
-  const [lastMsg, setLastMsg] = useState<{ roomId: string; message: string }[]>([]);
-
+  const [dataRoom, setDataRoom] = useState<Partial<{ name: string; photo: string }>>({});
   return (
     <WebsocketContext.Provider
       value={{
-        lastMsg,
-        setLastMsg,
+        dataRoom,
+        setDataRoom,
         chatOpen,
         setChatOpen,
         conn: conn,
