@@ -114,6 +114,26 @@ const ProfileOwner = () => {
     const gender = formData.gender;
     const email = formData.email;
     e.preventDefault();
+
+    const specialCharsRegex = /[^a-zA-Z0-9_]+/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,3}$/;
+
+    if (specialCharsRegex.test(name) || specialCharsRegex.test(user_name)) {
+      toast({
+        variant: "destructive",
+        description: "Name dan User Name hanya boleh berisi huruf, angka, dan underscore",
+      });
+      return;
+    }
+
+    if (!emailRegex.test(email)) {
+      toast({
+        variant: "destructive",
+        description: "Format email tidak valid. Email harus berakhir dengan .com, .net, .org, atau ekstensi domain lainnya yang berukuran 2 atau 3 karakter.",
+      });
+      return;
+    }
+
     try {
       const formData = new FormData();
       if (selectedImage) {
@@ -145,6 +165,14 @@ const ProfileOwner = () => {
 
   const changePassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (formPassword.new_password.length < 6) {
+      toast({
+        variant: "destructive",
+        description: "Password baru harus terdiri dari setidaknya 6 karakter",
+      });
+      return;
+    }
+
     if (formPassword.new_password === formPassword.konfirmasi_password) {
       try {
         const response = await axios.put(
@@ -164,7 +192,7 @@ const ProfileOwner = () => {
       } catch (error: any) {
         toast({
           variant: "destructive",
-          description: (error as Error).message,
+          description: "Password saat ini yang anda Masukan Invalid",
         });
       }
     } else {
@@ -313,7 +341,7 @@ const ProfileOwner = () => {
                               onChange={handlePerubahan}
                               value={formData.email}
                               required
-                              type="text"
+                              type="email"
                               placeholder="Masukan Email"
                               className="grow  focus:outline-none w-[45vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 text-zinc-900 max-md:pr-5"
                             />
