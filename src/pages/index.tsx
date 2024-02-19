@@ -8,7 +8,7 @@ import message from "@/assets/message.png";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { useNavigate } from "react-router-dom";
 import { getKosRecomend } from "@/utils/apis/kos/api";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IKosRecomend } from "@/utils/apis/kos/types";
 import { toast } from "@/components/ui/use-toast";
 import Homepage from "@/components/skeletons/Homepage";
@@ -18,6 +18,8 @@ import jakartaPusat from "@/assets/jakarta3.png";
 import jakartaTimur from "@/assets/jakarta4.png";
 import jakartaSelatan from "@/assets/jakarta5.png";
 import NumberFormatter from "@/components/NumberFormatter";
+import Autoplay from "embla-carousel-autoplay";
+
 const App = () => {
   const navigate = useNavigate();
   const [kosRecomend, setkosRecomend] = useState<IKosRecomend[]>();
@@ -44,6 +46,8 @@ const App = () => {
   const handleSearch = (e: any) => {
     navigate("/searchmenu", { state: { data: e.target[0].value } });
   };
+
+  const plugin = React.useRef(Autoplay({ delay: 4000 }));
 
   return (
     <Layout>
@@ -131,9 +135,12 @@ const App = () => {
         <section className="flex flex-col gap-y-[60px] items-center justify-center py-20 ">
           <h1 className="text-4xl font-medium">Rekomendasi Kos</h1>
           <Carousel
-            className="p-5 "
+            className="p-5"
+            plugins={[plugin.current]}
+            onMouseEnter={plugin.current.stop}
+            onMouseLeave={plugin.current.play}
             opts={{
-              align: "center",
+              align: "start",
               loop: true,
             }}
           >
@@ -245,5 +252,4 @@ const App = () => {
     </Layout>
   );
 };
-
 export default App;
