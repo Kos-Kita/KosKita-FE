@@ -1,4 +1,4 @@
-import brandLogo from "@/assets/koskitaa.png";
+import brandLogo from "@/assets/brand.png";
 import { useAuth } from "@/utils/context/auth";
 import {
   DropdownMenu,
@@ -29,6 +29,7 @@ const Navbar = () => {
     try {
       const result: AxiosResponse<Response<IGetRoom[]>> = await axiosWithConfig.get("/get-room");
       setRooms(result.data.data);
+      console.log("OPEN MESSAGES: ", rooms);
     } catch (error) {
       console.log(error);
     }
@@ -47,7 +48,6 @@ const Navbar = () => {
         user.id === recieveId ? senderId : recieveId
       }`
     );
-    console.log(ws);
     if (ws.OPEN) {
       setConn(ws);
       setChatOpen(true);
@@ -60,9 +60,9 @@ const Navbar = () => {
         <img
           src={brandLogo}
           alt="Brand-logo"
-          width={100}
+          width={125}
           height={58}
-          className="cursor-pointer"
+          className="cursor-pointer "
           onClick={() => navigate("/")}
         />
         <ul className="flex items-center gap-x-10">

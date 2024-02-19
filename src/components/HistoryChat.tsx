@@ -1,7 +1,8 @@
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { ReactNode } from "react";
+import { ReactNode, useContext } from "react";
 import defaultImg from "@/assets/download.png";
 import { IGetRoom } from "@/utils/apis/chat/types";
+import { WebsocketContext } from "@/utils/context/ws-provider";
 
 interface HistoryChatProps {
   openHistoryCht: boolean;
@@ -17,6 +18,8 @@ const HistoryChat = ({
   children,
   onOpenChat,
 }: HistoryChatProps) => {
+  const { setDataRoom } = useContext(WebsocketContext);
+
   return (
     <Popover open={openHistoryCht} modal={openHistoryCht} onOpenChange={setOpenHistoryCht}>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
@@ -30,6 +33,7 @@ const HistoryChat = ({
               onClick={() => {
                 onOpenChat(room.room_id, room.sender_id, room.receiver_id),
                   setOpenHistoryCht(false);
+                setDataRoom({ name: room.name, photo: room.photo_profile });
               }}
             >
               <img

@@ -10,7 +10,6 @@ export interface IGetMessage {
   message: string;
   sender_id: number;
   receiver_id: number;
-  //   type: "recv" | "self";
 }
 
 export interface IRoomType {
