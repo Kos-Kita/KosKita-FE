@@ -124,7 +124,6 @@ const AlamatKos = ({ register, setValue, errors }: AlamatKosProps) => {
               className="border px-4 py-2 rounded-lg w-full"
               placeholder="Alamat"
               onClick={() => setSuggestOpen(!suggestOpen)}
-              // onChange={(e) => setSearchValue(e.target.value)}
               {...register("address", {
                 onChange: (e) => {
                   setSearchValue(e.target.value);

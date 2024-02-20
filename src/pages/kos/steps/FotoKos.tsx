@@ -1,4 +1,5 @@
 import { IKosDetail, IKosType } from "@/utils/apis/kos/types";
+import { UploadCloud } from "lucide-react";
 import { useEffect, useState } from "react";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 
@@ -42,7 +43,8 @@ const FotoKos = ({ register, errors, dataKos }: FotoKosProps) => {
             />
           ) : (
             <div className="border-dashed border-2 rounded-2xl p-8 text-sm text-center text-slate-500">
-              Click to browse or drag and drop your files
+              <UploadCloud className="mx-auto my-1 " />
+              <span>Click to browse or drag and drop your files</span>
             </div>
           )}
         </label>
@@ -74,7 +76,8 @@ const FotoKos = ({ register, errors, dataKos }: FotoKosProps) => {
             />
           ) : (
             <div className="border-dashed border-2 rounded-2xl p-8 text-sm text-center text-slate-500">
-              Click to browse or drag and drop your files
+              <UploadCloud className="mx-auto my-1" />
+              <span>Click to browse or drag and drop your files</span>
             </div>
           )}
         </label>
@@ -106,7 +109,8 @@ const FotoKos = ({ register, errors, dataKos }: FotoKosProps) => {
             />
           ) : (
             <div className="border-dashed border-2 rounded-2xl p-8 text-sm text-center text-slate-500">
-              Click to browse or drag and drop your files
+              <UploadCloud className="mx-auto my-1" />
+              <span>Click to browse or drag and drop your files</span>
             </div>
           )}
         </label>
@@ -138,7 +142,8 @@ const FotoKos = ({ register, errors, dataKos }: FotoKosProps) => {
             />
           ) : (
             <div className="border-dashed border-2 rounded-2xl p-8 text-sm text-center text-slate-500">
-              Click to browse or drag and drop your files
+              <UploadCloud className="mx-auto my-1" />
+              <span>Click to browse or drag and drop your files</span>
             </div>
           )}
         </label>
@@ -170,7 +175,8 @@ const FotoKos = ({ register, errors, dataKos }: FotoKosProps) => {
             />
           ) : (
             <div className="border-dashed border-2 rounded-2xl p-8 text-sm text-center text-slate-500">
-              Click to browse or drag and drop your files
+              <UploadCloud className="mx-auto my-1" />
+              <span>Click to browse or drag and drop your files</span>
             </div>
           )}
         </label>
