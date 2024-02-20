@@ -236,7 +236,7 @@ const ProfileOwner = () => {
           <div className="flex flex-col px-8 pb-4 bg-white shadow-sm h-screen">
             <div className="self-center w-full max-w-[1353px] max-md:max-w-full">
               <div className="flex gap-5 max-md:flex-col max-md:gap-0 max-md:">
-                <div className="flex flex-col 2xl:w-[40vw] w-[40%] max-md:ml-0 max-md:w-full">
+                <div className="flex flex-col 2xl:w-[40vw] h-[40vh] w-[40%] max-md:ml-0 max-md:w-full">
                   {loading ? (
                     <SkeletonProfile />
                   ) : (

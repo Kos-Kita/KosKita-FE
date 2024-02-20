@@ -316,7 +316,7 @@ const ProfileRenter = () => {
         <div className="flex flex-col min-h-[80vh] justify-center items-center px-8 pb-4 overflow-y-scroll bg-white shadow-sm ">
           <div className="self-center w-full max-w-[1353px] max-md:max-w-full">
             <div className="flex gap-5 max-md:flex-col max-md:gap-0 max-md:">
-              <div className="flex flex-col 2xl:w-[40vw] w-[40%] max-md:ml-0 max-md:w-full">
+              <div className="flex flex-col 2xl:w-[40vw] h-[40vh] w-[40%] max-md:ml-0 max-md:w-full">
                 <div className="flex flex-col grow py-11 pr-12 pl-6 w-full text-base leading-7 bg-white rounded border border-solid shadow-sm border-stone-400 max-md:px-5 max-md:mt-6 max-md:max-w-full">
                   <form onSubmit={updateProfile}>
                     <div className="flex justify-center items-center px-7 text-sm font-medium leading-6 text-black whitespace-nowrap bg-white rounded max-md:px-5 max-md:max-w-full">
