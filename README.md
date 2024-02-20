@@ -12,7 +12,7 @@ KosKita adalah aplikasi yang dirancang untuk memudahkan pengguna dalam mencari d
 
 
 ## 🌐 Deployment
- - [VERCEL](https://koskita.netlify.app/)
+ - [NETLIFY](https://koskita.netlify.app/)
 
 ## 🖼 Prototype
 - [FIGMA](https://www.figma.com/file/SLA82Dp0aP8QOWOSRlJqCE/Kost?type=design&node-id=102%3A323&mode=design&t=NVcmjZWyVzodr9FS-1)
