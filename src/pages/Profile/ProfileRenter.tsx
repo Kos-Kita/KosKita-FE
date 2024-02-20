@@ -11,7 +11,8 @@ import RatingPopup from "./RatingPopup";
 import { useAuth } from "@/utils/context/auth";
 import NumberFormatter from "@/components/NumberFormatter";
 import logo from "../../assets/koskitaa.png";
-import { calculateEndDate } from "../Payment/functions";
+import { calculateEndDate } from "../payment/functions";
+import configUrl from "../../../config";
 
 const ProfileRenter = () => {
   const [rating, showRating] = useState<boolean>(false);
@@ -30,7 +31,7 @@ const ProfileRenter = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
-  const baseurl = import.meta.env.VITE_BASE_URL;
+  const baseurl = configUrl;
   const token = localStorage.getItem("token");
   const [formData, setformData] = useState<profile>({
     name: "",
@@ -157,7 +158,6 @@ const ProfileRenter = () => {
         variant: "destructive",
         description: `Error, Anda Harus Mengupload Image dulu`,
       });
-      console.log(error);
     }
   };
 
@@ -220,7 +220,6 @@ const ProfileRenter = () => {
         }
       }
     } catch (error: any) {
-      console.log(error);
       toast({
         variant: "destructive",
         description: error.response.data.message,

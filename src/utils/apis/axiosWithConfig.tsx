@@ -1,4 +1,5 @@
 import axios from "axios";
+import configUrl from "../../../config";
 
 let JWT_TOKEN = "";
 
@@ -9,7 +10,7 @@ export const setAxiosConfig = (token: string) => {
 };
 
 axiosWithConfig.interceptors.request.use((axiosConfig) => {
-  axiosConfig.baseURL = import.meta.env.VITE_BASE_URL;
+  axiosConfig.baseURL = configUrl.baseurl;
   axiosConfig.headers.Authorization = `Bearer ${JWT_TOKEN}`;
 
   return axiosConfig;

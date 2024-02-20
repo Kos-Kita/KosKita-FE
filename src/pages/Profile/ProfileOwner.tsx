@@ -11,6 +11,7 @@ import axios from "axios";
 import { changePassword } from "@/utils/types/type";
 import AlertDelete from "@/components/AlertDelete";
 import { useAuth } from "@/utils/context/auth";
+import configUrl from "../../../config";
 
 const ProfileOwner = () => {
   const [dataKos, setDataKos] = useState<IMyKosType[]>();
@@ -33,14 +34,12 @@ const ProfileOwner = () => {
       setLoading(false);
     }
   };
-  console.log(dataKos);
 
-  // const [status, setStatus] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
-  const baseurl = import.meta.env.VITE_BASE_URL;
+  const baseurl = configUrl;
   const token = localStorage.getItem("token");
   const [formData, setformData] = useState<profile>({
     name: "",

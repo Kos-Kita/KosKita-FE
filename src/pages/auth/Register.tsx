@@ -7,6 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "@/utils/apis/auth/types";
+import configUrl from "../../../config";
 
 const Register = () => {
   const [searchParams, _setSearchParams] = useSearchParams();
@@ -14,7 +15,7 @@ const Register = () => {
   const [showPassword, setPassword] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const baseurl = import.meta.env.VITE_BASE_URL;
+  const baseurl = configUrl;
 
   const {
     register,
