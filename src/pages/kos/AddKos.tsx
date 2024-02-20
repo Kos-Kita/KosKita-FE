@@ -24,7 +24,7 @@ const AddKos = () => {
     handleSubmit,
     setValue,
     reset,
-    // trigger,
+
     formState: { errors, isSubmitting },
   } = useForm<IKosType>({
     resolver: zodResolver(kosSchema),
@@ -77,31 +77,7 @@ const AddKos = () => {
 
   const handleNextStep = async () => {
     if (Number(stepTab) === 4) return;
-    // console.log(await trigger("kos_name"));
-    // switch (Number(stepTab)) {
-    //   case 1:
-    //     const test1 = [
-    //       trigger("kos_name"),
-    //       trigger("description"),
-    //       trigger("category"),
-    //       trigger("kos_rules"),
-    //       trigger("kos_facilities"),
-    //     ];
-    //     console.log(test1);
-    //     break;
-    //   case 2:
-    //     trigger("main_kos_photo");
-    //     trigger("front_kos_photo");
-    //     trigger("back_kos_photo");
-    //     trigger("front_room_photo");
-    //     trigger("inside_room_photo");
-    //     break;
-    //   case 3:
-    //     trigger("address");
-    //     break;
-    //   default:
-    //     break;
-    // }
+
     searchParam.set("step", `${Number(stepTab) + 1}`);
     setSearchParam(searchParam);
   };
