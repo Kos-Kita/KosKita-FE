@@ -100,7 +100,7 @@ const DetailKos = () => {
   const joinRoom = async () => {
     try {
       const result: AxiosResponse<Response<IGetRoom[]>> = await axiosWithConfig.get("/get-room");
-      console.log("Get Rooms : ", result.data);
+      // console.log("Get Rooms : ", result.data);
       if (result.status === 200) {
         setDataRoom({ name: data?.user.user_name, photo: data?.user.photo_profile });
 
@@ -111,9 +111,9 @@ const DetailKos = () => {
             const isReceiverIdMatch = value.receiver_id === data?.user.id;
             return isSenderIdMatch && isReceiverIdMatch;
           });
-        console.log("Exist Room : ", existRoom);
+        // console.log("Exist Room : ", existRoom);
         if (existRoom) {
-          console.log("Join Room");
+          // console.log("Join Room");
           const ws = new WebSocket(
             `wss://l3n.my.id/join-room/${existRoom?.room_id}?senderId=${existRoom.sender_id}&receiverId=${existRoom.receiver_id}`
           );
@@ -123,7 +123,7 @@ const DetailKos = () => {
             return;
           }
         } else {
-          console.log("Create Room");
+          // console.log("Create Room");
           const res: AxiosResponse<Response<{ room_id: string }>> = await axios.post(
             `${import.meta.env.VITE_BASE_URL}/create-room`,
             {
