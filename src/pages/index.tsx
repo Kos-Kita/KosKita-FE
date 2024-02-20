@@ -172,7 +172,7 @@ const App = () => {
                               </span>
                               <div className="flex items-center  rounded-xl gap-x-2">
                                 <Star color="white" fill={"green"} size={16} />
-                                <span className="text-sm">{data.rating}</span>
+                                <span className="text-sm">{data.rating.toFixed(1)}</span>
                               </div>
                             </div>
                             <h3 className="font-semibold -mt-2 text-xl w-full ">{data.kos_name}</h3>

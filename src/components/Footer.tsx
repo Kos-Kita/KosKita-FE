@@ -1,4 +1,4 @@
-import brandLogo from "@/assets/koskitaa.png";
+import brandLogo from "@/assets/brand.png";
 
 const Footer = () => {
   return (

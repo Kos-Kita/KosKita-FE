@@ -11,7 +11,7 @@ import {
   GraduationCap,
   Hammer,
   HandCoins,
-  LocateFixed,
+  MapPin,
   MoonStar,
   PartyPopper,
   PersonStanding,
@@ -185,7 +185,7 @@ const DetailKos = () => {
         <section className="py-10 px-5 2xl:px-0">
           <div className="flex items-start justify-between container 2xl:max-w-[100rem] mx-auto">
             <div className="flex flex-col gap-y-7 max-w-[50rem]">
-              <div className="flex items-center  gap-x-6">
+              <div className="flex items-center gap-x-6">
                 <h1 className="text-4xl font-medium">{data?.kos_name}</h1>
                 <div className="flex items-center gap-x-2 rounded  p-2">
                   <Star
@@ -194,12 +194,12 @@ const DetailKos = () => {
                     className="stroke-slate-100 drop-shadow-sm"
                     size={20}
                   />
-                  <span>{data?.rating}.0</span>
+                  <span>{data?.rating.toFixed(1)}</span>
                 </div>
                 <span className="py-1 px-4 uppercase border rounded-lg">{data?.category}</span>
               </div>
               <div className="flex items-center gap-x-1">
-                <LocateFixed />
+                <MapPin size={20} className="w-8" />
                 <span>{data?.address}</span>
               </div>
               <div className="flex flex-col ">

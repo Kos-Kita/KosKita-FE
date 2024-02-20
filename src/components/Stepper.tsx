@@ -6,14 +6,22 @@ interface StepperProps {
 }
 
 const Stepper = ({ steps }: StepperProps) => {
-  const [searchParams, _setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const stepTab = searchParams.get("step");
-
+  const handlePrevStep = (index: number) => {
+    if (index > Number(stepTab) + 1) return;
+    searchParams.set("step", `${index}`);
+    setSearchParams(searchParams);
+  };
   return (
     <div className="flex items-center gap-x-2">
       {steps.map((step, index) => (
         <>
-          <div className="flex flex-col items-center relative" key={index}>
+          <div
+            className="flex flex-col items-center relative cursor-pointer"
+            onClick={() => handlePrevStep(index + 1)}
+            key={index}
+          >
             <span
               className={`border ${
                 index + 1 <= Number(stepTab) ? "border-[#4CA02E]" : "border-[#A1AEBE]"
