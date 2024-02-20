@@ -236,7 +236,7 @@ const ProfileOwner = () => {
           <div className="flex flex-col px-8 pb-4 bg-white shadow-sm h-screen">
             <div className="self-center w-full max-w-[1353px] max-md:max-w-full">
               <div className="flex gap-5 max-md:flex-col max-md:gap-0 max-md:">
-                <div className="flex flex-col w-[40%] max-md:ml-0 max-md:w-full">
+                <div className="flex flex-col 2xl:w-[40vw] h-[40vh] w-[40%] max-md:ml-0 max-md:w-full">
                   {loading ? (
                     <SkeletonProfile />
                   ) : (
@@ -301,7 +301,7 @@ const ProfileOwner = () => {
                               value={formData.name}
                               type="text"
                               placeholder="Masukan Nama"
-                              className=" grow focus:outline-none w-[45vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400"
+                              className=" grow focus:outline-none w-[45vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400"
                             />
                           </div>
                         </div>
@@ -309,7 +309,12 @@ const ProfileOwner = () => {
                         <div className="flex gap-5 justify-between mt-5 text-zinc-900 max-md:flex-wrap max-md:max-w-full">
                           <div className="flex-auto self-center">Jenis Kelamin</div>
                           <div className="input-container">
-                            <select id="gender" onChange={handlePerubahan} value={formData.gender} className="grow focus:outline-none w-[45vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5">
+                            <select
+                              id="gender"
+                              onChange={handlePerubahan}
+                              value={formData.gender}
+                              className="grow focus:outline-none w-[45vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5"
+                            >
                               <option value="" disabled>
                                 Pilih Jenis Kelamin
                               </option>
@@ -329,7 +334,7 @@ const ProfileOwner = () => {
                               required
                               type="text"
                               placeholder="Masukan Username"
-                              className="grow  focus:outline-none w-[45vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5"
+                              className="grow  focus:outline-none w-[45vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5"
                             />
                           </div>
                         </div>
@@ -343,7 +348,7 @@ const ProfileOwner = () => {
                               required
                               type="email"
                               placeholder="Masukan Email"
-                              className="grow  focus:outline-none w-[45vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 text-zinc-900 max-md:pr-5"
+                              className="grow  focus:outline-none w-[45vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 text-zinc-900 max-md:pr-5"
                             />
                           </div>
                         </div>
@@ -366,7 +371,7 @@ const ProfileOwner = () => {
                   )}
                 </div>
 
-                <div className="flex flex-col ml-5 md:ml-0 w-[60%] max-md:ml-0 max-md:w-full border-2 border-slate-200  py-6">
+                <div className="flex flex-col ml-5 md:ml-0 2xl:w-[80vw] w-[60%] max-md:ml-0 max-md:w-full border-2 border-slate-200  py-6">
                   {loading ? (
                     <SkeletonCard />
                   ) : (
@@ -419,7 +424,7 @@ const ProfileOwner = () => {
                           </div>
                           <div
                             onClick={() => navigate("/buat-kos")}
-                            className="justify-center items-center self-end px-16 py-6 mt-7 mr-6 max-w-full text-center text-white whitespace-nowrap bg-lime-600 rounded-sm shadow-sm leading-[171%] w-[476px] max-md:px-5 max-md:mr-2.5"
+                            className="justify-center items-center self-center px-16 py-6 mt-7 mr-6 max-w-full text-center text-white whitespace-nowrap bg-lime-600 rounded-sm shadow-sm leading-[171%] w-[476px] max-md:px-5 max-md:mr-2.5"
                           >
                             Mulai Buat Kos
                           </div>
