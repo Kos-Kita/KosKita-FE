@@ -62,7 +62,6 @@ const AlamatKos = ({ register, setValue, errors }: AlamatKosProps) => {
       );
       const locationInfo = response.data;
       setDataLoc(locationInfo);
-      console.log("Location Info:", locationInfo);
     } catch (error) {
       console.error("Error fetching location info:", error);
     }
