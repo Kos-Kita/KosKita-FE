@@ -15,11 +15,7 @@ const HargaKos = ({ register, errors }: HargaKosProps) => {
         <div className="flex flex-col gap-y-3 w-full">
           <input
             {...register("price", {
-              setValueAs: (v) => {
-                if (typeof v === "string") {
-                  v = Number(v);
-                }
-              },
+              valueAsNumber: true,
             })}
             type="text"
             id="harga"
@@ -35,11 +31,7 @@ const HargaKos = ({ register, errors }: HargaKosProps) => {
         <div className="flex flex-col gap-y-3 w-full">
           <input
             {...register("rooms", {
-              setValueAs: (v) => {
-                if (typeof v === "string") {
-                  v = Number(v);
-                }
-              },
+              valueAsNumber: true,
             })}
             type="text"
             id="JumlahKos"
