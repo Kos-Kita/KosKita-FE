@@ -24,7 +24,7 @@ const AddKos = () => {
     handleSubmit,
     setValue,
     reset,
-    trigger,
+    // trigger,
     formState: { errors, isSubmitting },
   } = useForm<IKosType>({
     resolver: zodResolver(kosSchema),
