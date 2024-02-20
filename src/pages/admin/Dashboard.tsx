@@ -68,7 +68,6 @@ const Dashboard = () => {
         total_kos: data.total_kos,
         total_booking_per_month: data.total_booking_per_month,
       });
-      console.log(dataBook.total_booking_per_month[0]);
       if (response) {
         toast({
           description: "Berhasil mendapatkan data",

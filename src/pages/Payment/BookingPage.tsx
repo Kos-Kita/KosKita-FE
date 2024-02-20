@@ -7,9 +7,9 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { detail } from "@/utils/types/type";
 import { detailPayment } from "@/utils/types/type";
-import { formatTime } from "./functions";
 import { pembayaranType } from "@/utils/types/type";
-import { calculateEndDate } from "./functions";
+import { calculateEndDate, formatTime } from "./functions";
+import configUrl from "../../../config";
 
 const BookingPage = () => {
   const location = useLocation();
@@ -18,7 +18,7 @@ const BookingPage = () => {
   const endDate = calculateEndDate(startDate);
   const resultStartDate = `${new Date(startDate).toLocaleDateString()}`;
   const resultEndDate = `${new Date(endDate).toLocaleDateString()}`;
-  const baseurl = import.meta.env.VITE_BASE_URL;
+  const baseurl = configUrl;
   const [showPopup, setShowPopup] = useState<Boolean>(false);
   const { user } = useAuth();
   const token = localStorage.getItem("token");
@@ -91,7 +91,6 @@ const BookingPage = () => {
         total: response.data.data.total,
         virtual_number: response.data.data.virtual_number,
       });
-      console.log(response);
       setShowPopup(!showPopup);
     } catch (error: any) {
       toast({
