@@ -2,14 +2,15 @@ import Layout from "@/components/Layout";
 import NumberFormatter from "@/components/NumberFormatter";
 import { toast } from "@/components/ui/use-toast";
 import { useAuth } from "@/utils/context/auth";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { detail } from "@/utils/types/type";
-import { detailPayment } from "@/utils/types/type";
-import { pembayaranType } from "@/utils/types/type";
-import { calculateEndDate, formatTime } from "./functions";
-import configUrl from "../../../config";
+import { detail } from "@/utils/apis/payment/type";
+import { detailPayment } from "@/utils/apis/payment/type";
+import { paymentType } from "@/utils/apis/payment/type";
+import { calculateEndDate, formatTime } from "@/utils/apis/payment/functions";
+import { copyToClipboard } from "@/utils/apis/payment/functions";
+import { ChangeEvent } from "react";
+import { getDataBooking, postDataBooking } from "@/utils/apis/payment/api";
 
 const BookingPage = () => {
   const location = useLocation();
@@ -18,43 +19,21 @@ const BookingPage = () => {
   const endDate = calculateEndDate(startDate);
   const resultStartDate = `${new Date(startDate).toLocaleDateString()}`;
   const resultEndDate = `${new Date(endDate).toLocaleDateString()}`;
-  const baseurl = configUrl;
   const [showPopup, setShowPopup] = useState<Boolean>(false);
   const { user } = useAuth();
-  const token = localStorage.getItem("token");
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
   const [popupTimer, setPopupTimer] = useState<number>(24 * 60 * 60 * 1000);
-  const handlePaymentMethodChange = (event: any) => {
-    setSelectedPaymentMethod(event.target.value);
-  };
   const [data, setData] = useState<detail>({
     price: "",
   });
 
-  const copyToClipboard = () => {
-    const vaCodeInput = document.createElement("input");
-    let valueToCopy = "";
-    if (dPayment.virtual_number) {
-      valueToCopy = dPayment.virtual_number;
-    }
-    vaCodeInput.value = valueToCopy;
-    document.body.appendChild(vaCodeInput);
-    vaCodeInput.select();
-    document.execCommand("copy");
-    document.body.removeChild(vaCodeInput);
-
-    toast({
-      description: "Berhasil disalin",
-    });
-  };
-
-  const [dPayment, setPayment] = useState<detailPayment>({
+  const [displayPayment, setDisplayPayment] = useState<detailPayment>({
     booking_code: "",
     virtual_number: "",
     total: "",
   });
 
-  const [pembayaran, setPembayaran] = useState<pembayaranType>({
+  const [payment, setPayment] = useState<paymentType>({
     payment_type: "",
     kos_id: 0,
     bank: "",
@@ -64,13 +43,16 @@ const BookingPage = () => {
 
   const getData = async () => {
     try {
-      const response = await axios.get(`${baseurl}/kos/${id}`);
-      setData(response.data.data);
-      setPembayaran((prev) => ({ ...prev, payment_type: "bank_transfer" }));
-      setPembayaran((prev) => ({ ...prev, bank: selectedPaymentMethod }));
-      setPembayaran((prev) => ({ ...prev, kos_id: id }));
-      setPembayaran((prev) => ({ ...prev, start_date: resultStartDate }));
-      setPembayaran((prev) => ({ ...prev, end_date: resultEndDate }));
+      const response = await getDataBooking(id);
+      setData(response);
+      setPayment((prev) => ({
+        ...prev,
+        payment_type: "bank_transfer",
+        bank: selectedPaymentMethod,
+        kos_id: id,
+        start_date: resultStartDate,
+        end_date: resultEndDate,
+      }));
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -81,15 +63,11 @@ const BookingPage = () => {
 
   const createPayment = async () => {
     try {
-      const response = await axios.post(`https://l3n.my.id/booking`, pembayaran, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setPayment({
-        booking_code: response.data.data.booking_id,
-        total: response.data.data.total,
-        virtual_number: response.data.data.virtual_number,
+      const response = await postDataBooking(payment);
+      setDisplayPayment({
+        booking_code: response.booking_id,
+        total: response.total,
+        virtual_number: response.virtual_number,
       });
       setShowPopup(!showPopup);
     } catch (error: any) {
@@ -98,10 +76,6 @@ const BookingPage = () => {
         description: "Server Pusat Terganggu coba Metode Pembayaran Lainnya",
       });
     }
-  };
-
-  const closePopup = () => {
-    setShowPopup(!showPopup);
   };
 
   useEffect(() => {
@@ -148,7 +122,11 @@ const BookingPage = () => {
                       </div>
                     </div>
                     <div className="flex gap-2.5 justify-between mt-10 text-sm leading-6 bg-white rounded-md  text-slate-900 max-md:flex-wrap max-md:max-w-full">
-                      <select value={selectedPaymentMethod} onChange={handlePaymentMethodChange} className="grow focus:outline-none w-[45vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5">
+                      <select
+                        value={selectedPaymentMethod}
+                        onChange={(e: ChangeEvent<HTMLSelectElement>) => setSelectedPaymentMethod(e.target.value)}
+                        className="grow focus:outline-none w-[45vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5"
+                      >
                         <option value="" disabled selected hidden>
                           Metode Pembayaran
                         </option>
@@ -193,19 +171,19 @@ const BookingPage = () => {
                             <p className="my-2 text-sm font-semibold">
                               Total Pembayaran:
                               <span className="font-bold text-lg ml-2">
-                                <NumberFormatter value={parseInt(dPayment.total)} />
+                                <NumberFormatter value={parseInt(displayPayment.total)} />
                               </span>
                             </p>
                             <div className="mb-4 bg-orange-200 p-3 flex items-center justify-between rounded text-lg font-bold">
-                              <span> Kode VA : {dPayment.virtual_number}</span>
-                              <img className="cursor-pointer h-[20px] w-[20px]" width="24" height="24" src="https://img.icons8.com/material-sharp/24/copy.png" alt="copy" onClick={copyToClipboard} />
+                              <span> Kode VA : {displayPayment.virtual_number}</span>
+                              <img className="cursor-pointer h-[20px] w-[20px]" width="24" height="24" src="https://img.icons8.com/material-sharp/24/copy.png" alt="copy" onClick={() => copyToClipboard(displayPayment.virtual_number)} />
                             </div>
 
                             <p className="my-2 text-sm flex justify-end">
                               Waktu Berakhir: <span className="text-red-500 ml-2"> {formatTime(popupTimer)}</span>
                             </p>
                             <div className="flex gap-3">
-                              <button className="bg-gray-500 text-white px-4 py-2 mt-5 rounded hover:bg-gray-600" onClick={closePopup}>
+                              <button className="bg-gray-500 text-white px-4 py-2 mt-5 rounded hover:bg-gray-600" onClick={() => setShowPopup(!showPopup)}>
                                 Tutup
                               </button>
                             </div>

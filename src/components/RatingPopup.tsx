@@ -5,12 +5,11 @@ const RatingPopup = ({ show, onClose, onRate }: any) => {
   const [pendingRating, setPendingRating] = useState(0);
 
   const handleRate = (value: number) => {
-    setPendingRating(value); // Menyimpan rating yang belum terkirim
-    setRating(value); // Menampilkan rating yang dipilih
+    setPendingRating(value);
+    setRating(value);
   };
 
   const handleSubmitRating = () => {
-    // Mengirimkan rating yang belum terkirim ketika tombol "Submit Rating" diklik
     if (pendingRating > 0) {
       onRate(pendingRating);
     }

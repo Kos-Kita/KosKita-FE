@@ -1,34 +1,11 @@
-import BookingChart from "./Bookingchart";
+import BookingChart from "@/components/bookingchart";
 import Layout from "@/components/Layout";
 import { useAuth } from "@/utils/context/auth";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { toast } from "@/components/ui/use-toast";
 import icon from "../../assets/Icon.png";
-
-interface dataBookType {
-  total_user: string;
-  total_booking: string;
-  total_kos: string;
-  total_booking_per_month:
-    | any
-    | [
-        {
-          Januari: string;
-          Februari: string;
-          Maret: string;
-          April: string;
-          Mei: string;
-          Juni: string;
-          Juli: string;
-          Agustus: string;
-          September: string;
-          Oktober: string;
-          November: string;
-          Desember: string;
-        }
-      ];
-}
+import { dataBookType } from "@/utils/apis/admin/type";
+import { dataBookTotal } from "@/utils/apis/admin/api";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -52,21 +29,15 @@ const Dashboard = () => {
     dataBook.total_booking_per_month.November,
     dataBook.total_booking_per_month.Desember,
   ];
-  const token = localStorage.getItem("token");
 
   const getDataBook = async () => {
     try {
-      const response = await axios.get(`https://l3n.my.id/admin`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = response.data.data;
+      const response = await dataBookTotal();
       setDataBook({
-        total_user: data.total_user,
-        total_booking: data.total_booking,
-        total_kos: data.total_kos,
-        total_booking_per_month: data.total_booking_per_month,
+        total_user: response.total_user,
+        total_booking: response.total_booking,
+        total_kos: response.total_kos,
+        total_booking_per_month: response.total_booking_per_month,
       });
       if (response) {
         toast({

@@ -36,3 +36,7 @@ export interface changePassword {
   new_password: string;
   konfirmasi_password: string;
 }
+
+export interface bookingChartProps {
+  data: number[];
+}

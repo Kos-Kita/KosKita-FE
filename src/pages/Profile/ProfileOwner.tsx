@@ -6,41 +6,21 @@ import { getMyKos } from "@/utils/apis/user/api";
 import { IMyKosType } from "@/utils/apis/user/types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { profile } from "@/utils/types/type";
-import axios from "axios";
-import { changePassword } from "@/utils/types/type";
+import { profile, changePassword } from "@/utils/apis/profile/type";
 import AlertDelete from "@/components/AlertDelete";
 import { useAuth } from "@/utils/context/auth";
-import configUrl from "../../../config";
+import { getProfileSync, deleteProfileSync, updateProfileSync, changePasswordSync } from "@/utils/apis/profile/api";
 
 const ProfileOwner = () => {
   const [dataKos, setDataKos] = useState<IMyKosType[]>();
   const [loading, setLoading] = useState(false);
   const { changeToken } = useAuth();
-  useEffect(() => {
-    getDataKos();
-  }, []);
-  const getDataKos = async () => {
-    try {
-      setLoading(true);
-      const result = await getMyKos();
-      setDataKos(result.data);
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        description: (error as Error).message,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const [showPopup, setShowPopup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
-  const baseurl = configUrl;
-  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+
   const [formData, setformData] = useState<profile>({
     name: "",
     user_name: "",
@@ -48,7 +28,6 @@ const ProfileOwner = () => {
     email: "",
     photo_profile: "",
   });
-  const navigate = useNavigate();
 
   const [formPassword, setFormPassword] = useState<changePassword>({
     old_password: "",
@@ -60,21 +39,16 @@ const ProfileOwner = () => {
 
   const getProfile = async () => {
     try {
-      const response = await axios.get(`https://l3n.my.id/users`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = response.data.data;
+      const response = await getProfileSync();
       setformData({
-        name: data.name,
-        user_name: data.user_name,
-        gender: data.gender,
-        email: data.email,
-        photo_profile: data.photo_profile,
+        name: response.name,
+        user_name: response.user_name,
+        gender: response.gender,
+        email: response.email,
+        photo_profile: response.photo_profile,
       });
-      if (data.photo_profile) {
-        setUploadedImageUrl(data.photo_profile);
+      if (response.photo_profile) {
+        setUploadedImageUrl(response.photo_profile);
       }
     } catch (error) {
       toast({
@@ -86,11 +60,7 @@ const ProfileOwner = () => {
 
   const deleteProfile = async () => {
     try {
-      const response = await axios.delete(`${baseurl}/users`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await deleteProfileSync();
       if (response) {
         changeToken();
         navigate("/login");
@@ -107,13 +77,11 @@ const ProfileOwner = () => {
   };
 
   const updateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
-    const token = localStorage.getItem("token");
     const name = formData.name;
     const user_name = formData.user_name;
     const gender = formData.gender;
     const email = formData.email;
     e.preventDefault();
-
     const specialCharsRegex = /[^a-zA-Z0-9_]+/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,3}$/;
 
@@ -142,14 +110,9 @@ const ProfileOwner = () => {
         formData.append("gender", gender);
         formData.append("email", email);
       }
-      const response = await axios.put(`${baseurl}/users`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await updateProfileSync(formData);
       setUploadedImageUrl(response.data.photo_profile);
-      if (response) {
+      if (response.data) {
         toast({
           description: "Data telah Berhasil diubah",
         });
@@ -174,15 +137,7 @@ const ProfileOwner = () => {
 
     if (formPassword.new_password === formPassword.konfirmasi_password) {
       try {
-        const response = await axios.put(
-          `${baseurl}/change-password`,
-          { new_password: formPassword.new_password, old_password: formPassword.old_password },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await changePasswordSync(formPassword.new_password, formPassword.old_password);
         if (response) {
           toast({
             description: "Berhasil merubah Password",
@@ -201,12 +156,19 @@ const ProfileOwner = () => {
     }
   };
 
-  const handlePopup = () => {
-    setShowPopup(!showPopup);
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+  const getDataKos = async () => {
+    try {
+      setLoading(true);
+      const result = await getMyKos();
+      setDataKos(result.data);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        description: (error as Error).message,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -226,6 +188,7 @@ const ProfileOwner = () => {
 
   useEffect(() => {
     getProfile();
+    getDataKos();
   }, []);
 
   return (
@@ -353,7 +316,7 @@ const ProfileOwner = () => {
                         </div>
 
                         <div className="flex gap-5 justify-between items-start self-end mt-32 max-w-full w-full max-md:mt-10">
-                          <div className="flex-auto md:self-end md:mt-9 md:text-base text-sm text-sky-400 cursor-pointer" onClick={handlePopup}>
+                          <div className="flex-auto md:self-end md:mt-9 md:text-base text-sm text-sky-400 cursor-pointer" onClick={() => setShowPopup(!showPopup)}>
                             Ganti Password
                           </div>
                           <div className="flex gap-5 self-start text-center text-white whitespace-nowrap">
@@ -481,7 +444,7 @@ const ProfileOwner = () => {
                               }
                             />
 
-                            <span onClick={togglePasswordVisibility} className="mt-5">
+                            <span onClick={() => setShowPassword(!showPassword)} className="mt-5">
                               {!showPassword ? (
                                 <div className="flex gap-3 items-center">
                                   <img width="30" height="30" className="rounded-full border-2 p-1 border-slate-500" src="https://img.icons8.com/ios/50/closed-eye.png" alt="closed-eye" /> Tampilkan Password

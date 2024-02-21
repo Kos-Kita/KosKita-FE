@@ -1,5 +1,4 @@
 import Tabs from "@/components/Tabs";
-import axios from "axios";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +6,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "@/utils/apis/auth/types";
-import configUrl from "../../../config";
+import { registerSubmit } from "@/utils/apis/auth/api";
 
 const Register = () => {
   const [searchParams, _setSearchParams] = useSearchParams();
@@ -15,7 +14,6 @@ const Register = () => {
   const [showPassword, setPassword] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const baseurl = configUrl;
 
   const {
     register,
@@ -28,15 +26,7 @@ const Register = () => {
   const onSubmit = async (data: any) => {
     if (tabParam !== null) {
       try {
-        const response = await axios.post(`${baseurl}/users`, {
-          name: data.name,
-          user_name: data.user_name,
-          email: data.email,
-          password: data.password,
-          gender: data.gender,
-          role: tabParam,
-        });
-
+        const response = await registerSubmit(data);
         if (response) {
           toast({
             description: "Anda Berhasil Registrasi",

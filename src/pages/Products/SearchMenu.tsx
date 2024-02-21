@@ -1,32 +1,29 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import CardProduct, { searchKos } from "@/components/CardProduct";
 import Layout from "@/components/Layout";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
+import { getSearchMenu } from "@/utils/apis/products/api";
+import { buildQueryParams } from "@/utils/apis/products/functions";
+import { checkboxValuesType } from "@/utils/apis/products/type";
+import { calculatePagination } from "@/utils/apis/products/functions";
 
 const SearchMenu = () => {
   const { state } = useLocation();
   const [showCheckboxes, setShowCheckboxes] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [checkboxValues, setCheckboxValues] = useState({
+  const [showPagination, setShowPagination] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  const navigate = useNavigate();
+  const [checkboxValues, setCheckboxValues] = useState<checkboxValuesType>({
     putra: false,
     putri: false,
     hargaDibawah: false,
     hargaDiatas: false,
     campur: false,
   });
-  const baseurl = import.meta.env.VITE_BASE_URL;
-  const token = localStorage.getItem("token");
-  const [showPagination, setShowPagination] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    setSearchQuery(searchQuery === "" ? state?.data : searchQuery);
-  }, [state]);
 
   const handleCheckboxChange = (checkboxName: string) => {
     setCheckboxValues((prevValues: any) => ({
@@ -35,45 +32,10 @@ const SearchMenu = () => {
     }));
   };
 
-  const handleMoreFilterClick = () => {
-    setShowCheckboxes(!showCheckboxes);
-  };
-
-  const getSearch = async () => {
+  const handleSearchResults = async (queryParams: string) => {
     try {
-      const queryParams = new URLSearchParams();
-      if (searchQuery !== "") {
-        queryParams.set("address", searchQuery);
-      } else if (state?.data) {
-        queryParams.set("address", state.data);
-      }
-
-      const categories = [];
-      if (checkboxValues.putra) categories.push("putra");
-      if (checkboxValues.putri) categories.push("putri");
-      if (checkboxValues.campur) categories.push("campur");
-      if (categories.length > 0) {
-        queryParams.set("category", categories.join(","));
-      }
-
-      if (checkboxValues.hargaDibawah) {
-        queryParams.set("maxPrice", "1000000");
-        queryParams.set("minPrice", "0");
-      }
-
-      if (checkboxValues.hargaDiatas) {
-        queryParams.set("minPrice", "1000000");
-        queryParams.set("maxPrice", "5000000");
-      }
-      const url = `${baseurl}/kos/search/?${queryParams.toString()}`;
-      const response = await axios.get(url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      setSearchResults(response.data.data);
-      console.log(searchResults);
+      const response = await getSearchMenu(`?${queryParams}`);
+      setSearchResults(response);
       setShowCheckboxes(false);
     } catch (error: any) {
       setShowCheckboxes(false);
@@ -84,21 +46,27 @@ const SearchMenu = () => {
     }
   };
 
+  const getSearch = async () => {
+    const queryParams = buildQueryParams(searchQuery, state, checkboxValues);
+    await handleSearchResults(queryParams);
+  };
+
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSearchQuery(searchQuery);
     getSearch();
   };
 
+  const { totalPages, currentItems } = calculatePagination(currentPage, itemsPerPage, searchResults);
+
   useEffect(() => {
     setShowPagination(true);
     getSearch();
   }, []);
 
-  const totalPages = Math.ceil(searchResults.length / itemsPerPage);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = searchResults.slice(indexOfFirstItem, indexOfLastItem);
+  useEffect(() => {
+    setSearchQuery(searchQuery === "" ? state?.data : searchQuery);
+  }, [state]);
 
   return (
     <Layout>
@@ -117,7 +85,7 @@ const SearchMenu = () => {
               </div>
             </form>
 
-            <button onClick={handleMoreFilterClick} className="flex gap-5 md:text-base text-sm justify-center items-center p-3 w-[40%] md:w-1/6 my-4 border-[0.5px] text-white rounded-full bg-lime-600">
+            <button onClick={() => setShowCheckboxes(!showCheckboxes)} className="flex gap-5 md:text-base text-sm justify-center items-center p-3 w-[40%] md:w-1/6 my-4 border-[0.5px] text-white rounded-full bg-lime-600">
               <span>More Filters</span>
               <img width="20" height="20" src="https://img.icons8.com/badges/48/sort-down.png" alt="sort-down" />
             </button>
