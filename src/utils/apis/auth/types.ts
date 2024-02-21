@@ -1,12 +1,11 @@
 import * as z from "zod";
 const validGenders = ["laki-laki", "perempuan"];
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
 export const loginSchema = z.object({
   email: z.string().min(1, { message: "Email is required" }).email("Not a valid email"),
   password: z.string().min(1, { message: "Password is required" }),
 });
-
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
 export const registerSchema = z.object({
   name: z.string().min(3, { message: "name is required" }),

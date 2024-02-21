@@ -1,38 +1,31 @@
 import AlertDelete from "@/components/AlertDelete";
 import Layout from "@/components/Layout";
 import { toast } from "@/components/ui/use-toast";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { profile } from "@/utils/types/type";
-import { changePassword } from "@/utils/types/type";
+import { profile, changePassword } from "@/utils/apis/profile/type";
 import { useNavigate } from "react-router-dom";
 import { IMyKosType } from "@/utils/apis/user/types";
-import RatingPopup from "./RatingPopup";
 import { useAuth } from "@/utils/context/auth";
 import NumberFormatter from "@/components/NumberFormatter";
 import logo from "../../assets/koskitaa.png";
-import { calculateEndDate } from "../payment/functions";
-import configUrl from "../../../config";
+import RatingPopup from "@/components/RatingPopup";
+import { cancelBookingSync, cekKostSync, changePasswordSync, deleteProfileSync, getProfileSync, ratingSubmitSync, updateProfileSync } from "@/utils/apis/profile/api";
+import { calculateParsedDates, calculateResultEndDate } from "@/utils/apis/profile/functions";
 
 const ProfileRenter = () => {
   const [rating, showRating] = useState<boolean>(false);
   const [dataKos, setDataKos] = useState<IMyKosType[]>();
-  const endDate = dataKos?.map((item: any) => item.start_date);
-  const splitDates = endDate?.map((date: string) => date.split("/"));
-  const parsedDates = splitDates?.map((dateParts: string[]) => {
-    const [day, month, year] = dateParts;
-    return { day: parseInt(day), month: parseInt(month) - 1, year: parseInt(year) };
-  });
-  const startDate = parsedDates && parsedDates.length > 0 ? new Date(parsedDates[0].year, parsedDates[0].month, parsedDates[0].day) : new Date();
-  const resultEndDate = `${new Date(calculateEndDate(startDate)).toLocaleDateString()}`;
+  const startDate = dataKos ? calculateParsedDates(dataKos) : new Date();
+  const resultEndDate = calculateResultEndDate(startDate);
   const [status, setStatus] = useState(true);
   const { changeToken } = useAuth();
   const [showPopup, setShowPopup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
-  const baseurl = configUrl;
-  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+  const [showRatingPopup, setShowRatingPopup] = useState(false);
+  const [selectedKosId, setSelectedKosId] = useState<string | null>(null);
   const [formData, setformData] = useState<profile>({
     name: "",
     user_name: "",
@@ -40,9 +33,6 @@ const ProfileRenter = () => {
     email: "",
     photo_profile: "",
   });
-  const navigate = useNavigate();
-  const [showRatingPopup, setShowRatingPopup] = useState(false);
-  const [selectedKosId, setSelectedKosId] = useState<string | null>(null);
 
   const [formPassword, setFormPassword] = useState<changePassword>({
     old_password: "",
@@ -59,21 +49,16 @@ const ProfileRenter = () => {
 
   const getProfile = async () => {
     try {
-      const response = await axios.get(`https://l3n.my.id/users`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = response.data.data;
+      const response = await getProfileSync();
       setformData({
-        name: data.name,
-        user_name: data.user_name,
-        gender: data.gender,
-        email: data.email,
-        photo_profile: data.photo_profile,
+        name: response.name,
+        user_name: response.user_name,
+        gender: response.gender,
+        email: response.email,
+        photo_profile: response.photo_profile,
       });
-      if (data.photo_profile) {
-        setUploadedImageUrl(data.photo_profile);
+      if (response.photo_profile) {
+        setUploadedImageUrl(response.photo_profile);
       }
     } catch (error) {
       toast({
@@ -85,11 +70,7 @@ const ProfileRenter = () => {
 
   const deleteProfile = async () => {
     try {
-      const response = await axios.delete(`${baseurl}/users`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await deleteProfileSync();
       if (response) {
         changeToken();
         navigate("/login");
@@ -106,13 +87,11 @@ const ProfileRenter = () => {
   };
 
   const updateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
-    const token = localStorage.getItem("token");
     const name = formData.name;
     const user_name = formData.user_name;
     const gender = formData.gender;
     const email = formData.email;
     e.preventDefault();
-
     const specialCharsRegex = /[^a-zA-Z0-9_]+/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,3}$/;
 
@@ -141,14 +120,9 @@ const ProfileRenter = () => {
         formData.append("gender", gender);
         formData.append("email", email);
       }
-      const response = await axios.put(`${baseurl}/users`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await updateProfileSync(formData);
       setUploadedImageUrl(response.data.photo_profile);
-      if (response) {
+      if (response.data) {
         toast({
           description: "Data telah Berhasil diubah",
         });
@@ -173,15 +147,7 @@ const ProfileRenter = () => {
 
     if (formPassword.new_password === formPassword.konfirmasi_password) {
       try {
-        const response = await axios.put(
-          `${baseurl}/change-password`,
-          { new_password: formPassword.new_password, old_password: formPassword.old_password },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await changePasswordSync(formPassword.new_password, formPassword.old_password);
         if (response) {
           toast({
             description: "Berhasil merubah Password",
@@ -203,15 +169,7 @@ const ProfileRenter = () => {
   const handleRatingSubmit = async (kosId: string | null, rating: number) => {
     try {
       if (kosId) {
-        const response = await axios.post(
-          `${baseurl}/kos/${kosId}/rating`,
-          { score: rating },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await ratingSubmitSync(kosId, rating);
         if (response) {
           toast({
             description: "Berhasil menambahkan Rating",
@@ -222,7 +180,7 @@ const ProfileRenter = () => {
     } catch (error: any) {
       toast({
         variant: "destructive",
-        description: error.response.data.message,
+        description: "Kamu sudah Menambah Rating Sebelumnya",
       });
       showRating(true);
     } finally {
@@ -231,26 +189,14 @@ const ProfileRenter = () => {
     }
   };
 
-  const handlePopup = () => {
-    setShowPopup(!showPopup);
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
   const cekKost = async () => {
     try {
-      const response = await axios.get(`${baseurl}/booking`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.data.data.length < 1) {
+      const response = await cekKostSync();
+      if (response.length < 1) {
         setStatus(!status);
       } else {
         setStatus(!status);
-        setDataKos(response.data.data);
+        setDataKos(response);
       }
     } catch (error: any) {
       toast({
@@ -260,18 +206,9 @@ const ProfileRenter = () => {
     }
   };
 
-  const cancelBooking = async (bookingId: any) => {
+  const cancelBooking = async (bookingId: string) => {
     try {
-      const response = await axios.put(
-        `${baseurl}/booking/${bookingId}`,
-        { status: "cancelled" },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
+      const response = await cancelBookingSync(`${bookingId}`);
       if (response) {
         toast({
           description: "Pesanan dibatalkan",
@@ -416,7 +353,7 @@ const ProfileRenter = () => {
                     </div>
 
                     <div className="flex gap-5 justify-between items-start self-end mt-32 max-w-full w-full max-md:mt-10">
-                      <div className="flex-auto md:self-end md:mt-9 md:text-base text-sm text-sky-400 cursor-pointer" onClick={handlePopup}>
+                      <div className="flex-auto md:self-end md:mt-9 md:text-base text-sm text-sky-400 cursor-pointer" onClick={() => setShowPopup(!showPopup)}>
                         Ganti Password
                       </div>
                       <div className="flex gap-5 self-start text-center text-white whitespace-nowrap">
@@ -473,9 +410,9 @@ const ProfileRenter = () => {
                       {dataKos && (
                         <>
                           {dataKos &&
-                            dataKos.map((item: any) => (
+                            dataKos.map((item: any, index: number) => (
                               <>
-                                <div className=" md:pr-11 mt-11 overflow-hidden bg-zinc-100 rounded-[60px_60px_60px_12px] max-md:mt-10 max-md:max-w-full">
+                                <div key={index} className=" md:pr-11 mt-11 overflow-hidden bg-zinc-100 rounded-[60px_60px_60px_12px] max-md:mt-10 max-md:max-w-full">
                                   <div className="flex gap-3 max-md:flex-col  max-md:gap-0 max-md:">
                                     <div className="flex flex-col w-[55%] max-md:ml-0 max-md:w-full overflow-hidden">
                                       <img loading="lazy" srcSet={item.kos_main_foto ? item.kos_main_foto : `${logo}`} className="w-full md:h-full h-[12rem]  border-2 border-slate-100 " />
@@ -576,7 +513,7 @@ const ProfileRenter = () => {
                               onChange={(e: any) => setFormPassword((prev) => ({ ...prev, konfirmasi_password: e.target.value }))}
                             />
 
-                            <span onClick={togglePasswordVisibility} className="mt-5">
+                            <span onClick={() => setShowPassword(!showPassword)} className="mt-5">
                               {!showPassword ? (
                                 <div className="flex gap-3 items-center">
                                   <img width="30" height="30" className="rounded-full border-2 p-1 border-slate-500" src="https://img.icons8.com/ios/50/closed-eye.png" alt="closed-eye" /> Tampilkan Password

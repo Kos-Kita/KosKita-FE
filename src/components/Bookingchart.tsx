@@ -1,11 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
+import { bookingChartProps } from "@/utils/types/type";
 
-interface BookingChartProps {
-  data: number[];
-}
-
-const BookingChart: React.FC<BookingChartProps> = ({ data }) => {
+const BookingChart: React.FC<bookingChartProps> = ({ data }) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstance = useRef<Chart | null>(null);
 
@@ -23,7 +20,7 @@ const BookingChart: React.FC<BookingChartProps> = ({ data }) => {
             labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November"],
             datasets: [
               {
-                label: "Grafik Data Tahunan", // Nama grafik
+                label: "Grafik Data Tahunan",
                 data: data,
                 borderColor: "rgba(75, 192, 192, 1)",
                 backgroundColor: "rgba(75, 192, 192, 0.2)",

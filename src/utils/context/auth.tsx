@@ -1,4 +1,5 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 import axiosWithConfig, { setAxiosConfig } from "../apis/axiosWithConfig";
 import { IUserType } from "../apis/user/types";
@@ -21,7 +22,7 @@ const InitialState = {
 const AuthContext = createContext<Context>(InitialState);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setToken] = useState<string>(localStorage.getItem("token") ?? "");
+  const [token, setToken] = useState<string>(Cookies.get("token") ?? "");
   const [user, setUser] = useState<Partial<IUserType>>({});
 
   useEffect(() => {
@@ -51,9 +52,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const newToken = token ?? "";
     setToken(newToken);
     if (token) {
-      localStorage.setItem("token", newToken);
+      Cookies.set("token", newToken);
     } else {
-      localStorage.removeItem("token");
+      Cookies.remove("token");
       setUser({});
     }
   };
