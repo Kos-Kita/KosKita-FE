@@ -2,17 +2,17 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "../pages";
 import Login from "@/pages/auth/Login";
 import Register from "@/pages/auth/Register";
-import SearchMenu from "@/pages/products/SearchMenu";
-import ProfileRenter from "@/pages/profile/ProfileRenter";
-import ProfileOwner from "@/pages/profile/ProfileOwner";
 import AddKos from "@/pages/kos/AddKos";
 import DetailKos from "@/pages/kos/DetailKos";
-import BookingPage from "@/pages/payment/BookingPage";
 import EditKos from "@/pages/kos/EditKos";
 import Dashboard from "@/pages/admin/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import AboutUsPage from "@/pages/about/AboutPage";
 import ContactPage from "@/pages/about/ContactPage";
+import BookingPage from "@/pages/payment/BookingPage";
+import ProfileOwner from "@/pages/profile/ProfileOwner";
+import ProfileRenter from "@/pages/profile/ProfileRenter";
+import SearchMenu from "@/pages/products/SearchMenu";
 
 function App() {
   return (
