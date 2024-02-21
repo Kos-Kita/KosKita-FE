@@ -9,10 +9,10 @@ import Dashboard from "@/pages/admin/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import AboutUsPage from "@/pages/about/AboutPage";
 import ContactPage from "@/pages/about/ContactPage";
-import BookingPage from "@/pages/payment/BookingPage";
-import ProfileOwner from "@/pages/profile/ProfileOwner";
-import ProfileRenter from "@/pages/profile/ProfileRenter";
-import SearchMenu from "@/pages/products/SearchMenu";
+import BookingPage from "../pages/payment/BookingPage";
+import ProfileOwner from "../pages/profile/ProfileOwner";
+import ProfileRenter from "../pages/profile/ProfileRenter";
+import SearchMenu from "../pages/products/SearchMenu";
 
 function App() {
   return (
