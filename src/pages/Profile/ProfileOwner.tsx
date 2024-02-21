@@ -11,7 +11,6 @@ import AlertDelete from "@/components/AlertDelete";
 import { useAuth } from "@/utils/context/auth";
 import { getProfileSync, deleteProfileSync, updateProfileSync, changePasswordSync } from "@/utils/apis/profile/api";
 
-
 const ProfileOwner = () => {
   const [dataKos, setDataKos] = useState<IMyKosType[]>();
   const [loading, setLoading] = useState(false);
