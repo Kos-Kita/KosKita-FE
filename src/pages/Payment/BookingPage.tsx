@@ -12,6 +12,7 @@ import { copyToClipboard } from "@/utils/apis/payment/functions";
 import { ChangeEvent } from "react";
 import { getDataBooking, postDataBooking } from "@/utils/apis/payment/api";
 
+
 const BookingPage = () => {
   const location = useLocation();
   const id = location.state.kos_id;

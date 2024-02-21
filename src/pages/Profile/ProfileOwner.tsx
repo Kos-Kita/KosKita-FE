@@ -11,6 +11,7 @@ import AlertDelete from "@/components/AlertDelete";
 import { useAuth } from "@/utils/context/auth";
 import { getProfileSync, deleteProfileSync, updateProfileSync, changePasswordSync } from "@/utils/apis/profile/api";
 
+
 const ProfileOwner = () => {
   const [dataKos, setDataKos] = useState<IMyKosType[]>();
   const [loading, setLoading] = useState(false);
@@ -20,7 +21,6 @@ const ProfileOwner = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
   const navigate = useNavigate();
-
   const [formData, setformData] = useState<profile>({
     name: "",
     user_name: "",
