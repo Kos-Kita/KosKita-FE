@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "@/utils/apis/auth/types";
 import { registerSubmit } from "@/utils/apis/auth/api";
 
+
 const Register = () => {
   const [searchParams, _setSearchParams] = useSearchParams();
   const tabParam = searchParams.get("tab");
