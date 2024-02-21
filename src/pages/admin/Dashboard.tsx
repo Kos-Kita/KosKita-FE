@@ -1,4 +1,4 @@
-import BookingChart from "@/components/bookingchart";
+import BookingChart from "@/components/Bookingchart";
 import Layout from "@/components/Layout";
 import { useAuth } from "@/utils/context/auth";
 import { useEffect, useState } from "react";
