@@ -1,13 +1,6 @@
 import brandLogo from "@/assets/brand.png";
 import { useAuth } from "@/utils/context/auth";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../components/ui/dropdown-menu";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "./ui/use-toast";
 import { useContext, useState } from "react";
@@ -43,11 +36,7 @@ const Navbar = () => {
     });
   };
   const handleOpenChat = (room_id: string, senderId: number, recieveId: number) => {
-    const ws = new WebSocket(
-      `wss://l3n.my.id/join-room/${room_id}?senderId=${user.id}&receiverId=${
-        user.id === recieveId ? senderId : recieveId
-      }`
-    );
+    const ws = new WebSocket(`wss://l3n.my.id/join-room/${room_id}?senderId=${user.id}&receiverId=${user.id === recieveId ? senderId : recieveId}`);
     if (ws.OPEN) {
       setConn(ws);
       setChatOpen(true);
@@ -57,35 +46,20 @@ const Navbar = () => {
   return (
     <div className="p-3 shadow">
       <div className="container flex items-center justify-between ">
-        <img
-          src={brandLogo}
-          alt="Brand-logo"
-          width={125}
-          height={58}
-          className="cursor-pointer "
-          onClick={() => navigate("/")}
-        />
+        <img src={brandLogo} alt="Brand-logo" width={125} height={58} className="cursor-pointer md:w-[125px] md:h-[58px] h-[50px] w-[75px]" onClick={() => navigate("/")} />
         <ul className="flex items-center gap-x-10">
-          <li
-            className={`cursor-pointer ${location.pathname === "/" && "font-medium"}`}
-            onClick={() => navigate("/")}
-          >
+          <li className={`cursor-pointer ${location.pathname === "/" && "font-medium"} hidden md:block`} onClick={() => navigate("/")}>
             Beranda
           </li>
-          <li className="cursor-pointer" onClick={() => navigate("/kontak")}>
+          <li className="cursor-pointer hidden md:block" onClick={() => navigate("/kontak")}>
             Kontak
           </li>
-          <li className="cursor-pointer" onClick={() => navigate("/tentang")}>
+          <li className="cursor-pointer hidden md:block" onClick={() => navigate("/tentang")}>
             Tentang
           </li>
           {token ? (
-            <HistoryChat
-              openHistoryCht={openHistoryCht}
-              setOpenHistoryCht={setOpenHistoryCht}
-              rooms={rooms}
-              onOpenChat={handleOpenChat}
-            >
-              <li className="cursor-pointer" onClick={() => getRooms()}>
+            <HistoryChat openHistoryCht={openHistoryCht} setOpenHistoryCht={setOpenHistoryCht} rooms={rooms} onOpenChat={handleOpenChat}>
+              <li className="cursor-pointer hidden md:block" onClick={() => getRooms()}>
                 Chat
               </li>
             </HistoryChat>
@@ -106,35 +80,16 @@ const Navbar = () => {
               <DropdownMenuContent className="mt-2 w-[200px] ">
                 <DropdownMenuLabel className="p-3">Hi {user.user_name}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="p-2 hover:bg-slate-100 cursor-pointer"
-                  onClick={() =>
-                    navigate(
-                      `${
-                        user.role === "owner"
-                          ? "/profileowner"
-                          : user.role === "renter"
-                          ? "/profilerenter"
-                          : "/dashboard"
-                      }`
-                    )
-                  }
-                >
+                <DropdownMenuItem className="p-2 hover:bg-slate-100 cursor-pointer" onClick={() => navigate(`${user.role === "owner" ? "/profileowner" : user.role === "renter" ? "/profilerenter" : "/dashboard"}`)}>
                   {user.role !== "admin" ? "Profile" : "Dashboard"}
                 </DropdownMenuItem>
                 {user.role === "owner" ? (
-                  <DropdownMenuItem
-                    className="p-2 hover:bg-slate-100 cursor-pointer"
-                    onClick={() => navigate("/buat-kos")}
-                  >
+                  <DropdownMenuItem className="p-2 hover:bg-slate-100 cursor-pointer" onClick={() => navigate("/buat-kos")}>
                     Buat Kos
                   </DropdownMenuItem>
                 ) : null}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="p-2 hover:bg-slate-100 cursor-pointer"
-                  onClick={() => handleLogout()}
-                >
+                <DropdownMenuItem className="p-2 hover:bg-slate-100 cursor-pointer" onClick={() => handleLogout()}>
                   Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>

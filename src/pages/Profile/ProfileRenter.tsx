@@ -252,7 +252,7 @@ const ProfileRenter = () => {
         <div className="flex flex-col min-h-[80vh] justify-center items-center px-8 pb-4 overflow-y-scroll bg-white shadow-sm ">
           <div className="self-center w-full max-w-[1353px] max-md:max-w-full">
             <div className="flex gap-5 max-md:flex-col max-md:gap-0 max-md:">
-              <div className="flex flex-col 2xl:w-[40vw] h-[40vh] w-[40%] max-md:ml-0 max-md:w-full">
+              <div className="flex flex-col 2xl:w-[40vw] md:h-[40vh] w-[40%] max-md:ml-0 max-md:w-full">
                 <div className="flex flex-col grow py-11 pr-12 pl-6 w-full text-base leading-7 bg-white rounded border border-solid shadow-sm border-stone-400 max-md:px-5 max-md:mt-6 max-md:max-w-full">
                   <form onSubmit={updateProfile}>
                     <div className="flex justify-center items-center px-7 text-sm font-medium leading-6 text-black whitespace-nowrap bg-white rounded max-md:px-5 max-md:max-w-full">
@@ -305,7 +305,7 @@ const ProfileRenter = () => {
                           value={formData.name}
                           type="text"
                           placeholder="Masukan Nama"
-                          className=" grow focus:outline-none w-[45vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400"
+                          className=" grow focus:outline-none w-[35vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400"
                         />
                       </div>
                     </div>
@@ -313,7 +313,7 @@ const ProfileRenter = () => {
                     <div className="flex gap-5 justify-between mt-5 text-zinc-900 max-md:flex-wrap max-md:max-w-full">
                       <div className="flex-auto self-center">Jenis Kelamin</div>
                       <div className="input-container">
-                        <select id="gender" onChange={handlePerubahan} value={formData.gender} className=" focus:outline-none w-[45vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5">
+                        <select id="gender" onChange={handlePerubahan} value={formData.gender} className=" focus:outline-none w-[35vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5">
                           <option value="" disabled>
                             Pilih Jenis Kelamin
                           </option>
@@ -333,7 +333,7 @@ const ProfileRenter = () => {
                           required
                           type="text"
                           placeholder="Masukan Username"
-                          className="grow  focus:outline-none w-[45vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5"
+                          className="grow  focus:outline-none w-[35vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5"
                         />
                       </div>
                     </div>
@@ -347,7 +347,7 @@ const ProfileRenter = () => {
                           required
                           type="email"
                           placeholder="Masukan Email"
-                          className="grow  focus:outline-none w-[45vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 text-zinc-900 max-md:pr-5"
+                          className="grow  focus:outline-none w-[35vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 text-zinc-900 max-md:pr-5"
                         />
                       </div>
                     </div>
@@ -357,11 +357,11 @@ const ProfileRenter = () => {
                         Ganti Password
                       </div>
                       <div className="flex gap-5 self-start text-center text-white whitespace-nowrap">
-                        <button type="submit" className="grow justify-center px-3 py-2 md:px-4 md:py-3 bg-lime-600 rounded shadow-sm">
+                        <button type="submit" className="grow justify-center px-3 md:text-base text-sm py-2 md:px-4 md:py-3 bg-lime-600 rounded shadow-sm">
                           Edit Akun
                         </button>
                         <AlertDelete onAction={deleteProfile} title="Apakah anda yakin?" description="Penghapusan data ini tidak dapat dikembalikan, dan bersifat permanen" background="bg-red-600 hover:bg-red-400">
-                          <button className="grow justify-center md:px-3 md:py-4 px-3 py-2 bg-red-600 rounded shadow-sm hover:bg-red-400">Hapus Akun</button>
+                          <button className="grow justify-center md:px-3 md:py-4 px-3 py-2 md:text-base text-sm bg-red-600 rounded shadow-sm hover:bg-red-400">Hapus Akun</button>
                         </AlertDelete>
                       </div>
                     </div>

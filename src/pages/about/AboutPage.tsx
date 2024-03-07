@@ -14,11 +14,11 @@ const AboutUsPage: React.FC = () => {
       >
         <div className="container mx-auto px-4 md:px-20 drop-shadow-lg ">
           <h1 className="text-3xl font-bold mb-4 text-white z-10 relative">Tentang Kami - KosKita</h1>
-          <p className="text-white mb-4 pr-20 ">
+          <p className="text-white mb-4 md:pr-20 ">
             Selamat datang di KosKita! Kami adalah tempat penyewaan kos-kosan yang nyaman dan terjangkau. Dengan komitmen memberikan pelayanan terbaik kepada pelanggan, kami berusaha untuk menjadi pilihan utama bagi mereka yang mencari
             hunian sementara.
           </p>
-          <p className="text-white pr-20 ">
+          <p className="text-white md:pr-20 hidden md:block">
             Website ini baru saja dibangun dengan tujuan memudahkan calon penyewa untuk menemukan informasi tentang kos-kosan yang kami tawarkan. Kami berkomitmen untuk terus meningkatkan kualitas pelayanan dan fasilitas agar pengalaman
             tinggal di KosKita selalu menyenangkan.
           </p>

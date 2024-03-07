@@ -197,7 +197,7 @@ const ProfileOwner = () => {
           <div className="flex flex-col px-8 pb-4 bg-white shadow-sm h-screen">
             <div className="self-center w-full max-w-[1353px] max-md:max-w-full">
               <div className="flex gap-5 max-md:flex-col max-md:gap-0 max-md:">
-                <div className="flex flex-col 2xl:w-[40vw] h-[40vh] w-[40%] max-md:ml-0 max-md:w-full">
+                <div className="flex flex-col 2xl:w-[40vw] md:h-[40vh] w-[40%] max-md:ml-0 max-md:w-full">
                   {loading ? (
                     <SkeletonProfile />
                   ) : (
@@ -262,7 +262,7 @@ const ProfileOwner = () => {
                               value={formData.name}
                               type="text"
                               placeholder="Masukan Nama"
-                              className=" grow focus:outline-none w-[45vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400"
+                              className=" grow focus:outline-none w-[35vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400"
                             />
                           </div>
                         </div>
@@ -274,7 +274,7 @@ const ProfileOwner = () => {
                               id="gender"
                               onChange={handlePerubahan}
                               value={formData.gender}
-                              className="grow focus:outline-none w-[45vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5"
+                              className="grow focus:outline-none w-[35vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5"
                             >
                               <option value="" disabled>
                                 Pilih Jenis Kelamin
@@ -295,7 +295,7 @@ const ProfileOwner = () => {
                               required
                               type="text"
                               placeholder="Masukan Username"
-                              className="grow  focus:outline-none w-[45vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5"
+                              className="grow  focus:outline-none w-[35vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 max-md:pr-5"
                             />
                           </div>
                         </div>
@@ -309,7 +309,7 @@ const ProfileOwner = () => {
                               required
                               type="email"
                               placeholder="Masukan Email"
-                              className="grow  focus:outline-none w-[45vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 text-zinc-900 max-md:pr-5"
+                              className="grow  focus:outline-none w-[35vw] 2xl:w-[18vw] md:w-[22vw] p-4 bg-white rounded border border-solid shadow-sm border-zinc-400 text-zinc-900 max-md:pr-5"
                             />
                           </div>
                         </div>
@@ -319,11 +319,11 @@ const ProfileOwner = () => {
                             Ganti Password
                           </div>
                           <div className="flex gap-5 self-start text-center text-white whitespace-nowrap">
-                            <button type="submit" className="grow justify-center px-3 py-2 md:px-4 md:py-3 bg-lime-600 rounded shadow-sm">
+                            <button type="submit" className="grow justify-center md:text-base text-sm px-3 py-2 md:px-4 md:py-3 bg-lime-600 rounded shadow-sm">
                               Edit Akun
                             </button>
                             <AlertDelete onAction={deleteProfile} title="Apakah anda yakin?" description="Penghapusan data ini tidak dapat dikembalikan, dan bersifat permanen" background="bg-red-600 hover:bg-red-400">
-                              <button className="grow justify-center md:px-3 md:py-4 px-3 py-2 bg-red-600 rounded shadow-sm hover:bg-red-400">Hapus Akun</button>
+                              <button className="grow justify-center md:px-3 md:py-4 px-3 py-2 md:text-base text-sm bg-red-600 rounded shadow-sm hover:bg-red-400">Hapus Akun</button>
                             </AlertDelete>
                           </div>
                         </div>

@@ -74,10 +74,10 @@ const SearchMenu = () => {
         <div className="flex flex-col items-center self-stretch px-16 pt-5 pb-10 mt-2.5 w-full text-lg font-bold leading-6 bg-white max-md:px-5 max-md:max-w-full">
           <div className="flex flex-col items-start w-full max-w-[1064px] max-md:max-w-full">
             <form onSubmit={handleSearchSubmit}>
-              <div className="flex gap-5 justify-between self-stretch py-1.5 pr-1.5 pl-10 w-full whitespace-nowrap bg-white border-4 border-solid border-[color:var(--Green,#4CA02E)] rounded-[40px] max-md:flex-wrap max-md:pl-5 max-md:max-w-full">
+              <div className="flex md:gap-5 gap-4 justify-between self-stretch py-1.5 pr-1.5 md:pl-10 w-full whitespace-nowrap bg-white border-4 border-solid border-[color:var(--Green,#4CA02E)] rounded-[40px] max-md:flex-wrap max-md:pl-5 max-md:max-w-full">
                 <div className="flex gap-3 my-auto text-neutral-900">
                   <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/9b47326f4402e3d3079778f9715c62d6008fc9e571445de53fc761fb2497a593?" className="my-auto w-5 aspect-square" />
-                  <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Cari Kota" className="grow border-none focus:outline-none w-[40vw] md:w-[55vw]" />
+                  <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Cari Kota" className="md:text-base text-md grow border-none focus:outline-none w-[40vw] md:w-[55vw]" />
                 </div>
                 <button type="submit" className="cursor-pointer justify-center px-10 py-3 text-white bg-lime-600 rounded-[40px] max-md:px-5">
                   Search
@@ -85,7 +85,7 @@ const SearchMenu = () => {
               </div>
             </form>
 
-            <button onClick={() => setShowCheckboxes(!showCheckboxes)} className="flex gap-5 md:text-base text-sm justify-center items-center p-3 w-[40%] md:w-1/6 my-4 border-[0.5px] text-white rounded-full bg-lime-600">
+            <button onClick={() => setShowCheckboxes(!showCheckboxes)} className="flex md:gap-5 gap-1 md:text-base text-sm justify-center items-center p-3 w-[40%] md:w-1/6 my-4 border-[0.5px] text-white rounded-full bg-lime-600">
               <span>More Filters</span>
               <img width="20" height="20" src="https://img.icons8.com/badges/48/sort-down.png" alt="sort-down" />
             </button>
@@ -136,7 +136,7 @@ const SearchMenu = () => {
               <div className="flex flex-col justify-center items-center mb-10 w-full max-w-[995px] max-md:max-w-full text-2xl">Tidak ada data, cari nama lain</div>
             )}
             {searchResults.length !== 0 && (
-              <div id="pagination" className="flex justify-center my-16 gap-8">
+              <div id="pagination" className="flex justify-center my-16 gap-3 md:gap-8 md:p-0 ">
                 <button
                   id="prevPageBtn"
                   className={
